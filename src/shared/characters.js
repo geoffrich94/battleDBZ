@@ -9,6 +9,7 @@ export const playerStats = {
   defense: 30,
   kiDefense: 30,
 };
+
 export const npcStats = {
   level: 44,
   name: 'Vegeta',

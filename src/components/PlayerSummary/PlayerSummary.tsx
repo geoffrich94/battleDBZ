@@ -1,5 +1,5 @@
 import { Bar } from 'components';
-import styles from './styles.module.css'
+import * as S from './PlayerSummary.styles';
 
 const red = '#821200';
 const blue = '#1953cb';
@@ -14,17 +14,17 @@ interface PlayerSummaryProps {
 
 export const PlayerSummary: React.FC<PlayerSummaryProps> = ({ playableCharacter, name, level, health, maxHealth }) => {
   return (
-    <div style={{ backgroundColor: playableCharacter ? red : blue }} className={styles.main}>
+    <S.Container backgroundColor={playableCharacter ? red : blue}>
 
-      <div className={styles.info}>
-        <div className={styles.name}>{name}</div>
-        <div className={styles.level}>Lvl: {level}</div>
-      </div>
+      <S.Info>
+        <S.Heading>{name}</S.Heading>
+        <S.Heading>Lvl: {level}</S.Heading>
+      </S.Info>
 
-      <div className={styles.health}>
+      <S.Health>
         <Bar label='HP' value={health} maxValue={maxHealth} />
-      </div>
+      </S.Health>
 
-    </div>
+    </S.Container>
   )
 }
