@@ -1,25 +1,55 @@
+import { BattleMenu } from 'components/BattleMenu';
 import { PlayerSummary } from 'components/PlayerSummary'
 import { useState } from 'react';
 import { npcStats, playerStats } from 'shared/characters';
 import * as S from './Battle.styles';
 
-export const Battle = () => {
+interface BattleProps {
+  className?: string;
+}
+
+export const Battle: React.FC<BattleProps> = ({ className }) => {
 
   const [nonPlayableCharacterHealth, setNonPlayableCharacterHealth] = useState(npcStats.maxHealth);
   const [playableCharacterHealth, setPlayableCharacterHealth] = useState(playerStats.maxHealth);
 
   return (
-    <S.Container>
+    // <S.Container className={className}>
+    <>
       <S.NonPlayableCharacter>
         <S.Summary>
           <PlayerSummary playableCharacter={false} name={npcStats.name} level={npcStats.level} health={nonPlayableCharacterHealth} maxHealth={npcStats.maxHealth} />
         </S.Summary>
       </S.NonPlayableCharacter>
+
+      <S.Characters>
+        <S.GameHeader>
+          {playerStats.name} vs {npcStats.name}
+        </S.GameHeader>
+        <S.GameImages>
+          <S.PlayerSprite>
+            <img alt={playerStats.name} src={playerStats.img} />
+          </S.PlayerSprite>
+          <S.NPCSprite>
+            <img alt={npcStats.name} src={npcStats.img} />
+          </S.NPCSprite>
+        </S.GameImages>
+      </S.Characters>
+
       <S.PlayableCharacter>
         <S.Summary>
           <PlayerSummary playableCharacter name={playerStats.name} level={playerStats.level} health={playableCharacterHealth} maxHealth={playerStats.maxHealth} />
         </S.Summary>
       </S.PlayableCharacter>
-    </S.Container>
+
+      <S.HUD>
+        <S.HUDChild>
+          <BattleMenu onAttack={() => { console.log('Attack') }} onKi={() => { console.log('Ki') }} onSenzu={() => { console.log('Senzu') }} />
+        </S.HUDChild>
+      </S.HUD>
+
+    </>
+
+    // </S.Container>
   )
 }
