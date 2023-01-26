@@ -5,12 +5,13 @@ export const Container = styled.div`
   border-radius: 5px;
   gap: 5px;
   padding: 5px;
+  margin: 10px 0px;
   align-items: center;
   background-color: white;
 `;
 
 export const Label = styled.div`
-  font-size: 32px;
+  font-size: 15px;
   font-weight: bold;
   height: 35px;
   display: flex;
@@ -21,7 +22,7 @@ export const Label = styled.div`
 `;
 
 export const Max = styled.div`
-  height: 35px;
+  height: 30px;
   border-radius: 5px;
   overflow: hidden;
   box-sizing: border-box;

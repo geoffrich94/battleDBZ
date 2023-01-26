@@ -8,10 +8,12 @@ export const Container = styled.div`
     rgba(255, 255, 255, 1) 65%,
     rgba(253, 172, 0, 1) 100%
   );
-  width: 100vw;
+  /* width: 100vw; */
   height: 100vh;
+  padding: 25px;
   display: flex;
   align-items: center;
   flex-direction: column;
   justify-content: space-between;
+  box-sizing: border-box;
 `;

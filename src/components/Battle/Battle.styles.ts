@@ -14,7 +14,7 @@ export const NonPlayableCharacter = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
-  padding: 25px;
+  /* padding: 25px; */
   box-sizing: border-box;
 
   & ${Summary} {
@@ -28,7 +28,7 @@ export const PlayableCharacter = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
-  padding: 25px;
+  /* padding: 25px; */
   box-sizing: border-box;
 `;
 
@@ -54,7 +54,7 @@ export const GameHeader = styled.div`
 export const GameImages = styled.div`
   display: flex;
   justify-content: space-between;
-  padding: 25px;
+  /* padding: 25px; */
   box-sizing: border-box;
 `;
 
