@@ -1,7 +1,8 @@
+import { BattleAnnouncer } from 'components/BattleAnnouncer';
 import { BattleMenu } from 'components/BattleMenu';
 import { PlayerSummary } from 'components/PlayerSummary'
 import { useState } from 'react';
-import { npcStats, playerStats } from 'shared/characters';
+import { npcStats, playerStats } from 'shared';
 import * as S from './Battle.styles';
 
 interface BattleProps {
@@ -12,6 +13,7 @@ export const Battle: React.FC<BattleProps> = ({ className }) => {
 
   const [nonPlayableCharacterHealth, setNonPlayableCharacterHealth] = useState(npcStats.maxHealth);
   const [playableCharacterHealth, setPlayableCharacterHealth] = useState(playerStats.maxHealth);
+  const [announcerMessage, setAnnouncerMessage] = useState('');
 
   return (
     // <S.Container className={className}>
@@ -43,6 +45,9 @@ export const Battle: React.FC<BattleProps> = ({ className }) => {
       </S.PlayableCharacter>
 
       <S.HUD>
+        <S.HUDChild>
+          <BattleAnnouncer message={announcerMessage || `What will ${playerStats.name} do?`} />
+        </S.HUDChild>
         <S.HUDChild>
           <BattleMenu onAttack={() => { console.log('Attack') }} onKi={() => { console.log('Ki') }} onSenzu={() => { console.log('Senzu') }} />
         </S.HUDChild>
