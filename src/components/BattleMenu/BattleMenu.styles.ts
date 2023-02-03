@@ -1,5 +1,12 @@
 import styled from "styled-components";
 
+export const Border = styled.div`
+  transform: rotate(-2deg);
+  background-color: orangered;
+  height: 75%;
+  width: 100%;
+`
+
 export const Container = styled.div`
   box-sizing: border-box;
   border-radius: 10px;
@@ -17,22 +24,32 @@ export const Container = styled.div`
 `;
 
 export const Option = styled.div`
+  transform: rotate(2deg);
+  height: 90%;
   display: flex;
-  border-radius: 5px;
-  border: 1px solid black;
+  border: 5px solid orangered;
 
-  background-color: #821400;
+  background-color: #202020;
 
   align-items: center;
   justify-content: center;
   color: white;
-  font-size: 24px;
+  font-size: 18px;
 
   cursor: pointer;
 
-  &:hover {
-    background-color: #fd9401;
+  &:hover:before {
+    content:'';
+    width: 35px;
+    height: 35px;
+    background: url('/assets/dragonball.png');
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
+    position: absolute;
+    left: 10px;
   };
 `;
+
 
 

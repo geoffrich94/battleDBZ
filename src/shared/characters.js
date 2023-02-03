@@ -3,6 +3,7 @@ export const playerStats = {
   maxHealth: 177,
   name: 'Goku',
   img: '/assets/goku.png',
+  profileImg: '/assests/goku-profile-pic.png',
 
   ki: 32,
   attack: 50,
@@ -15,6 +16,7 @@ export const npcStats = {
   name: 'Vegeta',
   maxHealth: 188,
   img: '/assets/vegeta.png',
+  profileImg: '/assests/vegeta-profile-pic.png',
 
   ki: 50,
   attack: 32,

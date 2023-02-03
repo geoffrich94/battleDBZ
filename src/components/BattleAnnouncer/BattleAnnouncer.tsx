@@ -10,8 +10,10 @@ export const BattleAnnouncer: React.FC<BattleAnnouncerProps> = ({ message }) => 
   const typedMessage = useTypedMessage(message);
 
   return (
-    <S.Container>
-      <S.Message>{typedMessage}</S.Message>
-    </S.Container>
+    <S.Border>
+      <S.Container>
+        <S.Message>{typedMessage}</S.Message>
+      </S.Container>
+    </S.Border>
   )
 }

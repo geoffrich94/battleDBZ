@@ -1,29 +1,54 @@
 import styled from "styled-components";
 
 export const Container = styled.div<{ backgroundColor: string }>`
+  transform: skewX(20deg);
   width: 500px;
   /* height: 150px; */
-  border-radius: 10px;
-  box-shadow: 0px 0px 3px black;
+  border: 4px ridge #FFCC00;
+  box-shadow: inset 0 0 15px orangered;
+
 
   background-color: ${({ backgroundColor }) => backgroundColor};
   color: white;
-
-  padding: 10px 20px;
+/* 
+  padding: 10px 20px; */
   box-sizing: border-box;
 
   display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+  flex-direction: row;
+  justify-content: space-around;
+`;
+
+export const ProfilePicture = styled.div<{ profilePicture: string }>`
+  width: 22%;
+  background: url(${({ profilePicture }) => profilePicture});
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-size: cover;
+  background-position: center;
+  transform: skewX(-20deg);
+`;
+
+export const InnerContainer = styled.div`
+  transform: skewX(-20deg);
+  padding: 0px 5px 0px 20px;
+  width: 70%;
 `;
 
 export const Info = styled.div`
-  display: flex;
-  justify-content: space-between;
+  background: orangered;
+  padding: 5px 10px;
+  transform: skewX(20deg);
 `;
 
+export const InfoInnerContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  transform: skewX(-20deg);
+`
+
 export const Heading = styled.div`
-  font-size: 20px;
+  font-size: 16px;
 `;
 
 export const Health = styled.div``

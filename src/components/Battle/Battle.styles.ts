@@ -40,6 +40,9 @@ export const HUD = styled.div`
 `;
 
 export const HUDChild = styled.div`
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
   flex: 1;
   height: 200px;
 `;

@@ -25,9 +25,9 @@ export const Battle: React.FC<BattleProps> = ({ className }) => {
       </S.NonPlayableCharacter>
 
       <S.Characters>
-        <S.GameHeader>
+        {/* <S.GameHeader>
           {playerStats.name} vs {npcStats.name}
-        </S.GameHeader>
+        </S.GameHeader> */}
         <S.GameImages>
           <S.PlayerSprite>
             <img alt={playerStats.name} src={playerStats.img} />

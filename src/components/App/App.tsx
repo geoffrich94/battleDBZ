@@ -7,6 +7,7 @@ export const App = () => {
 
   return (
     <S.Container>
+      <S.Logo />
       {mode === 'start' && <StartMenu onStartClick={() => setmode('battle')} />}
       {mode === 'battle' && <Battle />}
       {mode === 'gameOver' && <>Game Over</>}

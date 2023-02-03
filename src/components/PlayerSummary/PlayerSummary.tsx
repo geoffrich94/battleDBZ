@@ -1,8 +1,8 @@
 import { Bar } from 'components';
 import * as S from './PlayerSummary.styles';
 
-const red = '#821200';
-const blue = '#1953cb';
+const red = '#202020';
+const blue = '#202020';
 
 interface PlayerSummaryProps {
   playableCharacter?: boolean;
@@ -16,14 +16,22 @@ export const PlayerSummary: React.FC<PlayerSummaryProps> = ({ playableCharacter,
   return (
     <S.Container backgroundColor={playableCharacter ? red : blue}>
 
-      <S.Info>
-        <S.Heading>{name}</S.Heading>
-        <S.Heading>Lvl: {level}</S.Heading>
-      </S.Info>
+      <S.ProfilePicture profilePicture={playableCharacter ? "/assets/goku-profile-pic.png" : "/assets/vegeta-profile-pic.png"} />
 
-      <S.Health>
-        <Bar label='HP' value={health} maxValue={maxHealth} />
-      </S.Health>
+      <S.InnerContainer>
+
+        <S.Info>
+          <S.InfoInnerContainer>
+            <S.Heading>{name}</S.Heading>
+            <S.Heading>Lvl: {level}</S.Heading>
+          </S.InfoInnerContainer>
+        </S.Info>
+
+        <S.Health>
+          <Bar label='HP' value={health} maxValue={maxHealth} />
+        </S.Health>
+
+      </S.InnerContainer>
 
     </S.Container>
   )
