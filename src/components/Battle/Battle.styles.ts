@@ -1,5 +1,17 @@
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 // import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+const flash = keyframes`
+  0 % {
+    opacity: 0;
+  }
+  50 % {
+    opacity: 1;
+  }
+  100 % {
+    opacity: 0;
+  }
+`
 
 export const Container = styled.div``;
 
@@ -71,25 +83,37 @@ export const Characters = styled.div`
   }
 `;
 
-export const PlayerSprite = styled.div``
+export const PlayerSprite = styled.div`
+  & img.static {
+    transform: translateX(0px);
+    transform: translateY(0px);
+    transition: 0.5s;
+  }
+  & img.attack {
+    transition: 0.1s;
+    transform: translateX(100px);
+  }
+  & img.damage {
+    opacity: 1;
+    animation: ${flash} 0.3s 0.3s infinite;
+  }
+`
 
-export const NPCSprite = styled.div``
-
-
-// .static {
-//   transform: translateX(0px);
-//   transform: translateY(0px);
-//   transition: 0.5s;
-// }
-
-// .playerSprite.attack {
-//   transition: 0.1s;
-//   transform: translateX(100px);
-// }
-// .opponentSprite.attack {
-//   transition: 0.1s;
-//   transform: translateX(-100px);
-// }
+export const NPCSprite = styled.div`
+  & img.static {
+    transform: translateX(0px);
+    transform: translateY(0px);
+    transition: 0.5s;
+  }
+  & img.attack {
+    transition: 0.1s;
+    transform: translateX(-100px);
+  }
+  & img.damage {
+    opacity: 1;
+    animation: ${flash} 0.3s 0.3s infinite;
+  }
+`
 
 // .magic {
 //   transition: 0.2s;
@@ -135,17 +159,5 @@ export const NPCSprite = styled.div``
 //   }
 // 100 % {
 //   transform: translate(1px, -2px) rotate(- 1deg) translateY(-25px);
-//   }
-// }
-
-// @keyframes flash {
-//   0 % {
-//     opacity: 0;
-//   }
-//   50 % {
-//     opacity: 1;
-//   }
-//   100 % {
-//     opacity: 0;
 //   }
 // }

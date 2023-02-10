@@ -1,22 +1,32 @@
-import { BattleAnnouncer } from 'components/BattleAnnouncer';
-import { BattleMenu } from 'components/BattleMenu';
-import { PlayerSummary } from 'components/PlayerSummary'
-import { useState } from 'react';
-import { npcStats, playerStats } from 'shared';
+import { BattleMenu, PlayerSummary, BattleAnnouncer } from 'components';
+import { useEffect, useState } from 'react';
+import { useAIOpponent, useBattleSequence } from 'hooks';
+import { npcStats, playerStats, wait } from 'shared';
 import * as S from './Battle.styles';
 
-interface BattleProps {
-  className?: string;
-}
+export const Battle = () => {
 
-export const Battle: React.FC<BattleProps> = ({ className }) => {
+  const [sequence, setSequence] = useState({});
 
-  const [nonPlayableCharacterHealth, setNonPlayableCharacterHealth] = useState(npcStats.maxHealth);
-  const [playableCharacterHealth, setPlayableCharacterHealth] = useState(playerStats.maxHealth);
-  const [announcerMessage, setAnnouncerMessage] = useState('');
+  const {
+    turn,
+    inSequence,
+    nonPlayableCharacterHealth,
+    playableCharacterHealth,
+    announcerMessage,
+    playerAnimation,
+    npcAnimation
+  } = useBattleSequence(sequence);
+
+  const aiChoice = useAIOpponent(turn);
+
+  useEffect(() => {
+    if (aiChoice && turn === 1 && !inSequence) {
+      setSequence({ turn, mode: aiChoice })
+    }
+  }, [turn, aiChoice, inSequence]);
 
   return (
-    // <S.Container className={className}>
     <>
       <S.NonPlayableCharacter>
         <S.Summary>
@@ -25,15 +35,12 @@ export const Battle: React.FC<BattleProps> = ({ className }) => {
       </S.NonPlayableCharacter>
 
       <S.Characters>
-        {/* <S.GameHeader>
-          {playerStats.name} vs {npcStats.name}
-        </S.GameHeader> */}
         <S.GameImages>
           <S.PlayerSprite>
-            <img alt={playerStats.name} src={playerStats.img} />
+            <img alt={playerStats.name} src={playerStats.img} className={playerAnimation} />
           </S.PlayerSprite>
           <S.NPCSprite>
-            <img alt={npcStats.name} src={npcStats.img} />
+            <img alt={npcStats.name} src={npcStats.img} className={npcAnimation} />
           </S.NPCSprite>
         </S.GameImages>
       </S.Characters>
@@ -49,12 +56,10 @@ export const Battle: React.FC<BattleProps> = ({ className }) => {
           <BattleAnnouncer message={announcerMessage || `What will ${playerStats.name} do?`} />
         </S.HUDChild>
         <S.HUDChild>
-          <BattleMenu onAttack={() => { console.log('Attack') }} onKi={() => { console.log('Ki') }} onSenzu={() => { console.log('Senzu') }} />
+          <BattleMenu onAttack={() => setSequence({ mode: 'attack', turn })} onKi={() => setSequence({ mode: 'ki', turn })} onSenzu={() => setSequence({ turn, mode: 'senzu' })} />
         </S.HUDChild>
       </S.HUD>
 
     </>
-
-    // </S.Container>
   )
 }

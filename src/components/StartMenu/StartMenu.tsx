@@ -1,9 +1,13 @@
-import styles from './styles.module.css';
+import * as S from './StartMenu.styles';
 
 interface StartMenuProps {
   onStartClick: () => void;
 }
 
 export const StartMenu: React.FC<StartMenuProps> = ({ onStartClick }) => {
-  return <div className={styles.main}><button className={styles.startButton} onClick={onStartClick}>Start Game</button></div>;
+  return (
+    <S.Container>
+      <S.StartButton onClick={onStartClick}>Start Game</S.StartButton>
+    </S.Container>
+  );
 }
