@@ -7,6 +7,7 @@ interface BarProps {
 }
 
 export const Bar: React.FC<BarProps> = ({ label, value, maxValue }) => {
+  console.log({ value });
   return (
     <S.Container>
       <S.Label>{label}</S.Label>

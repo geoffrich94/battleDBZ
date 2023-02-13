@@ -8,6 +8,8 @@ export const wait = (ms: number) => new Promise<void>(resolve => {
 
 export const attack = (attacker: characterStats, receiver: characterStats) => {
 
+  console.log(attacker.attack, attacker.level, receiver.level);
+
   const receivedDamage = attacker.attack - (attacker.level - receiver.level) * 1.25;
 
   const finalDamage = receivedDamage - receiver.defense / 2;

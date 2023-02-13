@@ -48,7 +48,7 @@ export const useBattleSequence = sequence => {
 
             turn === 0 ? setNPCAnimation('static') : setPlayerAnimation('static');
             setAnnouncerMessage(`${receiver.name} felt that!`);
-            turn === 0 ? setNonPlayableCharacterHealth(h => (h - damage > 0 ? h - damage : 0)) : setPlayableCharacterHealth('static');
+            turn === 0 ? setNonPlayableCharacterHealth(h => (h - damage > 0 ? h - damage : 0)) : setPlayableCharacterHealth(h => (h - damage > 0 ? h - damage : 0));
             await wait(2000);
 
             setAnnouncerMessage(`Now its ${receiver.name}'s turn!`);
