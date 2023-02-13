@@ -59,7 +59,6 @@ export const Battle = () => {
           <BattleMenu onAttack={() => setSequence({ mode: 'attack', turn })} onKi={() => setSequence({ mode: 'ki', turn })} onSenzu={() => setSequence({ turn, mode: 'senzu' })} />
         </S.HUDChild>
       </S.HUD>
-
     </>
   )
 }

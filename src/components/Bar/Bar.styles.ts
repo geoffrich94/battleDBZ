@@ -25,11 +25,11 @@ export const Max = styled.div`
   box-sizing: border-box;
   flex: 1;
   background-color: lightgray;
+  border: 3px ridge #FFCC00;
 `;
 
 export const Value = styled.div<{ width: number }>`
   height: 100%;
-  border: 3px ridge #FFCC00;
   background-color: lawngreen;
   transition: 0.35s;
   width: ${({ width }) => width}%;
