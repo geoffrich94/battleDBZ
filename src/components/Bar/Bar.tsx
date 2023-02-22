@@ -1,19 +1,17 @@
 import * as S from './Bar.styles'
 
 interface BarProps {
-  label: string;
-  value: number;
-  maxValue: number;
+  label?: string;
+  width: number;
 }
 
-export const Bar: React.FC<BarProps> = ({ label, value, maxValue }) => {
-  console.log({ value });
+export const Bar: React.FC<BarProps> = ({ label, width }) => {
   return (
     <S.Container>
       <S.Label>{label}</S.Label>
       <S.Max>
-        <S.Value width={(value / maxValue) * 100}></S.Value>
+        <S.Value data-testid='HealthBar' width={width}></S.Value>
       </S.Max>
-    </S.Container >
+    </S.Container>
   )
 }

@@ -1,4 +1,4 @@
-import { attack, characterStats } from "shared";
+import { attack, characterStats, ki, senzu } from "shared";
 import '@testing-library/jest-dom';
 
 const mockAttackerStats: characterStats = {
@@ -34,4 +34,17 @@ describe('helpers', () => {
     const result = attack(mockAttackerStats, mockRecieverStats);
     expect(result).toEqual(22);
   });
+
+  it('should return the correct final damage for a ki attack', () => {
+    // const receivedDamage = 15 - (25 - 25) * 1.25;
+    // const finalDamage = receivedDamage - 18 / 2;
+    const result = ki(mockAttackerStats, mockRecieverStats);
+    expect(result).toEqual(6);
+  })
+
+  it('should return the correct value for a senzu', () => {
+    // const receivedValue = 20 + 25 * 0.25;
+    const result = senzu(mockRecieverStats);
+    expect(result).toEqual(26.25);
+  })
 });

@@ -28,7 +28,7 @@ export const PlayerSummary: React.FC<PlayerSummaryProps> = ({ playableCharacter,
         </S.Info>
 
         <S.Health>
-          <Bar label='HP' value={health} maxValue={maxHealth} />
+          <Bar width={(health / maxHealth) * 100} label='HP' />
         </S.Health>
 
       </S.InnerContainer>
