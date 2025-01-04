@@ -11,11 +11,24 @@ const flash = keyframes`
   100 % {
     opacity: 0;
   }
-`
+`;
+export const Logo = styled.div`
+  position: absolute;
+  background: url("/assets/logo.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+  width: 255px;
+  height: 100px;
+  z-index: 99;
+  left: 20px;
+`;
 
-export const Container = styled.div``;
+export const Container = styled.div`
+  background: linear-gradient(0deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)),
+    url("/assets/bg.png");
+`;
 
-export const Summary = styled.div` 
+export const Summary = styled.div`
   display: flex;
   align-items: flex - end;
   justify-content: flex - start;
@@ -32,7 +45,7 @@ export const NonPlayableCharacter = styled.div`
   & ${Summary} {
     align-items: flex-start;
     justify-content: flex-end;
-  };
+  }
 `;
 
 export const PlayableCharacter = styled.div`
@@ -63,7 +76,7 @@ export const GameHeader = styled.div`
   font-size: 48px;
   color: #fdac00;
   text-shadow: 0px 0px 5px #7f0000;
-  font-family: 'Press Start 2P', cursive;
+  font-family: "Press Start 2P", cursive;
 `;
 
 export const GameImages = styled.div`
@@ -97,7 +110,7 @@ export const PlayerSprite = styled.div`
     opacity: 1;
     animation: ${flash} 0.3s 0.3s infinite;
   }
-`
+`;
 
 export const NPCSprite = styled.div`
   & img.static {
@@ -113,7 +126,7 @@ export const NPCSprite = styled.div`
     opacity: 1;
     animation: ${flash} 0.3s 0.3s infinite;
   }
-`
+`;
 
 // .magic {
 //   transition: 0.2s;
