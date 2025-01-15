@@ -58,14 +58,14 @@ export const Battle: React.FC<BattleProps> = ({ onGameEnd }) => {
           <S.PlayerSprite>
             <img
               alt={playerStats.name}
-              src={playerStats.img}
+              src={`${process.env.PUBLIC_URL}${playerStats.img}`}
               className={playerAnimation}
             />
           </S.PlayerSprite>
           <S.NPCSprite>
             <img
               alt={npcStats.name}
-              src={npcStats.img}
+              src={`${process.env.PUBLIC_URL}${npcStats.img}`}
               className={npcAnimation}
             />
           </S.NPCSprite>
