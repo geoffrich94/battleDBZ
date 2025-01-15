@@ -5,7 +5,7 @@ export const Border = styled.div`
   background-color: orangered;
   height: 75%;
   width: 100%;
-`
+`;
 
 export const Container = styled.div`
   box-sizing: border-box;
@@ -20,7 +20,7 @@ export const Container = styled.div`
   & > :first-child {
     grid-column-start: 1;
     grid-column-end: 3;
-  };
+  }
 `;
 
 export const Option = styled.div`
@@ -39,17 +39,14 @@ export const Option = styled.div`
   cursor: pointer;
 
   &:hover:before {
-    content:'';
+    content: "";
     width: 35px;
     height: 35px;
-    background: url('/assets/dragonball.png');
+    background: url("${process.env.PUBLIC_URL}/assets/dragonball.png");
     background-repeat: no-repeat;
     background-attachment: fixed;
     background-size: cover;
     position: absolute;
     left: 10px;
-  };
+  }
 `;
-
-
-

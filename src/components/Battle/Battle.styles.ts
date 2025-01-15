@@ -14,7 +14,7 @@ const flash = keyframes`
 `;
 export const Logo = styled.div`
   position: absolute;
-  background: url("/assets/logo.png");
+  background: url("${process.env.PUBLIC_URL}/assets/logo.png");
   background-repeat: no-repeat;
   background-size: cover;
   width: 255px;
@@ -25,7 +25,7 @@ export const Logo = styled.div`
 
 export const Container = styled.div`
   background: linear-gradient(0deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)),
-    url("/assets/bg.png");
+    url("${process.env.PUBLIC_URL}/assets/bg.png");
 `;
 
 export const Summary = styled.div`

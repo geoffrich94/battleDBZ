@@ -9,7 +9,7 @@ export const Container = styled.div`
 `;
 
 export const Logo = styled.div`
-  background: url("/assets/logo.png");
+  background: url("${process.env.PUBLIC_URL}/assets/logo.png");
   background-repeat: no-repeat;
   background-size: cover;
   width: 800px;

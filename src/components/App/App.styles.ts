@@ -4,7 +4,8 @@ export const Container = styled.div<{
   backgroundUrl: string;
   gradient: string;
 }>`
-  background: ${(props) => `${props.gradient}, url(${props.backgroundUrl})`};
+  background: ${(props) =>
+    `${props.gradient}, url(${process.env.PUBLIC_URL}${props.backgroundUrl})`};
   background-repeat: no-repeat;
   background-attachment: fixed;
   background-size: cover;

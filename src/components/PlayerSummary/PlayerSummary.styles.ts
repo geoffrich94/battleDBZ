@@ -4,13 +4,12 @@ export const Container = styled.div<{ backgroundColor: string }>`
   transform: skewX(20deg);
   width: 500px;
   /* height: 150px; */
-  border: 4px ridge #FFCC00;
+  border: 4px ridge #ffcc00;
   box-shadow: inset 0 0 15px orangered;
-
 
   background-color: ${({ backgroundColor }) => backgroundColor};
   color: white;
-/* 
+  /* 
   padding: 10px 20px; */
   box-sizing: border-box;
 
@@ -21,7 +20,8 @@ export const Container = styled.div<{ backgroundColor: string }>`
 
 export const ProfilePicture = styled.div<{ profilePicture: string }>`
   width: 22%;
-  background: url(${({ profilePicture }) => profilePicture});
+  background: url(${({ profilePicture }) =>
+    `${process.env.PUBLIC_URL}${profilePicture}`});
   background-repeat: no-repeat;
   background-attachment: fixed;
   background-size: cover;
@@ -45,10 +45,10 @@ export const InfoInnerContainer = styled.div`
   display: flex;
   justify-content: space-between;
   transform: skewX(-20deg);
-`
+`;
 
 export const Heading = styled.div`
   font-size: 16px;
 `;
 
-export const Health = styled.div``
+export const Health = styled.div``;
