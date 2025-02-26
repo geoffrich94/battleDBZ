@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/battleDBZ/static/css/main.6063c591.css",
+    "main.js": "/battleDBZ/static/js/main.3d40fcb2.js",
+    "static/js/787.a8a3da55.chunk.js": "/battleDBZ/static/js/787.a8a3da55.chunk.js",
+    "index.html": "/battleDBZ/index.html",
+    "main.6063c591.css.map": "/battleDBZ/static/css/main.6063c591.css.map",
+    "main.3d40fcb2.js.map": "/battleDBZ/static/js/main.3d40fcb2.js.map",
+    "787.a8a3da55.chunk.js.map": "/battleDBZ/static/js/787.a8a3da55.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.6063c591.css",
+    "static/js/main.3d40fcb2.js"
+  ]
+}
