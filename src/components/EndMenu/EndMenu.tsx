@@ -8,8 +8,24 @@ interface EndMenuProps {
 export const EndMenu: React.FC<EndMenuProps> = ({ winner, onStartClick }) => {
   return (
     <S.Main>
-      <S.Text>{winner.name} Wins !</S.Text>
-      <S.StartButton onClick={onStartClick}>Play Again</S.StartButton>
+        <S.Container>
+      
+        <S.ProfilePicture profilePicture={`/assets/${winner.name}-profile-pic.png`} />
+      
+            <S.InnerContainer>
+      
+              <S.Info>
+                <S.InfoInnerContainer>
+                  <S.Heading>{winner.name} Wins !</S.Heading>
+                </S.InfoInnerContainer>
+              </S.Info>
+      
+              <S.StartButton onClick={onStartClick}>Play Again</S.StartButton>
+      
+            </S.InnerContainer>
+      
+          </S.Container>
+          
     </S.Main>
   );
 };

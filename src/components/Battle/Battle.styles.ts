@@ -1,5 +1,6 @@
 import styled, { keyframes } from "styled-components";
 // import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+import { devices } from "theme";
 
 const flash = keyframes`
   0 % {
@@ -17,10 +18,15 @@ export const Logo = styled.div`
   background: url("${process.env.PUBLIC_URL}/assets/logo.png");
   background-repeat: no-repeat;
   background-size: cover;
-  width: 255px;
-  height: 100px;
+  width: 125px;
+  height: 50px;
   z-index: 99;
   left: 20px;
+
+  @media ${devices.laptop} {
+    width: 255px;
+    height: 100px;
+  }
 `;
 
 export const Container = styled.div`
@@ -69,7 +75,11 @@ export const HUDChild = styled.div`
   justify-content: center;
   flex-direction: column;
   flex: 1;
-  height: 200px;
+  height: 100px;
+
+  @media ${devices.laptop} {
+    height: 200px;
+  }
 `;
 
 export const GameHeader = styled.div`
@@ -92,7 +102,14 @@ export const Characters = styled.div`
 
   & ${GameImages} img {
     max-height: 25vh;
-    min-height: 150px;
+    min-height: 100px;
+  }
+
+  @media ${devices.laptop} {
+    & ${GameImages} img {
+      max-height: 25vh;
+      min-height: 150px;
+    }
   }
 `;
 

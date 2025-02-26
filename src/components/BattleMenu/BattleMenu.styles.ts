@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { devices } from "theme";
 
 export const Border = styled.div`
   transform: rotate(-2deg);
@@ -34,7 +35,7 @@ export const Option = styled.div`
   align-items: center;
   justify-content: center;
   color: white;
-  font-size: 18px;
+  font-size: 14px;
 
   cursor: pointer;
 
@@ -48,5 +49,9 @@ export const Option = styled.div`
     background-size: cover;
     position: absolute;
     left: 10px;
+  }
+
+  @media ${devices.laptop} {
+    font-size: 18px;
   }
 `;

@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { devices } from "theme";
 
 export const Container = styled.div`
   height: 100vh;
@@ -11,10 +12,15 @@ export const Container = styled.div`
 export const Logo = styled.div`
   background: url("${process.env.PUBLIC_URL}/assets/logo.png");
   background-repeat: no-repeat;
-  background-size: cover;
-  width: 800px;
-  height: 300px;
+  background-size: contain;
+  width: 500px;
+  height: 220px;
   z-index: 99;
+
+  @media ${devices.laptop} {
+    width: 800px;
+    height: 300px;
+  }
 `;
 
 export const StartButton = styled.button`

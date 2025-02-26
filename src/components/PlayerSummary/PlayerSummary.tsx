@@ -1,10 +1,12 @@
 import { Bar } from 'components';
 import * as S from './PlayerSummary.styles';
+import { Character } from 'shared';
 
 const red = '#202020';
 const blue = '#202020';
 
 interface PlayerSummaryProps {
+  selectedCharacter?: Character | null;
   playableCharacter?: boolean;
   name: string;
   level: number;
@@ -12,11 +14,11 @@ interface PlayerSummaryProps {
   maxHealth: number;
 }
 
-export const PlayerSummary: React.FC<PlayerSummaryProps> = ({ playableCharacter, name, level, health, maxHealth }) => {
+export const PlayerSummary: React.FC<PlayerSummaryProps> = ({ selectedCharacter, playableCharacter, name, level, health, maxHealth }) => {
   return (
-    <S.Container backgroundColor={playableCharacter ? red : blue}>
+    <S.Container>
 
-      <S.ProfilePicture profilePicture={playableCharacter ? "/assets/goku-profile-pic.png" : "/assets/vegeta-profile-pic.png"} />
+      <S.ProfilePicture profilePicture={selectedCharacter ? `/assets/${selectedCharacter.name}-profile-pic.png` : "/assets/vegeta-profile-pic.png"} />
 
       <S.InnerContainer>
 

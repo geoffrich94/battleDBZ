@@ -5,10 +5,14 @@ import {
   attack,
   playerStats,
   npcStats,
+  BattleSequence,
 } from 'shared';
 import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { RootState } from 'redux/store';
 
-export const useBattleSequence = sequence => {
+export const useBattleSequence = (sequence: BattleSequence) => {
+  
   const [turn, setTurn] = useState(0);
   const [inSequence, setInSequence] = useState(false);
   const [nonPlayableCharacterHealth, setNonPlayableCharacterHealth] = useState(npcStats.maxHealth);
@@ -17,14 +21,20 @@ export const useBattleSequence = sequence => {
   const [playerAnimation, setPlayerAnimation] = useState('static');
   const [npcAnimation, setNPCAnimation] = useState('static');
 
+  const selectedCharacter = useSelector((state: RootState) => state.character.selectedCharacter);
+
   useEffect(() => {
+
+    if (!sequence) return; // Prevents automatic execution
 
     const { mode, turn } = sequence;
 
     if (mode) {
 
-      const attacker = turn === 0 ? playerStats : npcStats;
-      const receiver = turn === 0 ? npcStats : playerStats;
+      if (!selectedCharacter || !mode) return;
+
+      const attacker = turn === 0 ? selectedCharacter : npcStats;
+      const receiver = turn === 0 ? npcStats : selectedCharacter;
 
       switch (mode) {
         case 'attack': {
@@ -106,7 +116,7 @@ export const useBattleSequence = sequence => {
         }
 
         case 'senzu': {
-          const recovered = senzu({ receiver: attacker });
+          const recovered = senzu(attacker);
 
           (async () => {
             setInSequence(true);
@@ -151,7 +161,7 @@ export const useBattleSequence = sequence => {
           break;
       }
     }
-  }, [sequence]);
+  }, [selectedCharacter, sequence]);
 
   return {
     turn,

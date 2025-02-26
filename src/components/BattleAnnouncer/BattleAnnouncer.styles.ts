@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { devices } from "theme";
 
 export const Container = styled.div`
   transform: rotate(3deg);
@@ -19,7 +20,11 @@ export const Container = styled.div`
 
 export const Message = styled.div`
   text-align: center;
-  font-size: 20px;
+  font-size: 16px;
+
+  @media ${devices.laptop} {
+    font-size: 20px;
+  }
 `;
 
 export const Border = styled.div`
