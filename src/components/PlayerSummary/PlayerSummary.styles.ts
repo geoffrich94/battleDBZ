@@ -26,7 +26,7 @@ export const Container = styled.div`
 
 export const ProfilePicture = styled.div<{ profilePicture: string }>`
   width: 22%;
-  background: url(${({ profilePicture }) => `assets/${profilePicture}-profile-pic.png`});
+  background: url(${({ profilePicture }) => `${process.env.PUBLIC_URL || ""}${profilePicture}-profile-pic.png`});
   background-repeat: no-repeat;
   background-attachment: fixed;
   background-size: cover;
