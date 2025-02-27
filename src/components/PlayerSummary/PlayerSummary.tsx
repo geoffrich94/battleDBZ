@@ -18,7 +18,7 @@ export const PlayerSummary: React.FC<PlayerSummaryProps> = ({ selectedCharacter,
   return (
     <S.Container>
 
-      <S.ProfilePicture profilePicture={selectedCharacter ? `/assets/${selectedCharacter.name}-profile-pic.png` : "/assets/vegeta-profile-pic.png"} />
+      <S.ProfilePicture profilePicture={selectedCharacter ? `${selectedCharacter.name}` : "vegeta"} />
 
       <S.InnerContainer>
 
