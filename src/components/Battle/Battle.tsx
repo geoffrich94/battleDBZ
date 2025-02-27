@@ -3,6 +3,8 @@ import { useEffect, useState } from "react";
 import { useAIOpponent, useBattleSequence } from "hooks";
 import { npcStats, playerStats, Character, wait, BattleSequence } from "shared";
 import * as S from "./Battle.styles";
+import { useSelector } from "react-redux";
+import { RootState } from "redux/store";
 
 interface BattleProps {
   onGameEnd: (winner: Character) => void;
@@ -10,6 +12,22 @@ interface BattleProps {
 }
 
 export const Battle: React.FC<BattleProps> = ({ onGameEnd, selectedCharacter }) => {
+
+  const defaultAICharacter: Character = {
+    name: "Default AI",
+    level: 1,
+    maxHealth: 100,
+    img: "/vegeta.png",
+    profileImg: "",
+    characterImg: "",
+    ki: 0,
+    attack: 0,
+    defense: 0,
+    kiDefense: 0
+  };
+
+  const aiCharacter = useSelector((state: RootState) => state.character.aiCharacter) || defaultAICharacter;
+
   const [sequence, setSequence] = useState<BattleSequence>({
     mode: 'idle', // Default action
     turn: 0, // Player starts first
@@ -23,7 +41,7 @@ export const Battle: React.FC<BattleProps> = ({ onGameEnd, selectedCharacter }) 
     announcerMessage,
     playerAnimation,
     npcAnimation,
-  } = useBattleSequence(sequence);
+  } = useBattleSequence(sequence, selectedCharacter, aiCharacter);
 
   const aiChoice = useAIOpponent(turn);
 
@@ -49,10 +67,12 @@ export const Battle: React.FC<BattleProps> = ({ onGameEnd, selectedCharacter }) 
     if (playableCharacterHealth === 0 || nonPlayableCharacterHealth === 0) {
       (async () => {
         await wait(1000);
-        onGameEnd(playableCharacterHealth === 0 ? npcStats : playerStats);
+        onGameEnd(playableCharacterHealth === 0 ? aiCharacter : selectedCharacter);
       })();
     }
-  }, [playableCharacterHealth, nonPlayableCharacterHealth, onGameEnd]);
+  }, [playableCharacterHealth, nonPlayableCharacterHealth, onGameEnd, aiCharacter, selectedCharacter]);
+
+  
 
   return (
     <>
@@ -60,12 +80,12 @@ export const Battle: React.FC<BattleProps> = ({ onGameEnd, selectedCharacter }) 
       <S.NonPlayableCharacter>
         <S.Summary>
           <PlayerSummary
-            selectedCharacter={null}
+            selectedCharacter={aiCharacter}
             playableCharacter={false}
-            name={npcStats.name}
-            level={npcStats.level}
+            name={aiCharacter.name}
+            level={aiCharacter.level}
             health={nonPlayableCharacterHealth}
-            maxHealth={npcStats.maxHealth}
+            maxHealth={aiCharacter.maxHealth}
           />
         </S.Summary>
       </S.NonPlayableCharacter>
@@ -75,14 +95,15 @@ export const Battle: React.FC<BattleProps> = ({ onGameEnd, selectedCharacter }) 
           <S.PlayerSprite>
             <img
               alt={selectedCharacter.name}
-              src={`${process.env.PUBLIC_URL}${selectedCharacter.img}`}
+              src={`${process.env.PUBLIC_URL || ""}${selectedCharacter.img}`}
               className={playerAnimation}
             />
           </S.PlayerSprite>
           <S.NPCSprite>
             <img
-              alt={npcStats.name}
-              src={`${process.env.PUBLIC_URL}${npcStats.img}`}
+              alt={aiCharacter.name}
+              src={`${process.env.PUBLIC_URL || ""}${aiCharacter.img}`}
+
               className={npcAnimation}
             />
           </S.NPCSprite>

@@ -130,20 +130,30 @@ export const PlayerSprite = styled.div`
 `;
 
 export const NPCSprite = styled.div`
-  & img.static {
-    transform: translateX(0px);
-    transform: translateY(0px);
+  & img {
+    transform: scaleX(-1);  /* Default flip */
     transition: 0.5s;
   }
-  & img.attack {
-    transition: 0.1s;
-    transform: translateX(-100px);
+
+  & img.static {
+    transform: scaleX(-1) translateX(0px) translateY(0px);
+    transition: 0.5s;
   }
+
+  & img.attack {
+    transform: scaleX(-1) translateX(100px) translateY(0px);  /* Unflip for attack and move */
+    transition: 0.1s;
+  }
+
   & img.damage {
+    transform: scaleX(-1) translateX(0px) translateY(0px);  /* Maintain flip on damage */
     opacity: 1;
+    transition: opacity 0.3s ease-in-out;
     animation: ${flash} 0.3s 0.3s infinite;
   }
 `;
+
+
 
 // .magic {
 //   transition: 0.2s;

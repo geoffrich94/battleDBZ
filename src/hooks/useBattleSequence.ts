@@ -6,22 +6,21 @@ import {
   playerStats,
   npcStats,
   BattleSequence,
+  Character,
 } from 'shared';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from 'redux/store';
 
-export const useBattleSequence = (sequence: BattleSequence) => {
+export const useBattleSequence = (sequence: BattleSequence, selectedCharacter: Character, aiCharacter: Character) => {
   
   const [turn, setTurn] = useState(0);
   const [inSequence, setInSequence] = useState(false);
-  const [nonPlayableCharacterHealth, setNonPlayableCharacterHealth] = useState(npcStats.maxHealth);
-  const [playableCharacterHealth, setPlayableCharacterHealth] = useState(playerStats.maxHealth);
+  const [nonPlayableCharacterHealth, setNonPlayableCharacterHealth] = useState(aiCharacter.maxHealth);
+  const [playableCharacterHealth, setPlayableCharacterHealth] = useState(selectedCharacter.maxHealth);
   const [announcerMessage, setAnnouncerMessage] = useState('');
   const [playerAnimation, setPlayerAnimation] = useState('static');
   const [npcAnimation, setNPCAnimation] = useState('static');
-
-  const selectedCharacter = useSelector((state: RootState) => state.character.selectedCharacter);
 
   useEffect(() => {
 
@@ -33,8 +32,8 @@ export const useBattleSequence = (sequence: BattleSequence) => {
 
       if (!selectedCharacter || !mode) return;
 
-      const attacker = turn === 0 ? selectedCharacter : npcStats;
-      const receiver = turn === 0 ? npcStats : selectedCharacter;
+      const attacker = turn === 0 ? selectedCharacter : aiCharacter;
+      const receiver = turn === 0 ? aiCharacter : selectedCharacter;
 
       switch (mode) {
         case 'attack': {
@@ -50,7 +49,7 @@ export const useBattleSequence = (sequence: BattleSequence) => {
             turn === 0 ? setPlayerAnimation('attack') : setNPCAnimation('attack');
             await wait(100);
 
-            turn === 0 ? setPlayerAnimation('static') : setNPCAnimation('static');
+            turn === 0 ? setNPCAnimation('damage') : setPlayerAnimation('damage');
             await wait(500);
 
             turn === 0 ? setNPCAnimation('damage') : setPlayerAnimation('damage');
@@ -161,7 +160,7 @@ export const useBattleSequence = (sequence: BattleSequence) => {
           break;
       }
     }
-  }, [selectedCharacter, sequence]);
+  }, [selectedCharacter, aiCharacter, sequence]);
 
   return {
     turn,

@@ -3,9 +3,10 @@ import * as S from './CharacterSelectionMenu.styles'
 
 interface CharacterSelectionMenuProps {
   onCharacterSelect: (characterImg: string, characterName: string) => void;
+  selectionStep: "player" | "ai";
 }
 
-export const CharacterSelectionMenu: React.FC<CharacterSelectionMenuProps> = ({ onCharacterSelect }) => {
+export const CharacterSelectionMenu: React.FC<CharacterSelectionMenuProps> = ({ onCharacterSelect, selectionStep, }) => {
   return (
     <>
       <S.Container>
