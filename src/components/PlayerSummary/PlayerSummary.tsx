@@ -18,7 +18,7 @@ export const PlayerSummary: React.FC<PlayerSummaryProps> = ({ selectedCharacter,
   return (
     <S.Container>
 
-      <S.ProfilePicture profilePicture={selectedCharacter ? `${selectedCharacter.name}` : "vegeta"} />
+      <S.ProfilePicture profilePicture={selectedCharacter ? selectedCharacter.name.toLowerCase() : "vegeta"} />
 
       <S.InnerContainer>
 
