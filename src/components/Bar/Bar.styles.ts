@@ -3,8 +3,6 @@ import styled from "styled-components";
 export const Container = styled.div`
   display: flex;
   gap: 5px;
-  padding: 5px;
-  margin: 10px 0px;
   align-items: center;
 `;
 
@@ -28,9 +26,9 @@ export const Max = styled.div`
   border: 3px ridge #FFCC00;
 `;
 
-export const Value = styled.div<{ width: number }>`
+export const Value = styled.div<{ width: number, color: string }>`
   height: 100%;
-  background-color: lawngreen;
+  background-color: ${({ color }) => color};
   transition: 0.35s;
   width: ${({ width }) => width}%;
 `;

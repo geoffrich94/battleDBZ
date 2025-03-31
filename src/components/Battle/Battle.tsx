@@ -1,7 +1,7 @@
 import { BattleMenu, PlayerSummary, BattleAnnouncer } from "components";
 import { useEffect, useState } from "react";
 import { useAIOpponent, useBattleSequence } from "hooks";
-import { npcStats, playerStats, Character, wait, BattleSequence } from "shared";
+import { Character, wait, BattleSequence } from "shared";
 import * as S from "./Battle.styles";
 import { useSelector } from "react-redux";
 import { RootState } from "redux/store";
@@ -23,7 +23,9 @@ export const Battle: React.FC<BattleProps> = ({ onGameEnd, selectedCharacter }) 
     ki: 0,
     attack: 0,
     defense: 0,
-    kiDefense: 0
+    kiDefense: 0,
+    maxEnergy: 100,
+    moveset: []
   };
 
   const aiCharacter = useSelector((state: RootState) => state.character.aiCharacter) || defaultAICharacter;
@@ -38,6 +40,8 @@ export const Battle: React.FC<BattleProps> = ({ onGameEnd, selectedCharacter }) 
     inSequence,
     nonPlayableCharacterHealth,
     playableCharacterHealth,
+    nonPlayableCharacterEnergy,
+    playableCharacterEnergy,
     announcerMessage,
     playerAnimation,
     npcAnimation,
@@ -86,6 +90,8 @@ export const Battle: React.FC<BattleProps> = ({ onGameEnd, selectedCharacter }) 
             level={aiCharacter.level}
             health={nonPlayableCharacterHealth}
             maxHealth={aiCharacter.maxHealth}
+            energy={nonPlayableCharacterEnergy}
+            maxEnergy={aiCharacter.maxEnergy}
           />
         </S.Summary>
       </S.NonPlayableCharacter>
@@ -118,6 +124,8 @@ export const Battle: React.FC<BattleProps> = ({ onGameEnd, selectedCharacter }) 
             level={selectedCharacter.level}
             health={playableCharacterHealth}
             maxHealth={selectedCharacter.maxHealth}
+            energy={playableCharacterEnergy}
+            maxEnergy={selectedCharacter.maxEnergy}
           />
         </S.Summary>
       </S.PlayableCharacter>
@@ -130,8 +138,10 @@ export const Battle: React.FC<BattleProps> = ({ onGameEnd, selectedCharacter }) 
         </S.HUDChild>
         <S.HUDChild>
           <BattleMenu
+            selectedCharacter={selectedCharacter}
             onAttack={() => setSequence({ mode: "attack", turn })}
             onKi={() => setSequence({ mode: "ki", turn })}
+            onMove={() => setSequence({ mode: "move01", turn })}
             onSenzu={() => setSequence({ turn, mode: "senzu" })}
           />
         </S.HUDChild>

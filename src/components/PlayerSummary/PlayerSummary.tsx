@@ -12,9 +12,11 @@ interface PlayerSummaryProps {
   level: number;
   health: number;
   maxHealth: number;
+  energy: number;
+  maxEnergy: number;
 }
 
-export const PlayerSummary: React.FC<PlayerSummaryProps> = ({ selectedCharacter, playableCharacter, name, level, health, maxHealth }) => {
+export const PlayerSummary: React.FC<PlayerSummaryProps> = ({ selectedCharacter, playableCharacter, name, level, health, maxHealth, energy, maxEnergy }) => {
   return (
     <S.Container>
 
@@ -30,7 +32,8 @@ export const PlayerSummary: React.FC<PlayerSummaryProps> = ({ selectedCharacter,
         </S.Info>
 
         <S.Health>
-          <Bar width={(health / maxHealth) * 100} label='HP' />
+          <Bar width={(health / maxHealth) * 100} label='HP' color='lawngreen'/>
+          <Bar width={(energy/ maxEnergy) * 100} label='EP' color='blue'/>
         </S.Health>
 
       </S.InnerContainer>

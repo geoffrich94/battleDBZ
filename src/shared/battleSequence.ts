@@ -1,4 +1,4 @@
 export interface BattleSequence {
-  mode?: 'attack' | 'ki' | 'senzu' | 'idle';
+  mode?: 'attack' | 'ki' | 'move01' | 'senzu' | 'idle';
   turn: number;
 };
