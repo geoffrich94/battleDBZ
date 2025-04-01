@@ -36,18 +36,18 @@ export const characters: Character[] = [
     kiDefense: 30,
     moveset: [
       {
-        name: 'Kamehameha',
+        name: "Kamehameha",
         damage: 80,
         kiCost: 75,
-        special: false
+        special: false,
       },
       {
-        name: 'Spirit Bomb',
+        name: "Spirit Bomb",
         damage: 120,
         kiCost: 150,
-        special: true
-      }
-    ]
+        special: true,
+      },
+    ],
   },
   {
     level: 44,
@@ -63,18 +63,18 @@ export const characters: Character[] = [
     kiDefense: 48,
     moveset: [
       {
-        name: 'Galick Gun',
+        name: "Galick Gun",
         damage: 80,
         kiCost: 75,
-        special: false
+        special: false,
       },
       {
-        name: 'Final Flash',
+        name: "Final Flash",
         damage: 120,
         kiCost: 150,
-        special: true
-      }
-    ]
+        special: true,
+      },
+    ],
   },
   {
     level: 44,
@@ -90,18 +90,18 @@ export const characters: Character[] = [
     kiDefense: 48,
     moveset: [
       {
-        name: 'Death Beam',
+        name: "Death Beam",
         damage: 90,
         kiCost: 75,
         special: false,
       },
       {
-        name: 'Death Ball',
+        name: "Death Ball",
         damage: 110,
         kiCost: 125,
         special: true,
-      }
-    ]
+      },
+    ],
   },
   {
     level: 44,
@@ -117,24 +117,24 @@ export const characters: Character[] = [
     kiDefense: 48,
     moveset: [
       {
-        name: 'Kamehameha',
+        name: "Kamehameha",
         damage: 80,
         kiCost: 75,
-        special: false
+        special: false,
       },
       {
-        name: 'Masenko',
+        name: "Masenko",
         damage: 55,
         kiCost: 60,
-        special: false
+        special: false,
       },
       {
-        name: 'Super Kamehameha',
+        name: "Super Kamehameha",
         damage: 110,
         kiCost: 150,
-        special: true
+        special: true,
       },
-  ],
+    ],
   },
   {
     level: 44,
@@ -150,18 +150,18 @@ export const characters: Character[] = [
     kiDefense: 48,
     moveset: [
       {
-        name: 'Light Grenade',
+        name: "Light Grenade",
         damage: 50,
         kiCost: 60,
         special: false,
       },
       {
-        name: 'Special Beam Cannon',
+        name: "Special Beam Cannon",
         damage: 105,
         kiCost: 120,
         special: true,
-      }
-    ]
+      },
+    ],
   },
   {
     level: 44,
@@ -177,12 +177,18 @@ export const characters: Character[] = [
     kiDefense: 48,
     moveset: [
       {
-        name: 'Hakai (Destruction)',
+        name: "Sphere of Destruction",
+        damage: 80,
+        kiCost: 75,
+        special: false,
+      },
+      {
+        name: "Hakai (Destruction)",
         damage: 200,
         kiCost: 250,
         special: true,
-      }
-    ]
+      },
+    ],
   },
   {
     level: 44,
@@ -198,18 +204,18 @@ export const characters: Character[] = [
     kiDefense: 48,
     moveset: [
       {
-        name: 'Kiai',
+        name: "Kiai",
         damage: 70,
         kiCost: 75,
         special: false,
       },
       {
-        name: 'Power Impact',
+        name: "Power Impact",
         damage: 115,
         kiCost: 150,
         special: true,
-      }
-    ]
+      },
+    ],
   },
   {
     level: 44,
@@ -225,17 +231,17 @@ export const characters: Character[] = [
     kiDefense: 48,
     moveset: [
       {
-        name: 'Black Kamehameha',
+        name: "Black Kamehameha",
         damage: 70,
         kiCost: 75,
         special: false,
       },
       {
-        name: 'Divine Retribution',
+        name: "Divine Retribution",
         damage: 115,
         kiCost: 150,
         special: true,
-      }
-    ]
+      },
+    ],
   },
 ];
