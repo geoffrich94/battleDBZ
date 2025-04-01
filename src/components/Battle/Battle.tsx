@@ -139,9 +139,11 @@ export const Battle: React.FC<BattleProps> = ({ onGameEnd, selectedCharacter }) 
         <S.HUDChild>
           <BattleMenu
             selectedCharacter={selectedCharacter}
+            playableCharacterHealth={playableCharacterHealth}
             onAttack={() => setSequence({ mode: "attack", turn })}
             onKi={() => setSequence({ mode: "ki", turn })}
-            onMove={() => setSequence({ mode: "move01", turn })}
+            onSignatureMove={() => setSequence({ mode: "signatureMove", turn })}
+            onSpecialMove={() => setSequence({ mode: "specialMove", turn })}
             onSenzu={() => setSequence({ turn, mode: "senzu" })}
           />
         </S.HUDChild>

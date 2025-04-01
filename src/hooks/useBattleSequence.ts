@@ -1,7 +1,13 @@
-import { wait, ki, senzu, attack, BattleSequence, Character, calculateMoveDamage } from "shared";
+import {
+  wait,
+  ki,
+  senzu,
+  attack,
+  BattleSequence,
+  Character,
+  calculateMoveDamage,
+} from "shared";
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
-import { RootState } from "redux/store";
 
 export const useBattleSequence = (
   sequence: BattleSequence,
@@ -19,6 +25,7 @@ export const useBattleSequence = (
   const [nonPlayableCharacterEnergy, setNonPlayableCharacterEnergy] = useState(
     aiCharacter.maxEnergy
   );
+  // Set the max energy of the playable character to the character states max energy
   const [playableCharacterEnergy, setPlayableCharacterEnergy] = useState(
     selectedCharacter.maxEnergy
   );
@@ -129,66 +136,155 @@ export const useBattleSequence = (
           break;
         }
 
-        case 'move01': {
+        case "signatureMove": {
           // Get the first move in the selected character's moveset
           const selectedMove = selectedCharacter.moveset[0]; // First move in the moveset
           const kiCost = selectedMove.kiCost;
-        
+
           // Check if the selected character has enough energy to use the move
           if (playableCharacterEnergy >= kiCost) {
             (async () => {
               setInSequence(true);
-              setAnnouncerMessage(`${selectedCharacter.name} has used ${selectedMove.name}!`);
-        
+              setAnnouncerMessage(
+                `${selectedCharacter.name} has used ${selectedMove.name}!`
+              );
+
               // Deduct energy for the move
-              setPlayableCharacterEnergy(h => h - kiCost);
-        
+              setPlayableCharacterEnergy((energy) => energy - kiCost);
+
               // Calculate the damage using the utility function
-              const damage = calculateMoveDamage(selectedCharacter, aiCharacter, selectedMove);
-        
+              const damage = calculateMoveDamage(
+                selectedCharacter,
+                aiCharacter,
+                selectedMove
+              );
+
               await wait(1000);
-        
+
               // Set animation for the attack
-              turn === 0 ? setPlayerAnimation('ki') : setNPCAnimation('ki');
+              turn === 0 ? setPlayerAnimation("ki") : setNPCAnimation("ki");
               await wait(1000);
-        
+
               // Set animation for damage
-              turn === 0 ? setPlayerAnimation('static') : setNPCAnimation('static');
+              turn === 0
+                ? setPlayerAnimation("static")
+                : setNPCAnimation("static");
               await wait(500);
-        
+
               turn === 0
-                ? setNPCAnimation('damage')
-                : setPlayerAnimation('damage');
+                ? setNPCAnimation("damage")
+                : setPlayerAnimation("damage");
               await wait(750);
-        
+
               turn === 0
-                ? setNPCAnimation('static')
-                : setPlayerAnimation('static');
-              setAnnouncerMessage(`${selectedCharacter.name} landed the attack!`);
-        
+                ? setNPCAnimation("static")
+                : setPlayerAnimation("static");
+              setAnnouncerMessage(
+                `${selectedCharacter.name} landed the attack!`
+              );
+
               // Apply damage to the opponent
               turn === 0
-                ? setNonPlayableCharacterHealth(h =>
+                ? setNonPlayableCharacterHealth((h) =>
                     h - damage > 0 ? h - damage : 0
                   )
-                : setPlayableCharacterHealth(h =>
+                : setPlayableCharacterHealth((h) =>
                     h - damage > 0 ? h - damage : 0
                   );
-        
+
               await wait(2500);
-        
+
               setAnnouncerMessage(`Now it's ${selectedCharacter.name}'s turn!`);
               await wait(1500);
-        
+
               // Switch turn
               setTurn(turn === 0 ? 1 : 0);
               setInSequence(false);
             })();
           } else {
             // If not enough energy, display a message
-            setAnnouncerMessage(`${selectedCharacter.name} doesn't have enough energy!`);
+            setAnnouncerMessage(
+              `${selectedCharacter.name} doesn't have enough energy!`
+            );
           }
-        
+
+          break;
+        }
+
+        case "specialMove": {
+          const selectedMove = selectedCharacter.moveset[1];
+          console.log(selectedMove);
+          const kiCost = selectedCharacter.moveset[1].kiCost;
+
+          // Check to see if the selected character has enough energy to make the move
+          if (playableCharacterEnergy >= kiCost) {
+            (async () => {
+              // Set the state so that the battle sequence is currently in sequence/progess
+              setInSequence(true);
+              // Set the suitable announcer message
+              setAnnouncerMessage(
+                `${selectedCharacter.name} has used ${selectedMove.name}!`
+              );
+
+              // Deduct energy for the move
+              setPlayableCharacterEnergy((energy) => energy - kiCost);
+
+              // Calculate the damage using the utility function
+              const damage = calculateMoveDamage(
+                selectedCharacter,
+                aiCharacter,
+                selectedMove
+              );
+
+              await wait(1000);
+
+              // Set animation for the attack
+              turn === 0 ? setPlayerAnimation("ki") : setNPCAnimation("ki");
+              await wait(1000);
+
+              // Set animation for damage
+              turn === 0
+                ? setPlayerAnimation("static")
+                : setNPCAnimation("static");
+              await wait(500);
+
+              turn === 0
+                ? setNPCAnimation("damage")
+                : setPlayerAnimation("damage");
+              await wait(750);
+
+              turn === 0
+                ? setNPCAnimation("static")
+                : setPlayerAnimation("static");
+              setAnnouncerMessage(
+                `${selectedCharacter.name} landed the attack!`
+              );
+
+              // Apply damage to the opponent
+              turn === 0
+                ? setNonPlayableCharacterHealth((h) =>
+                    h - damage > 0 ? h - damage : 0
+                  )
+                : setPlayableCharacterHealth((h) =>
+                    h - damage > 0 ? h - damage : 0
+                  );
+
+              await wait(2500);
+
+              setAnnouncerMessage(`Now it's ${selectedCharacter.name}'s turn!`);
+              await wait(1500);
+
+              // Switch turn
+              setTurn(turn === 0 ? 1 : 0);
+              setInSequence(false);
+            })();
+          } else {
+            // If not enough energy, display a message
+            setAnnouncerMessage(
+              `${selectedCharacter.name} doesn't have enough energy!`
+            );
+          }
+
           break;
         }
 

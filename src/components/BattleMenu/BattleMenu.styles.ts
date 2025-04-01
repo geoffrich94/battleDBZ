@@ -25,7 +25,7 @@ export const Container = styled.div<{ isHidden: boolean }>`
 
 export const Option = styled.button`
   transform: rotate(2deg);
-  height: 90%;
+  height: 100%;
   width: 100%;
   display: flex;
   border: 5px solid orangered;

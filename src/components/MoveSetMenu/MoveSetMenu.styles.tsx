@@ -17,15 +17,15 @@ export const Container = styled.div<{ isHidden: boolean }>`
   grid-template-columns: repeat(2, 1fr);
   grid-auto-rows: 1fr;
 
-  /* If there are an odd number of children, the first spans both columns */
   & > :first-child:nth-last-child(odd) {
     grid-column: span 2;
   }
 `;
 
-export const Option = styled.div`
+export const Option = styled.button`
   transform: rotate(2deg);
-  height: 90%;
+  height: 100%;
+  width: 100%;
   display: flex;
   border: 5px solid orangered;
 
@@ -48,6 +48,11 @@ export const Option = styled.div`
     background-size: cover;
     position: absolute;
     left: 10px;
+  }
+
+  &:disabled {
+    cursor: not-allowed; /* Prevents the button from interacting */
+
   }
 
   @media ${devices.laptop} {

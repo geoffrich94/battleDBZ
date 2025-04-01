@@ -5,18 +5,22 @@ import { useState } from "react";
 import { Character } from "shared";
 
 interface BattleMenuProps {
-  selectedCharacter: Character
+  selectedCharacter: Character;
+  playableCharacterHealth: number;
   onAttack: () => void;
   onKi: () => void;
   onSenzu: () => void;
-  onMove: () => void;
+  onSignatureMove: () => void;
+  onSpecialMove: () => void;
 }
 
 export const BattleMenu: React.FC<BattleMenuProps> = ({
   selectedCharacter,
+  playableCharacterHealth,
   onAttack,
   onKi,
-  onMove,
+  onSignatureMove,
+  onSpecialMove,
   onSenzu,
 }) => {
 
@@ -36,7 +40,7 @@ export const BattleMenu: React.FC<BattleMenuProps> = ({
         </S.Border>
       </S.Container>
 
-      <MoveSetMenu onKi={onKi} onMove={onMove} isHidden={!isHidden} selectedCharacter={selectedCharacter} onBack={() => setIsHidden(false)} />
+      <MoveSetMenu onKi={onKi} onSpecialMove={onSpecialMove} onSignatureMove={onSignatureMove} isHidden={!isHidden} selectedCharacter={selectedCharacter} playableCharacterHealth={playableCharacterHealth} onBack={() => setIsHidden(false)} />
     </>
   );
 };
