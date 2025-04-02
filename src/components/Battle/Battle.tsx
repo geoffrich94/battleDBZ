@@ -11,8 +11,10 @@ interface BattleProps {
   selectedCharacter: Character;
 }
 
-export const Battle: React.FC<BattleProps> = ({ onGameEnd, selectedCharacter }) => {
-
+export const Battle: React.FC<BattleProps> = ({
+  onGameEnd,
+  selectedCharacter,
+}) => {
   const defaultAICharacter: Character = {
     name: "Default AI",
     level: 1,
@@ -25,15 +27,19 @@ export const Battle: React.FC<BattleProps> = ({ onGameEnd, selectedCharacter }) 
     defense: 0,
     kiDefense: 0,
     maxEnergy: 100,
-    moveset: []
+    moveset: [],
   };
 
-  const aiCharacter = useSelector((state: RootState) => state.character.aiCharacter) || defaultAICharacter;
+  const aiCharacter =
+    useSelector((state: RootState) => state.character.aiCharacter) ||
+    defaultAICharacter;
 
   const [sequence, setSequence] = useState<BattleSequence>({
-    mode: 'idle', // Default action
+    mode: "idle", // Default action
     turn: 0, // Player starts first
   });
+
+  const [selectedMoveName, setSelectedMoveName] = useState<string>("");
 
   const {
     turn,
@@ -45,7 +51,12 @@ export const Battle: React.FC<BattleProps> = ({ onGameEnd, selectedCharacter }) 
     announcerMessage,
     playerAnimation,
     npcAnimation,
-  } = useBattleSequence(sequence, selectedCharacter, aiCharacter);
+  } = useBattleSequence(
+    sequence,
+    selectedCharacter,
+    aiCharacter,
+    selectedMoveName
+  );
 
   const aiChoice = useAIOpponent(turn);
 
@@ -57,7 +68,7 @@ export const Battle: React.FC<BattleProps> = ({ onGameEnd, selectedCharacter }) 
     if (turn === 1 && !inSequence && !usedAiTurn) {
       if (aiChoice) {
         setUsedAiTurn(true); // Ensure AI only acts once
-        setSequence({ turn, mode: aiChoice as 'attack' | 'ki' | 'senzu' });
+        setSequence({ turn, mode: aiChoice as "attack" | "ki" | "senzu" });
       }
     }
 
@@ -71,12 +82,18 @@ export const Battle: React.FC<BattleProps> = ({ onGameEnd, selectedCharacter }) 
     if (playableCharacterHealth === 0 || nonPlayableCharacterHealth === 0) {
       (async () => {
         await wait(1000);
-        onGameEnd(playableCharacterHealth === 0 ? aiCharacter : selectedCharacter);
+        onGameEnd(
+          playableCharacterHealth === 0 ? aiCharacter : selectedCharacter
+        );
       })();
     }
-  }, [playableCharacterHealth, nonPlayableCharacterHealth, onGameEnd, aiCharacter, selectedCharacter]);
-
-  
+  }, [
+    playableCharacterHealth,
+    nonPlayableCharacterHealth,
+    onGameEnd,
+    aiCharacter,
+    selectedCharacter,
+  ]);
 
   return (
     <>
@@ -109,7 +126,6 @@ export const Battle: React.FC<BattleProps> = ({ onGameEnd, selectedCharacter }) 
             <img
               alt={aiCharacter.name}
               src={`${process.env.PUBLIC_URL || ""}${aiCharacter.img}`}
-
               className={npcAnimation}
             />
           </S.NPCSprite>
@@ -133,7 +149,9 @@ export const Battle: React.FC<BattleProps> = ({ onGameEnd, selectedCharacter }) 
       <S.HUD>
         <S.HUDChild>
           <BattleAnnouncer
-            message={announcerMessage || `What will ${selectedCharacter.name} do?`}
+            message={
+              announcerMessage || `What will ${selectedCharacter.name} do?`
+            }
           />
         </S.HUDChild>
         <S.HUDChild>
@@ -142,7 +160,11 @@ export const Battle: React.FC<BattleProps> = ({ onGameEnd, selectedCharacter }) 
             playableCharacterHealth={playableCharacterHealth}
             onAttack={() => setSequence({ mode: "attack", turn })}
             onKi={() => setSequence({ mode: "ki", turn })}
-            onSignatureMove={() => setSequence({ mode: "signatureMove", turn })}
+            onSignatureMove={(moveName: string) => {
+              console.log(`Selected Signature Move: ${moveName}`);
+              setSelectedMoveName(moveName); // Save the move name
+              setSequence({ mode: "signatureMove", turn }); // Start sequence
+            }}
             onSpecialMove={() => setSequence({ mode: "specialMove", turn })}
             onSenzu={() => setSequence({ turn, mode: "senzu" })}
           />

@@ -1,6 +1,6 @@
 import { Character } from "shared";
 import * as S from "./MoveSetMenu.styles";
-import { PlayableCharacter } from '../Battle/Battle.styles';
+import { PlayableCharacter } from "../Battle/Battle.styles";
 
 interface MoveSetMenuProps {
   isHidden: boolean;
@@ -8,7 +8,7 @@ interface MoveSetMenuProps {
   playableCharacterHealth: number;
   onKi: () => void;
   onBack: () => void;
-  onSignatureMove: () => void;
+  onSignatureMove: (moveName: string) => void; // This function expects a move name
   onSpecialMove: () => void;
 }
 
@@ -17,35 +17,42 @@ export const MoveSetMenu: React.FC<MoveSetMenuProps> = ({
   selectedCharacter,
   playableCharacterHealth,
   onKi,
+  onBack,
   onSignatureMove,
   onSpecialMove,
-  onBack,
 }) => {
   return (
-
-    
     <S.Container isHidden={isHidden}>
       <S.Border>
-        <S.Option onClick={onBack}>Back</S.Option> {/* <-- Calls onBack */}
+        <S.Option onClick={onBack}>Back</S.Option>
       </S.Border>
       <S.Border>
         <S.Option onClick={onKi}>Ki Blast</S.Option>
       </S.Border>
       {selectedCharacter.moveset.map((move, index) => {
-  console.log(`Move: ${move.name}, Index: ${index}, Health: ${playableCharacterHealth}, Disabled: ${index === 1 && playableCharacterHealth < (selectedCharacter.maxHealth * 0.2)}`);
+        const isLastMove = index === selectedCharacter.moveset.length - 1;
+        const isHealthLow =
+          playableCharacterHealth < selectedCharacter.maxHealth * 0.2;
 
-  return (
-    <S.Border key={index}>
-      <S.Option 
-        disabled={index === 1 && playableCharacterHealth > (selectedCharacter.maxHealth * 0.2)}
-        onClick={index === 0 ? onSignatureMove : onSpecialMove}
-      >
-        {move.name}
-      </S.Option>
-    </S.Border>
-  );
-})}
+        const handleMoveClick = () => {
+          if (move.special) {
+            onSpecialMove();
+          } else {
+            onSignatureMove(move.name);
+          }
+        };
 
+        return (
+          <S.Border key={index}>
+            <S.Option
+              disabled={isLastMove && !isHealthLow}
+              onClick={handleMoveClick}
+            >
+              {move.name}
+            </S.Option>
+          </S.Border>
+        );
+      })}
     </S.Container>
   );
 };

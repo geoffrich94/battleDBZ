@@ -12,7 +12,8 @@ import { useEffect, useState } from "react";
 export const useBattleSequence = (
   sequence: BattleSequence,
   selectedCharacter: Character,
-  aiCharacter: Character
+  aiCharacter: Character,
+  selectedMoveName: string // Add selectedMoveName as an argument
 ) => {
   const [turn, setTurn] = useState(0);
   const [inSequence, setInSequence] = useState(false);
@@ -25,7 +26,6 @@ export const useBattleSequence = (
   const [nonPlayableCharacterEnergy, setNonPlayableCharacterEnergy] = useState(
     aiCharacter.maxEnergy
   );
-  // Set the max energy of the playable character to the character states max energy
   const [playableCharacterEnergy, setPlayableCharacterEnergy] = useState(
     selectedCharacter.maxEnergy
   );
@@ -51,7 +51,6 @@ export const useBattleSequence = (
           (async () => {
             setInSequence(true);
             setAnnouncerMessage(`${attacker.name} has chosen to attack!`);
-
             await wait(1000);
 
             turn === 0
@@ -74,15 +73,11 @@ export const useBattleSequence = (
               : setPlayerAnimation("static");
             setAnnouncerMessage(`${receiver.name} felt that!`);
             turn === 0
-              ? setNonPlayableCharacterHealth((h) =>
-                  h - damage > 0 ? h - damage : 0
-                )
-              : setPlayableCharacterHealth((h) =>
-                  h - damage > 0 ? h - damage : 0
-                );
+              ? setNonPlayableCharacterHealth((h) => Math.max(0, h - damage))
+              : setPlayableCharacterHealth((h) => Math.max(0, h - damage));
             await wait(2000);
 
-            setAnnouncerMessage(`Now its ${receiver.name}'s turn!`);
+            setAnnouncerMessage(`Now it's ${receiver.name}'s turn!`);
             await wait(1500);
 
             setTurn(turn === 0 ? 1 : 0);
@@ -118,12 +113,8 @@ export const useBattleSequence = (
               : setPlayerAnimation("static");
             setAnnouncerMessage(`${receiver.name} doesn't know what hit them!`);
             turn === 0
-              ? setNonPlayableCharacterHealth((h) =>
-                  h - damage > 0 ? h - damage : 0
-                )
-              : setPlayableCharacterHealth((h) =>
-                  h - damage > 0 ? h - damage : 0
-                ); // We don't want a negative HP.
+              ? setNonPlayableCharacterHealth((h) => Math.max(0, h - damage))
+              : setPlayableCharacterHealth((h) => Math.max(0, h - damage));
             await wait(2500);
 
             setAnnouncerMessage(`Now it's ${receiver.name}'s turn!`);
@@ -137,9 +128,19 @@ export const useBattleSequence = (
         }
 
         case "signatureMove": {
-          // Get the first move in the selected character's moveset
-          const selectedMove = selectedCharacter.moveset[0]; // First move in the moveset
-          const kiCost = selectedMove.kiCost;
+          // Find the selected signature move from the moveset
+          const selectedMove = selectedCharacter.moveset.find(
+            (move) => move.name === selectedMoveName && move.special !== true
+          );
+
+          if (!selectedMove) {
+            setAnnouncerMessage(
+              `${selectedCharacter.name} has no signature move selected!`
+            );
+            break;
+          }
+
+          const kiCost = selectedMove.kiCost; // Get the kiCost from the signature move
 
           // Check if the selected character has enough energy to use the move
           if (playableCharacterEnergy >= kiCost) {
@@ -185,12 +186,8 @@ export const useBattleSequence = (
 
               // Apply damage to the opponent
               turn === 0
-                ? setNonPlayableCharacterHealth((h) =>
-                    h - damage > 0 ? h - damage : 0
-                  )
-                : setPlayableCharacterHealth((h) =>
-                    h - damage > 0 ? h - damage : 0
-                  );
+                ? setNonPlayableCharacterHealth((h) => Math.max(0, h - damage))
+                : setPlayableCharacterHealth((h) => Math.max(0, h - damage));
 
               await wait(2500);
 
@@ -212,77 +209,81 @@ export const useBattleSequence = (
         }
 
         case "specialMove": {
-          const selectedMove = selectedCharacter.moveset[1];
-          console.log(selectedMove);
-          const kiCost = selectedCharacter.moveset[1].kiCost;
+          // Find the special move with special: true (which is Super Kamehameha)
+          const selectedMove = selectedCharacter.moveset.find(
+            (move) => move.special === true
+          );
 
-          // Check to see if the selected character has enough energy to make the move
-          if (playableCharacterEnergy >= kiCost) {
-            (async () => {
-              // Set the state so that the battle sequence is currently in sequence/progess
-              setInSequence(true);
-              // Set the suitable announcer message
+          // If a special move is found, proceed
+          if (selectedMove) {
+            const kiCost = selectedMove.kiCost; // Get the kiCost from the special move
+
+            // Check to see if the selected character has enough energy to make the move
+            if (playableCharacterEnergy >= kiCost) {
+              (async () => {
+                setInSequence(true);
+                setAnnouncerMessage(
+                  `${selectedCharacter.name} has used ${selectedMove.name}!`
+                );
+
+                // Deduct energy for the move
+                setPlayableCharacterEnergy((energy) => energy - kiCost);
+
+                // Calculate the damage using the utility function
+                const damage = calculateMoveDamage(
+                  selectedCharacter,
+                  aiCharacter,
+                  selectedMove
+                );
+
+                await wait(1000);
+
+                // Set animation for the attack
+                turn === 0 ? setPlayerAnimation("ki") : setNPCAnimation("ki");
+                await wait(1000);
+
+                // Set animation for damage
+                turn === 0
+                  ? setPlayerAnimation("static")
+                  : setNPCAnimation("static");
+                await wait(500);
+
+                turn === 0
+                  ? setNPCAnimation("damage")
+                  : setPlayerAnimation("damage");
+                await wait(750);
+
+                turn === 0
+                  ? setNPCAnimation("static")
+                  : setPlayerAnimation("static");
+                setAnnouncerMessage(
+                  `${selectedCharacter.name} landed the attack!`
+                );
+
+                // Apply damage to the opponent
+                turn === 0
+                  ? setNonPlayableCharacterHealth((h) =>
+                      Math.max(0, h - damage)
+                    )
+                  : setPlayableCharacterHealth((h) => Math.max(0, h - damage));
+
+                await wait(2500);
+
+                setAnnouncerMessage(
+                  `Now it's ${selectedCharacter.name}'s turn!`
+                );
+                await wait(1500);
+
+                // Switch turn
+                setTurn(turn === 0 ? 1 : 0);
+                setInSequence(false);
+              })();
+            } else {
+              // If not enough energy, display a message
               setAnnouncerMessage(
-                `${selectedCharacter.name} has used ${selectedMove.name}!`
+                `${selectedCharacter.name} doesn't have enough energy!`
               );
-
-              // Deduct energy for the move
-              setPlayableCharacterEnergy((energy) => energy - kiCost);
-
-              // Calculate the damage using the utility function
-              const damage = calculateMoveDamage(
-                selectedCharacter,
-                aiCharacter,
-                selectedMove
-              );
-
-              await wait(1000);
-
-              // Set animation for the attack
-              turn === 0 ? setPlayerAnimation("ki") : setNPCAnimation("ki");
-              await wait(1000);
-
-              // Set animation for damage
-              turn === 0
-                ? setPlayerAnimation("static")
-                : setNPCAnimation("static");
-              await wait(500);
-
-              turn === 0
-                ? setNPCAnimation("damage")
-                : setPlayerAnimation("damage");
-              await wait(750);
-
-              turn === 0
-                ? setNPCAnimation("static")
-                : setPlayerAnimation("static");
-              setAnnouncerMessage(
-                `${selectedCharacter.name} landed the attack!`
-              );
-
-              // Apply damage to the opponent
-              turn === 0
-                ? setNonPlayableCharacterHealth((h) =>
-                    h - damage > 0 ? h - damage : 0
-                  )
-                : setPlayableCharacterHealth((h) =>
-                    h - damage > 0 ? h - damage : 0
-                  );
-
-              await wait(2500);
-
-              setAnnouncerMessage(`Now it's ${selectedCharacter.name}'s turn!`);
-              await wait(1500);
-
-              // Switch turn
-              setTurn(turn === 0 ? 1 : 0);
-              setInSequence(false);
-            })();
-          } else {
-            // If not enough energy, display a message
-            setAnnouncerMessage(
-              `${selectedCharacter.name} doesn't have enough energy!`
-            );
+            }
           }
 
           break;
@@ -307,15 +308,11 @@ export const useBattleSequence = (
             setAnnouncerMessage(`${attacker.name} has recovered health.`);
             turn === 0
               ? setPlayableCharacterHealth((h) =>
-                  h + recovered <= attacker.maxHealth
-                    ? h + recovered
-                    : attacker.maxHealth
+                  Math.min(h + recovered, selectedCharacter.maxHealth)
                 )
               : setNonPlayableCharacterHealth((h) =>
-                  h + recovered <= attacker.maxHealth
-                    ? h + recovered
-                    : attacker.maxHealth
-                ); // We don't want to set HP more than the max
+                  Math.min(h + recovered, aiCharacter.maxHealth)
+                );
             await wait(2500);
 
             setAnnouncerMessage(`Now it's ${receiver.name}'s turn!`);
@@ -332,7 +329,7 @@ export const useBattleSequence = (
           break;
       }
     }
-  }, [selectedCharacter, aiCharacter, sequence]);
+  }, [selectedCharacter, aiCharacter, sequence, selectedMoveName]); // ✅ Add selectedMoveName to dependencies
 
   return {
     turn,

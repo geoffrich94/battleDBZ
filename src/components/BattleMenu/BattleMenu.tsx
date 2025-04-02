@@ -10,7 +10,7 @@ interface BattleMenuProps {
   onAttack: () => void;
   onKi: () => void;
   onSenzu: () => void;
-  onSignatureMove: () => void;
+  onSignatureMove: (moveName: string) => void; // Accepts a move name
   onSpecialMove: () => void;
 }
 
@@ -25,6 +25,7 @@ export const BattleMenu: React.FC<BattleMenuProps> = ({
 }) => {
 
   const [isHidden, setIsHidden] = useState(false)
+
 
   return (
     <>
