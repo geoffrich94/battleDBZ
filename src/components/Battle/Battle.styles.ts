@@ -3,16 +3,35 @@ import styled, { keyframes } from "styled-components";
 import { devices } from "theme";
 
 const flash = keyframes`
-  0 % {
+  0% {
     opacity: 0;
   }
-  50 % {
+  50% {
     opacity: 1;
   }
-  100 % {
+  100% {
     opacity: 0;
   }
 `;
+
+const glow = keyframes`
+  0% {
+    filter: brightness(1);
+  }
+  50% {
+    filter: brightness(10); 
+  }
+  50% {
+    filter: brightness(1); 
+  }
+  75% {
+    filter: brightness(10); 
+  }
+  100% {
+    filter: brightness(1);
+  }
+`;
+
 export const Logo = styled.div`
   position: absolute;
   background: url("${process.env.PUBLIC_URL}/assets/logo.png");
@@ -45,7 +64,6 @@ export const NonPlayableCharacter = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
-  /* padding: 25px; */
   box-sizing: border-box;
 
   & ${Summary} {
@@ -59,7 +77,6 @@ export const PlayableCharacter = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
-  /* padding: 25px; */
   box-sizing: border-box;
 `;
 
@@ -92,7 +109,6 @@ export const GameHeader = styled.div`
 export const GameImages = styled.div`
   display: flex;
   justify-content: space-between;
-  /* padding: 25px; */
   box-sizing: border-box;
 `;
 
@@ -123,6 +139,9 @@ export const PlayerSprite = styled.div`
     transition: 0.1s;
     transform: translateX(100px);
   }
+  & img.ki {
+    animation: ${glow} 0.5s linear infinite; 
+  }
   & img.damage {
     opacity: 1;
     animation: ${flash} 0.3s 0.3s infinite;
@@ -131,7 +150,7 @@ export const PlayerSprite = styled.div`
 
 export const NPCSprite = styled.div`
   & img {
-    transform: scaleX(-1);  /* Default flip */
+    transform: scaleX(-1);
     transition: 0.5s;
   }
 
@@ -141,63 +160,11 @@ export const NPCSprite = styled.div`
   }
 
   & img.attack {
-    transform: scaleX(-1) translateX(100px) translateY(0px);  /* Unflip for attack and move */
+    transform: scaleX(-1) translateX(100px) translateY(0px);
     transition: 0.1s;
   }
-
   & img.damage {
-    transform: scaleX(-1) translateX(0px) translateY(0px);  /* Maintain flip on damage */
-    opacity: 1;
-    transition: opacity 0.3s ease-in-out;
-    animation: ${flash} 0.3s 0.3s infinite;
+    transform: scaleX(-1) translateX(0px) translateY(0px);
+    animation: ${flash} 0.3s infinite;
   }
 `;
-
-
-
-// .magic {
-//   transition: 0.2s;
-//   transform: translateY(-25px);
-//   animation: shake 0.5s infinite;
-// }
-
-// .damage {
-//   opacity: 1;
-//   animation: flash 0.3s 0.3s infinite;
-// }
-
-// @keyframes shake {
-//   0 % {
-//     transform: translate(1px, 1px) rotate(0deg) translateY(- 25px);
-// }
-// 10 % {
-//   transform: translate(-1px, -2px) rotate(- 1deg) translateY(-25px);
-//   }
-// 20 % {
-//   transform: translate(-3px, 0px) rotate(1deg) translateY(- 25px);
-//   }
-// 30 % {
-//   transform: translate(3px, 2px) rotate(0deg) translateY(- 25px);
-//   }
-// 40 % {
-//   transform: translate(1px, -1px) rotate(1deg) translateY(- 25px);
-//   }
-// 50 % {
-//   transform: translate(-1px, 2px) rotate(- 1deg) translateY(-25px);
-//   }
-// 60 % {
-//   transform: translate(-3px, 1px) rotate(0deg) translateY(- 25px);
-//   }
-// 70 % {
-//   transform: translate(3px, 1px) rotate(- 1deg) translateY(-25px);
-//   }
-// 80 % {
-//   transform: translate(-1px, -1px) rotate(1deg) translateY(- 25px);
-//   }
-// 90 % {
-//   transform: translate(1px, 2px) rotate(0deg) translateY(- 25px);
-//   }
-// 100 % {
-//   transform: translate(1px, -2px) rotate(- 1deg) translateY(-25px);
-//   }
-// }

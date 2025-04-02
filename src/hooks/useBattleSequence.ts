@@ -53,24 +53,24 @@ export const useBattleSequence = (
             setAnnouncerMessage(`${attacker.name} has chosen to attack!`);
             await wait(1000);
 
-            turn === 0
-              ? setPlayerAnimation("attack")
-              : setNPCAnimation("attack");
+            if (turn === 0) {
+              setPlayerAnimation("attack");
+              setTimeout(() => setPlayerAnimation("static"), 200);
+            } else {
+              setNPCAnimation("attack");
+              setTimeout(() => setNPCAnimation("static"), 200);
+            }
             await wait(100);
 
-            turn === 0
-              ? setNPCAnimation("damage")
-              : setPlayerAnimation("damage");
+            if (turn === 0) {
+              setNPCAnimation("damage");
+              setTimeout(() => setNPCAnimation("static"), 2000);
+            } else {
+              setPlayerAnimation("damage");
+              setTimeout(() => setPlayerAnimation("static"), 2000);
+            }
             await wait(500);
 
-            turn === 0
-              ? setNPCAnimation("damage")
-              : setPlayerAnimation("damage");
-            await wait(750);
-
-            turn === 0
-              ? setNPCAnimation("static")
-              : setPlayerAnimation("static");
             setAnnouncerMessage(`${receiver.name} felt that!`);
             turn === 0
               ? setNonPlayableCharacterHealth((h) => Math.max(0, h - damage))
@@ -92,29 +92,36 @@ export const useBattleSequence = (
 
           (async () => {
             setInSequence(true);
-            setAnnouncerMessage(`${attacker.name} has used a ki blast`);
+            setAnnouncerMessage(`${attacker.name} has used a ki blast!`);
             await wait(1000);
 
-            turn === 0 ? setPlayerAnimation("ki") : setNPCAnimation("ki");
+            // Ki blast animation
+            if (turn === 0) {
+              setPlayerAnimation("ki");
+              setTimeout(() => setPlayerAnimation("static"), 1000);
+            } else {
+              setNPCAnimation("ki");
+              setTimeout(() => setNPCAnimation("static"), 1000);
+            }
             await wait(1000);
 
-            turn === 0
-              ? setPlayerAnimation("static")
-              : setNPCAnimation("static");
-            await wait(500);
-
-            turn === 0
-              ? setNPCAnimation("damage")
-              : setPlayerAnimation("damage");
+            // Apply damage animation and make it last for 5 seconds
+            if (turn === 0) {
+              setNPCAnimation("damage");
+              setTimeout(() => setNPCAnimation("static"), 2000); // Stop flashing after 5s
+            } else {
+              setPlayerAnimation("damage");
+              setTimeout(() => setPlayerAnimation("static"), 2000);
+            }
             await wait(750);
 
-            turn === 0
-              ? setNPCAnimation("static")
-              : setPlayerAnimation("static");
             setAnnouncerMessage(`${receiver.name} doesn't know what hit them!`);
-            turn === 0
-              ? setNonPlayableCharacterHealth((h) => Math.max(0, h - damage))
-              : setPlayableCharacterHealth((h) => Math.max(0, h - damage));
+
+            if (turn === 0) {
+              setNonPlayableCharacterHealth((h) => Math.max(0, h - damage));
+            } else {
+              setPlayableCharacterHealth((h) => Math.max(0, h - damage));
+            }
             await wait(2500);
 
             setAnnouncerMessage(`Now it's ${receiver.name}'s turn!`);
@@ -162,27 +169,25 @@ export const useBattleSequence = (
 
               await wait(1000);
 
-              // Set animation for the attack
-              turn === 0 ? setPlayerAnimation("ki") : setNPCAnimation("ki");
+              // Ki blast animation
+              if (turn === 0) {
+                setPlayerAnimation("ki");
+                setTimeout(() => setPlayerAnimation("static"), 1000);
+              } else {
+                setNPCAnimation("ki");
+                setTimeout(() => setNPCAnimation("static"), 1000);
+              }
               await wait(1000);
 
-              // Set animation for damage
-              turn === 0
-                ? setPlayerAnimation("static")
-                : setNPCAnimation("static");
-              await wait(500);
-
-              turn === 0
-                ? setNPCAnimation("damage")
-                : setPlayerAnimation("damage");
+              // Apply damage animation and make it last for 5 seconds
+              if (turn === 0) {
+                setNPCAnimation("damage");
+                setTimeout(() => setNPCAnimation("static"), 2000); // Stop flashing after 5s
+              } else {
+                setPlayerAnimation("damage");
+                setTimeout(() => setPlayerAnimation("static"), 2000);
+              }
               await wait(750);
-
-              turn === 0
-                ? setNPCAnimation("static")
-                : setPlayerAnimation("static");
-              setAnnouncerMessage(
-                `${selectedCharacter.name} landed the attack!`
-              );
 
               // Apply damage to the opponent
               turn === 0
@@ -238,27 +243,25 @@ export const useBattleSequence = (
 
                 await wait(1000);
 
-                // Set animation for the attack
-                turn === 0 ? setPlayerAnimation("ki") : setNPCAnimation("ki");
+                // Ki blast animation
+                if (turn === 0) {
+                  setPlayerAnimation("ki");
+                  setTimeout(() => setPlayerAnimation("static"), 1000);
+                } else {
+                  setNPCAnimation("ki");
+                  setTimeout(() => setNPCAnimation("static"), 1000);
+                }
                 await wait(1000);
 
-                // Set animation for damage
-                turn === 0
-                  ? setPlayerAnimation("static")
-                  : setNPCAnimation("static");
-                await wait(500);
-
-                turn === 0
-                  ? setNPCAnimation("damage")
-                  : setPlayerAnimation("damage");
+                // Apply damage animation and make it last for 5 seconds
+                if (turn === 0) {
+                  setNPCAnimation("damage");
+                  setTimeout(() => setNPCAnimation("static"), 2000); // Stop flashing after 5s
+                } else {
+                  setPlayerAnimation("damage");
+                  setTimeout(() => setPlayerAnimation("static"), 2000);
+                }
                 await wait(750);
-
-                turn === 0
-                  ? setNPCAnimation("static")
-                  : setPlayerAnimation("static");
-                setAnnouncerMessage(
-                  `${selectedCharacter.name} landed the attack!`
-                );
 
                 // Apply damage to the opponent
                 turn === 0
