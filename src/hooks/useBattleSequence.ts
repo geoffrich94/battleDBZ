@@ -10,7 +10,10 @@ import {
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "redux/store";
-import { updatePlayableCharacterSenzuCount, updateAiSenzuCount } from "./../redux/reducers/characterSlice";
+import {
+  updatePlayableCharacterSenzuCount,
+  updateAiSenzuCount,
+} from "./../redux/reducers/characterSlice";
 
 export const useBattleSequence = (
   sequence: BattleSequence,
@@ -59,7 +62,7 @@ export const useBattleSequence = (
 
       switch (mode) {
         case "attack": {
-          const damage = attack(attacker, receiver);
+          const damage = attack(attacker, receiver, 0.2);
 
           (async () => {
             setInSequence(true);
@@ -101,7 +104,7 @@ export const useBattleSequence = (
         }
 
         case "ki": {
-          const damage = ki(attacker, receiver);
+          const damage = ki(attacker, receiver, 0.2);
 
           (async () => {
             setInSequence(true);
@@ -173,48 +176,56 @@ export const useBattleSequence = (
               // Deduct energy for the move
               setPlayableCharacterEnergy((energy) => energy - kiCost);
 
-              // Calculate the damage using the utility function
-              const damage = calculateMoveDamage(
+              // Calculate damage
+              const result = calculateMoveDamage(
                 selectedCharacter,
                 aiCharacter,
-                selectedMove
+                selectedMove,
+                0.2 // critChance
               );
 
-              await wait(1000);
+              if (result !== 0) {
+                const { damage, isCritical } = result;
 
-              // Ki blast animation
-              if (turn === 0) {
-                setPlayerAnimation("ki");
-                setTimeout(() => setPlayerAnimation("static"), 1000);
-              } else {
-                setNPCAnimation("ki");
-                setTimeout(() => setNPCAnimation("static"), 1000);
+                await wait(1000);
+                await wait(1000);
+
+                // Ki blast animation
+                if (turn === 0) {
+                  setPlayerAnimation("ki");
+                  setTimeout(() => setPlayerAnimation("static"), 1000);
+                } else {
+                  setNPCAnimation("ki");
+                  setTimeout(() => setNPCAnimation("static"), 1000);
+                }
+                await wait(1000);
+
+                // Apply damage animation and make it last for 5 seconds
+                if (turn === 0) {
+                  setNPCAnimation("damage");
+                  setTimeout(() => setNPCAnimation("static"), 2000); // Stop flashing after 5s
+                } else {
+                  setPlayerAnimation("damage");
+                  setTimeout(() => setPlayerAnimation("static"), 2000);
+                }
+                await wait(750);
+
+                // Apply damage to the opponent
+                turn === 0
+                  ? setNonPlayableCharacterHealth((h) =>
+                      Math.max(0, h - damage)
+                    )
+                  : setPlayableCharacterHealth((h) => Math.max(0, h - damage));
+
+                await wait(2500);
+
+                setAnnouncerMessage(`Now it's ${aiCharacter.name}'s turn!`);
+                await wait(1500);
+
+                // Switch turn
+                setTurn(turn === 0 ? 1 : 0);
+                setInSequence(false);
               }
-              await wait(1000);
-
-              // Apply damage animation and make it last for 5 seconds
-              if (turn === 0) {
-                setNPCAnimation("damage");
-                setTimeout(() => setNPCAnimation("static"), 2000); // Stop flashing after 5s
-              } else {
-                setPlayerAnimation("damage");
-                setTimeout(() => setPlayerAnimation("static"), 2000);
-              }
-              await wait(750);
-
-              // Apply damage to the opponent
-              turn === 0
-                ? setNonPlayableCharacterHealth((h) => Math.max(0, h - damage))
-                : setPlayableCharacterHealth((h) => Math.max(0, h - damage));
-
-              await wait(2500);
-
-              setAnnouncerMessage(`Now it's ${aiCharacter.name}'s turn!`);
-              await wait(1500);
-
-              // Switch turn
-              setTurn(turn === 0 ? 1 : 0);
-              setInSequence(false);
             })();
           } else {
             // If not enough energy, display a message
@@ -247,52 +258,58 @@ export const useBattleSequence = (
                 // Deduct energy for the move
                 setPlayableCharacterEnergy((energy) => energy - kiCost);
 
-                // Calculate the damage using the utility function
-                const damage = calculateMoveDamage(
+                // Calculate damage
+                const result = calculateMoveDamage(
                   selectedCharacter,
                   aiCharacter,
-                  selectedMove
+                  selectedMove,
+                  0.2 // critChance
                 );
 
-                await wait(1000);
+                if (result !== 0) {
+                  const { damage, isCritical } = result;
+                  await wait(1000);
 
-                // Ki blast animation
-                if (turn === 0) {
-                  setPlayerAnimation("ki");
-                  setTimeout(() => setPlayerAnimation("static"), 1000);
-                } else {
-                  setNPCAnimation("ki");
-                  setTimeout(() => setNPCAnimation("static"), 1000);
+                  // Ki blast animation
+                  if (turn === 0) {
+                    setPlayerAnimation("ki");
+                    setTimeout(() => setPlayerAnimation("static"), 1000);
+                  } else {
+                    setNPCAnimation("ki");
+                    setTimeout(() => setNPCAnimation("static"), 1000);
+                  }
+                  await wait(1000);
+
+                  // Apply damage animation and make it last for 5 seconds
+                  if (turn === 0) {
+                    setNPCAnimation("damage");
+                    setTimeout(() => setNPCAnimation("static"), 2000); // Stop flashing after 5s
+                  } else {
+                    setPlayerAnimation("damage");
+                    setTimeout(() => setPlayerAnimation("static"), 2000);
+                  }
+                  await wait(750);
+
+                  // Apply damage to the opponent
+                  turn === 0
+                    ? setNonPlayableCharacterHealth((h) =>
+                        Math.max(0, h - damage)
+                      )
+                    : setPlayableCharacterHealth((h) =>
+                        Math.max(0, h - damage)
+                      );
+
+                  await wait(2500);
+
+                  setAnnouncerMessage(
+                    `Now it's ${selectedCharacter.name}'s turn!`
+                  );
+                  await wait(1500);
+
+                  // Switch turn
+                  setTurn(turn === 0 ? 1 : 0);
+                  setInSequence(false);
                 }
-                await wait(1000);
-
-                // Apply damage animation and make it last for 5 seconds
-                if (turn === 0) {
-                  setNPCAnimation("damage");
-                  setTimeout(() => setNPCAnimation("static"), 2000); // Stop flashing after 5s
-                } else {
-                  setPlayerAnimation("damage");
-                  setTimeout(() => setPlayerAnimation("static"), 2000);
-                }
-                await wait(750);
-
-                // Apply damage to the opponent
-                turn === 0
-                  ? setNonPlayableCharacterHealth((h) =>
-                      Math.max(0, h - damage)
-                    )
-                  : setPlayableCharacterHealth((h) => Math.max(0, h - damage));
-
-                await wait(2500);
-
-                setAnnouncerMessage(
-                  `Now it's ${selectedCharacter.name}'s turn!`
-                );
-                await wait(1500);
-
-                // Switch turn
-                setTurn(turn === 0 ? 1 : 0);
-                setInSequence(false);
               })();
             } else {
               // If not enough energy, display a message
@@ -307,13 +324,15 @@ export const useBattleSequence = (
 
         case "senzu": {
           if (mode === "senzu" && !senzuProcessedRef.current) {
-            
             senzuProcessedRef.current = true; // Mark as processed
 
             (async () => {
               setInSequence(true);
 
-              const currentSenzu = attacker === selectedCharacter ? selectedCharacterSenzuCount : aiSenzuCount; // capture at the time the sequence starts
+              const currentSenzu =
+                attacker === selectedCharacter
+                  ? selectedCharacterSenzuCount
+                  : aiSenzuCount; // capture at the time the sequence starts
 
               if (currentSenzu <= 0) {
                 setAnnouncerMessage(
@@ -340,13 +359,27 @@ export const useBattleSequence = (
 
               await wait(500);
 
-              setAnnouncerMessage(`${attacker.name} has recovered health.`);
+              setAnnouncerMessage(`${attacker.name} has recovered health and energy.`);
               turn === 0
                 ? setPlayableCharacterHealth((h) =>
-                    Math.min(h + recovered, selectedCharacter.maxHealth)
+                    Math.min(
+                      h + recovered.maxHealth,
+                      selectedCharacter.maxHealth
+                    )
                   )
                 : setNonPlayableCharacterHealth((h) =>
-                    Math.min(h + recovered, aiCharacter.maxHealth)
+                    Math.min(h + recovered.maxHealth, aiCharacter.maxHealth)
+                  );
+
+              turn === 0
+                ? setPlayableCharacterEnergy((e) =>
+                    Math.min(
+                      e + recovered.maxEnergy,
+                      selectedCharacter.maxEnergy
+                    )
+                  )
+                : setNonPlayableCharacterEnergy((e) =>
+                    Math.min(e + recovered.maxEnergy, aiCharacter.maxEnergy)
                   );
 
               await wait(2500);
@@ -368,7 +401,15 @@ export const useBattleSequence = (
           break;
       }
     }
-  }, [selectedCharacter, aiCharacter, sequence, selectedMoveName, aiSenzuCount, dispatch, selectedCharacterSenzuCount]); // ✅ Add selectedMoveName to dependencies
+  }, [
+    selectedCharacter,
+    aiCharacter,
+    sequence,
+    selectedMoveName,
+    aiSenzuCount,
+    dispatch,
+    selectedCharacterSenzuCount,
+  ]); // ✅ Add selectedMoveName to dependencies
 
   return {
     turn,
