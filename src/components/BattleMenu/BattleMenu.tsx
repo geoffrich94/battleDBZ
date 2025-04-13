@@ -1,5 +1,4 @@
-
-import { MoveSetMenu } from "components/MoveSetMenu/MoveSetMenu";
+import { MoveSetMenu, ItemsMenu, ItemIcon } from "components";
 import * as S from "./BattleMenu.styles";
 import { useState } from "react";
 import { Character } from "shared";
@@ -10,7 +9,7 @@ interface BattleMenuProps {
   onAttack: () => void;
   onKi: () => void;
   onSenzu: () => void;
-  onSignatureMove: (moveName: string) => void; // Accepts a move name
+  onSignatureMove: (moveName: string) => void;
   onSpecialMove: () => void;
 }
 
@@ -23,25 +22,55 @@ export const BattleMenu: React.FC<BattleMenuProps> = ({
   onSpecialMove,
   onSenzu,
 }) => {
-
-  const [isHidden, setIsHidden] = useState(false)
-
+  const [activeMenu, setActiveMenu] = useState<
+    "default" | "abilities" | "items"
+  >("default");
 
   return (
-    <>
-      <S.Container isHidden={isHidden}>
-        <S.Border>
-          <S.Option onClick={onAttack}>Attack</S.Option>
-        </S.Border>
-        <S.Border>
-          <S.Option onClick={() => setIsHidden((prev) => !prev)}>Abilities</S.Option>
-        </S.Border>
-        <S.Border>
-          <S.Option onClick={onSenzu}>Items</S.Option>
-        </S.Border>
-      </S.Container>
+    <S.Container>
+      <S.ItemIconContainer>
+        <ItemIcon imgUrl="assets/senzu-bean.png" onClick={onSenzu} />
+      </S.ItemIconContainer>
 
-      <MoveSetMenu onKi={onKi} onSpecialMove={onSpecialMove} onSignatureMove={onSignatureMove} isHidden={!isHidden} selectedCharacter={selectedCharacter} playableCharacterHealth={playableCharacterHealth} onBack={() => setIsHidden(false)} />
-    </>
+      {/* Battle Menu */}
+      {activeMenu === "default" && (
+        <S.BattleMenuContainer>
+          <S.Border>
+            <S.Option onClick={onAttack}>Attack</S.Option>
+          </S.Border>
+          <S.Border>
+            <S.Option onClick={() => setActiveMenu("abilities")}>
+              Abilities
+            </S.Option>
+          </S.Border>
+          <S.Border>
+            <S.Option onClick={() => setActiveMenu("items")}>Items</S.Option>
+          </S.Border>
+        </S.BattleMenuContainer>
+      )}
+
+      {/* Abilities Menu */}
+      {activeMenu === "abilities" && (
+        <MoveSetMenu
+          onKi={onKi}
+          onSpecialMove={onSpecialMove}
+          onSignatureMove={onSignatureMove}
+          isHidden={false}
+          selectedCharacter={selectedCharacter}
+          playableCharacterHealth={playableCharacterHealth}
+          onBack={() => setActiveMenu("default")}
+        />
+      )}
+
+      {/* Items Menu */}
+      {activeMenu === "items" && (
+        <ItemsMenu
+          selectedCharacter={selectedCharacter}
+          isHidden={false}
+          onSenzu={onSenzu}
+          onBack={() => setActiveMenu("default")}
+        />
+      )}
+    </S.Container>
   );
 };

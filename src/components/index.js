@@ -9,3 +9,6 @@ export * from "./BattleAnnouncer";
 export * from "./EndMenu";
 export * from './CharacterSelection';
 export * from './CharacterSelectionMenu';
+export * from './MoveSetMenu';
+export * from './ItemsMenu';
+export * from './ItemIcon';

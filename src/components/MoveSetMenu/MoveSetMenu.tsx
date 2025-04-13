@@ -8,7 +8,7 @@ interface MoveSetMenuProps {
   playableCharacterHealth: number;
   onKi: () => void;
   onBack: () => void;
-  onSignatureMove: (moveName: string) => void; // This function expects a move name
+  onSignatureMove: (moveName: string) => void;
   onSpecialMove: () => void;
 }
 

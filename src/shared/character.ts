@@ -19,6 +19,8 @@ export interface Character {
   defense: number;
   kiDefense: number;
   moveset: Move[];
+
+  senzuCount: number;
 }
 
 export const characters: Character[] = [
@@ -30,6 +32,7 @@ export const characters: Character[] = [
     img: "/assets/goku.png",
     profileImg: "/assets/goku-profile-pic.png",
     characterImg: "assets/goku-character-pic.png",
+
     ki: 32,
     attack: 50,
     defense: 30,
@@ -48,6 +51,8 @@ export const characters: Character[] = [
         special: true,
       },
     ],
+
+    senzuCount: 1
   },
   {
     level: 44,
@@ -57,6 +62,7 @@ export const characters: Character[] = [
     img: "/assets/vegeta.png",
     profileImg: "/assets/vegeta-profile-pic.png",
     characterImg: "assets/vegeta-character-pic.png",
+
     ki: 40,
     attack: 40,
     defense: 20,
@@ -75,6 +81,8 @@ export const characters: Character[] = [
         special: true,
       },
     ],
+
+    senzuCount: 1
   },
   {
     level: 44,
@@ -84,6 +92,7 @@ export const characters: Character[] = [
     img: "/assets/frieza.png",
     profileImg: "/assets/frieza-profile-pic.png",
     characterImg: "assets/frieza-character-pic.png",
+
     ki: 40,
     attack: 40,
     defense: 20,
@@ -102,6 +111,8 @@ export const characters: Character[] = [
         special: true,
       },
     ],
+
+    senzuCount: 1
   },
   {
     level: 44,
@@ -111,6 +122,7 @@ export const characters: Character[] = [
     img: "/assets/gohan.png",
     profileImg: "/assets/gohan-profile-pic.png",
     characterImg: "assets/gohan-character-pic.png",
+
     ki: 40,
     attack: 40,
     defense: 20,
@@ -135,6 +147,8 @@ export const characters: Character[] = [
         special: true,
       },
     ],
+
+    senzuCount: 1
   },
   {
     level: 44,
@@ -144,6 +158,7 @@ export const characters: Character[] = [
     img: "/assets/piccolo.png",
     profileImg: "/assets/piccolo-profile-pic.png",
     characterImg: "assets/piccolo-character-pic.png",
+
     ki: 40,
     attack: 40,
     defense: 20,
@@ -162,6 +177,8 @@ export const characters: Character[] = [
         special: true,
       },
     ],
+
+    senzuCount: 1
   },
   {
     level: 44,
@@ -171,6 +188,7 @@ export const characters: Character[] = [
     img: "/assets/beerus.png",
     profileImg: "/assets/beerus-profile-pic.png",
     characterImg: "assets/beerus-character-pic.png",
+
     ki: 40,
     attack: 40,
     defense: 20,
@@ -189,6 +207,8 @@ export const characters: Character[] = [
         special: true,
       },
     ],
+
+    senzuCount: 1
   },
   {
     level: 44,
@@ -198,6 +218,7 @@ export const characters: Character[] = [
     img: "/assets/jiren.png",
     profileImg: "/assets/jiren-profile-pic.png",
     characterImg: "assets/jiren-character-pic.png",
+
     ki: 40,
     attack: 40,
     defense: 20,
@@ -216,6 +237,8 @@ export const characters: Character[] = [
         special: true,
       },
     ],
+
+    senzuCount: 1
   },
   {
     level: 44,
@@ -225,6 +248,7 @@ export const characters: Character[] = [
     img: "/assets/goku-black.png",
     profileImg: "/assets/goku-black-profile-pic.png",
     characterImg: "assets/goku-black-character-pic.png",
+
     ki: 40,
     attack: 40,
     defense: 20,
@@ -243,5 +267,7 @@ export const characters: Character[] = [
         special: true,
       },
     ],
+
+    senzuCount: 1
   },
 ];
