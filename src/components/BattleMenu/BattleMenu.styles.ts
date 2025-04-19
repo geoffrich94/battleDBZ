@@ -1,6 +1,11 @@
 import styled from "styled-components";
 import { devices } from "theme";
 
+export const Container = styled.div`
+  position: relative;
+  height: 100%;
+`;
+
 export const Border = styled.div`
   transform: rotate(-2deg);
   background-color: orangered;
@@ -8,18 +13,17 @@ export const Border = styled.div`
   width: 100%;
 `;
 
-export const Container = styled.div<{ isHidden: boolean }>`
+export const BattleMenuContainer = styled.div`
   box-sizing: border-box;
   height: 100%;
 
   gap: 10px;
-  display: ${({ isHidden }) =>  isHidden ? 'none' : 'grid '}; 
-  grid-template-rows: 1fr 1fr;
-  grid-template-columns: 1fr 1fr;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-auto-rows: 1fr;
 
-  & > :first-child {
-    grid-column-start: 1;
-    grid-column-end: 3;
+  & > :first-child:nth-last-child(odd) {
+    grid-column: span 2;
   }
 `;
 
@@ -54,4 +58,27 @@ export const Option = styled.button`
   @media ${devices.laptop} {
     font-size: 18px;
   }
+`;
+
+export const IconContainer = styled.div`
+  display: flex;
+  position: absolute;
+  top: -50px;
+  font-size: 22px;
+  font-weight: bold;
+  color: white;
+
+  & div {
+    display: flex;
+    align-items: center;
+  }
+`;
+
+export const ItemIconContainer = styled.div`
+  display: flex;
+  width: 100%;
+  justify-content: end;
+  column-gap: 20px;
+  position: absolute;
+  top: -90px;
 `;

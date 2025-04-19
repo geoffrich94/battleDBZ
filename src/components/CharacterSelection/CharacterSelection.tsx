@@ -11,7 +11,6 @@ interface CharacterSelectionProps {
 }
 
 export const CharacterSelection: React.FC<CharacterSelectionProps> = ({ onStartClick }) => {
-
   const dispatch = useDispatch();
   const selectedCharacter = useSelector((state: RootState) => state.character.selectedCharacter);
   const aiCharacter = useSelector((state: RootState) => state.character.aiCharacter);
@@ -37,7 +36,6 @@ export const CharacterSelection: React.FC<CharacterSelectionProps> = ({ onStartC
   return (
     <>
       <S.Logo />
-
       <S.Button onClick={onStartClick} disabled={!selectedCharacter || !aiCharacter}>Start Game</S.Button>
 
       <S.ImgContainter>
@@ -55,8 +53,7 @@ export const CharacterSelection: React.FC<CharacterSelectionProps> = ({ onStartC
       </S.CharacterNameContainer>
 
       <S.VersusLogo src="assets/vs-logo.png" />
-
       <CharacterSelectionMenu onCharacterSelect={handleCharacterSelection} selectionStep={selectionStep} />
     </>
-  )
+  );
 }

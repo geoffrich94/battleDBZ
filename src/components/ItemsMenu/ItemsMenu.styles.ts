@@ -14,11 +14,12 @@ export const Container = styled.div<{ isHidden: boolean }>`
 
   gap: 10px;
   display: ${({ isHidden }) => (isHidden ? "none" : "grid")};
-  grid-template-columns: repeat(2, 1fr);
-  grid-auto-rows: 1fr;
+  grid-template-columns: 1fr 1fr;
+  grid-auto-rows: 1fr; /* Automatically adds rows as needed */
 
-  & > :first-child:nth-last-child(odd) {
-    grid-column: span 2;
+  & > :first-child {
+    grid-column-start: 1;
+    grid-column-end: 3;
   }
 `;
 
