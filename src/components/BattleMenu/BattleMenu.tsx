@@ -9,6 +9,7 @@ interface BattleMenuProps {
   onAttack: () => void;
   onKi: () => void;
   onSenzu: () => void;
+  onCharge: () => void;
   onSignatureMove: (moveName: string) => void;
   onSpecialMove: () => void;
 }
@@ -21,6 +22,7 @@ export const BattleMenu: React.FC<BattleMenuProps> = ({
   onSignatureMove,
   onSpecialMove,
   onSenzu,
+  onCharge
 }) => {
   const [activeMenu, setActiveMenu] = useState<
     "default" | "abilities" | "items"
@@ -42,6 +44,9 @@ export const BattleMenu: React.FC<BattleMenuProps> = ({
             <S.Option onClick={() => setActiveMenu("abilities")}>
               Abilities
             </S.Option>
+          </S.Border>
+          <S.Border>
+            <S.Option onClick={onCharge}>Charge Up</S.Option>
           </S.Border>
           <S.Border>
             <S.Option onClick={() => setActiveMenu("items")}>Items</S.Option>

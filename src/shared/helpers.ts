@@ -44,6 +44,10 @@ export const senzu = (receiver: Character) => {
   };
 };
 
+export const charge = (receiver: Character) => {
+  return 50;
+};
+
 // New function to calculate damage for a move
 export const calculateMoveDamage = (attacker: Character, receiver: Character, move: Move, critChance: number) => {
 
@@ -51,6 +55,7 @@ export const calculateMoveDamage = (attacker: Character, receiver: Character, mo
   console.log(randomFactor)
 
   const isCritical = Math.random() < critChance; // True if we roll a critical hit
+  console.log(isCritical)
 
   const critMultiplier = isCritical ? 1.5 : 1.0; // 1.5x damage if crit, otherwise 1.0x
 

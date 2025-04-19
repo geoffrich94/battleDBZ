@@ -3,8 +3,9 @@ import { useEffect, useState } from "react";
 import { useAIOpponent, useBattleSequence } from "hooks";
 import { Character, wait, BattleSequence } from "shared";
 import * as S from "./Battle.styles";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "redux/store";
+import { updatePlayerIsCharging } from '../../redux/reducers/characterSlice';
 
 interface BattleProps {
   onGameEnd: (winner: Character) => void;
@@ -28,12 +29,18 @@ export const Battle: React.FC<BattleProps> = ({
     kiDefense: 0,
     maxEnergy: 100,
     moveset: [],
-    senzuCount: 1
+    senzuCount: 1,
+    isCharging: false,
   };
 
   const aiCharacter =
     useSelector((state: RootState) => state.character.aiCharacter) ||
     defaultAICharacter;
+
+  const dispatch = useDispatch();
+
+  const isCharging =
+  useSelector((state: RootState) => state.character.selectedCharacter?.isCharging)
 
   const [sequence, setSequence] = useState<BattleSequence>({
     mode: "idle", // Default action
@@ -73,7 +80,10 @@ export const Battle: React.FC<BattleProps> = ({
     if (turn === 1 && !inSequence && !usedAiTurn) {
       if (aiChoice) {
         setUsedAiTurn(true); // Ensure AI only acts once
-        setSequence({ turn, mode: aiChoice as "attack" | "ki" | "senzu" });
+        // setTimeout to simulate player waiting before choosing move
+        dispatch(updatePlayerIsCharging(false))
+          setSequence({ turn, mode: aiChoice as "attack" | "ki" | "senzu" });
+       
       }
     }
 
@@ -81,7 +91,7 @@ export const Battle: React.FC<BattleProps> = ({
     if (turn === 0 && !inSequence) {
       setUsedAiTurn(false); // Reset after player completes their turn
     }
-  }, [turn, aiChoice, inSequence, usedAiTurn, sequence]);
+  }, [turn, aiChoice, inSequence, usedAiTurn, sequence, isCharging]);
 
   useEffect(() => {
     if (playableCharacterHealth === 0 || nonPlayableCharacterHealth === 0) {
@@ -147,6 +157,7 @@ export const Battle: React.FC<BattleProps> = ({
             maxHealth={selectedCharacter.maxHealth}
             energy={playableCharacterEnergy}
             maxEnergy={selectedCharacter.maxEnergy}
+            className={isCharging ? 'charge' : ''}
           />
         </S.Summary>
       </S.PlayableCharacter>
@@ -172,6 +183,12 @@ export const Battle: React.FC<BattleProps> = ({
             }}
             onSpecialMove={() => setSequence({ mode: "specialMove", turn })}
             onSenzu={() => setSequence({ turn, mode: "senzu" })}
+            onCharge={() => { 
+                setSequence({ turn, mode: "charge" })
+                // setIsCharging(true)
+              }
+            }
+            
           />
         </S.HUDChild>
       </S.HUD>

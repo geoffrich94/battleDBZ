@@ -51,6 +51,21 @@ export const characterSlice = createSlice({
         state.aiCharacter.senzuCount = action.payload;
       }
     },
+    updatePlayableCharacterDefense: (state, action) => {
+      if (state.selectedCharacter) {
+        state.selectedCharacter.defense = action.payload;
+      }
+    },
+    updateAiCharacterDefense: (state, action) => {
+      if (state.aiCharacter) {
+        state.aiCharacter.defense = action.payload;
+      }
+    },
+    updatePlayerIsCharging: (state, action) => {
+      if (state.selectedCharacter) {
+        state.selectedCharacter.isCharging = action.payload;
+      }
+    }
   },
 });
 
@@ -63,7 +78,10 @@ export const {
   updatePlayableCharacterEnergy,
   updateAiCharacterEnergy,
   updatePlayableCharacterSenzuCount,
-  updateAiSenzuCount
+  updateAiSenzuCount,
+  updatePlayableCharacterDefense,
+  updateAiCharacterDefense,
+  updatePlayerIsCharging
 } = characterSlice.actions;
 
 export default characterSlice.reducer;

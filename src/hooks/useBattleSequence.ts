@@ -6,6 +6,7 @@ import {
   BattleSequence,
   Character,
   calculateMoveDamage,
+  charge,
 } from "shared";
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -13,6 +14,7 @@ import { RootState } from "redux/store";
 import {
   updatePlayableCharacterSenzuCount,
   updateAiSenzuCount,
+  updatePlayerIsCharging,
 } from "./../redux/reducers/characterSlice";
 
 export const useBattleSequence = (
@@ -48,9 +50,11 @@ export const useBattleSequence = (
   );
 
   const senzuProcessedRef = useRef(false);
+  const hasChargedRef = useRef(false);
+  const hasRunRef = useRef(false);
 
   useEffect(() => {
-    if (!sequence) return; // Prevents automatic execution
+    if (!sequence || inSequence) return; // Prevents automatic execution
 
     const { mode, turn } = sequence;
 
@@ -359,7 +363,9 @@ export const useBattleSequence = (
 
               await wait(500);
 
-              setAnnouncerMessage(`${attacker.name} has recovered health and energy.`);
+              setAnnouncerMessage(
+                `${attacker.name} has recovered health and energy.`
+              );
               turn === 0
                 ? setPlayableCharacterHealth((h) =>
                     Math.min(
@@ -397,6 +403,54 @@ export const useBattleSequence = (
           break;
         }
 
+        case "charge": {
+          if (hasRunRef.current) break;
+          hasRunRef.current = true;
+        
+          const runChargeSequence = async () => {
+            setInSequence(true);
+        
+            if (turn === 0 && !hasChargedRef.current) {
+              hasChargedRef.current = true;
+              dispatch(updatePlayerIsCharging(true));
+            }
+        
+            console.log('ischarging');
+            setAnnouncerMessage(`${attacker.name} is charging up energy!`);
+            await wait(100);
+        
+            const chargeUp = charge(attacker);
+        
+            if (turn === 0) {
+              setPlayableCharacterEnergy((e) =>
+                Math.min(e + chargeUp, selectedCharacter.maxEnergy)
+              );
+              setPlayerAnimation("charge");
+            } else {
+              setNonPlayableCharacterEnergy((e) =>
+                Math.min(e + chargeUp, aiCharacter.maxEnergy)
+              );
+              setNPCAnimation("charge");
+            }
+        
+            await wait(5000);
+        
+            if (turn === 0) {
+              dispatch(updatePlayerIsCharging(false));
+              hasChargedRef.current = false;
+            }
+        
+            setTurn(turn === 0 ? 1 : 0);
+            setInSequence(false);
+            hasRunRef.current = false;
+          };
+        
+          runChargeSequence();
+          break;
+        }
+        
+        
+
         default:
           break;
       }
@@ -409,7 +463,7 @@ export const useBattleSequence = (
     aiSenzuCount,
     dispatch,
     selectedCharacterSenzuCount,
-  ]); // ✅ Add selectedMoveName to dependencies
+  ]);
 
   return {
     turn,

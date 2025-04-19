@@ -19,12 +19,11 @@ export const BattleMenuContainer = styled.div`
 
   gap: 10px;
   display: grid;
-  grid-template-rows: 1fr 1fr;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(2, 1fr);
+  grid-auto-rows: 1fr;
 
-  & > :first-child {
-    grid-column-start: 1;
-    grid-column-end: 3;
+  & > :first-child:nth-last-child(odd) {
+    grid-column: span 2;
   }
 `;
 

@@ -21,6 +21,7 @@ export interface Character {
   moveset: Move[];
 
   senzuCount: number;
+  isCharging: boolean;
 }
 
 export const characters: Character[] = [
@@ -38,6 +39,7 @@ export const characters: Character[] = [
       { name: "Spirit Bomb", damage: 200, kiCost: 150, special: true },
     ],
     senzuCount: 1,
+    isCharging: false,
     img: "/assets/goku.png",
     profileImg: "/assets/goku-profile-pic.png",
     characterImg: "assets/goku-character-pic.png",
@@ -56,6 +58,7 @@ export const characters: Character[] = [
       { name: "Final Flash", damage: 190, kiCost: 150, special: true },
     ],
     senzuCount: 1,
+    isCharging: false,
     img: "/assets/vegeta.png",
     profileImg: "/assets/vegeta-profile-pic.png",
     characterImg: "assets/vegeta-character-pic.png",
@@ -74,6 +77,7 @@ export const characters: Character[] = [
       { name: "Death Ball", damage: 180, kiCost: 125, special: true },
     ],
     senzuCount: 1,
+    isCharging: false,
     img: "/assets/frieza.png",
     profileImg: "/assets/frieza-profile-pic.png",
     characterImg: "assets/frieza-character-pic.png",
@@ -93,6 +97,7 @@ export const characters: Character[] = [
       { name: "Super Kamehameha", damage: 185, kiCost: 150, special: true },
     ],
     senzuCount: 1,
+    isCharging: false,
     img: "/assets/gohan.png",
     profileImg: "/assets/gohan-profile-pic.png",
     characterImg: "assets/gohan-character-pic.png",
@@ -111,6 +116,7 @@ export const characters: Character[] = [
       { name: "Special Beam Cannon", damage: 175, kiCost: 120, special: true },
     ],
     senzuCount: 1,
+    isCharging: false,
     img: "/assets/piccolo.png",
     profileImg: "/assets/piccolo-profile-pic.png",
     characterImg: "assets/piccolo-character-pic.png",
@@ -129,6 +135,7 @@ export const characters: Character[] = [
       { name: "Hakai (Destruction)", damage: 240, kiCost: 250, special: true },
     ],
     senzuCount: 1,
+    isCharging: false,
     img: "/assets/beerus.png",
     profileImg: "/assets/beerus-profile-pic.png",
     characterImg: "assets/beerus-character-pic.png",
@@ -147,6 +154,7 @@ export const characters: Character[] = [
       { name: "Power Impact", damage: 190, kiCost: 150, special: true },
     ],
     senzuCount: 1,
+    isCharging: false,
     img: "/assets/jiren.png",
     profileImg: "/assets/jiren-profile-pic.png",
     characterImg: "assets/jiren-character-pic.png",
@@ -165,6 +173,7 @@ export const characters: Character[] = [
       { name: "Divine Retribution", damage: 190, kiCost: 150, special: true },
     ],
     senzuCount: 1,
+    isCharging: false,
     img: "/assets/goku-black.png",
     profileImg: "/assets/goku-black-profile-pic.png",
     characterImg: "assets/goku-black-character-pic.png",
