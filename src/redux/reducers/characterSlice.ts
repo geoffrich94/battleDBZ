@@ -21,6 +21,12 @@ export const characterSlice = createSlice({
     selectAICharacter: (state, action: PayloadAction<Character>) => {
       state.aiCharacter = action.payload;
     },
+    deSelectCharacter: (state) => {
+      state.selectedCharacter = null;
+    },
+    deSelectAICharacter:(state) => {
+      state.aiCharacter = null;
+    },
     updatePlayableCharacterHealth: (state, action: PayloadAction<number>) => {
       if (state.selectedCharacter) {
         state.selectedCharacter.maxHealth = action.payload;
@@ -73,6 +79,8 @@ export const characterSlice = createSlice({
 export const {
   selectCharacter,
   selectAICharacter,
+  deSelectCharacter,
+  deSelectAICharacter,
   updatePlayableCharacterHealth,
   updateAiCharacterHealth,
   updatePlayableCharacterEnergy,

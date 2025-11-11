@@ -3,8 +3,11 @@ import { devices } from "theme";
 
 export const Container = styled.div`
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
   width: 100%;
+  position: absolute;
+  bottom: 0;
+  margin-bottom: 125px;
 `
 export const Border = styled.div`
   transform: rotate(-2deg);
@@ -25,8 +28,8 @@ export const CharacterSelectionIcon = styled.button<{ profilePicture: string }>`
   background-position: center;
 
   @media ${devices.laptop} {
-    width: 150px;
-    height: 150px;
+    width: 125px;
+    height: 125px;
   }
 
   &:hover {
