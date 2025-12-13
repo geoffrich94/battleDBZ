@@ -8,13 +8,16 @@ export interface Move {
 export interface Character {
   level: number;
   maxHealth: number;
+  currentHealth: number;
   maxEnergy: number;
+  currentEnergy: number;
   name: string;
   img?: string;
   profileImg: string;
   characterImg: string;
 
   ki: number;
+  kiCost: number;
   attack: number;
   defense: number;
   kiDefense: number;
@@ -29,11 +32,14 @@ export const characters: Character[] = [
     name: "Goku",
     level: 44,
     maxHealth: 700,
+    currentHealth: 700,
     maxEnergy: 250,
+    currentEnergy: 250,
     attack: 130,
     defense: 110,
     kiDefense: 100, // Adjusted to allow for reasonable damage
     ki: 150, // Increased to make sure Goku can deal damage
+    kiCost: 35,
     moveset: [
       { name: "Kamehameha", damage: 150, kiCost: 75, special: false },
       { name: "Spirit Bomb", damage: 200, kiCost: 150, special: true },
@@ -48,11 +54,14 @@ export const characters: Character[] = [
     name: "Vegeta",
     level: 44,
     maxHealth: 720,
+    currentHealth: 720,
     maxEnergy: 250,
+    currentEnergy: 250,
     attack: 135,
     defense: 105,
     kiDefense: 105, // Adjusted to allow for reasonable damage
     ki: 145, // Increased for better damage calculation
+    kiCost: 35,
     moveset: [
       { name: "Galick Gun", damage: 145, kiCost: 75, special: false },
       { name: "Final Flash", damage: 190, kiCost: 150, special: true },
@@ -67,11 +76,14 @@ export const characters: Character[] = [
     name: "Frieza",
     level: 44,
     maxHealth: 680,
+    currentHealth: 680,
     maxEnergy: 250,
+    currentEnergy: 250,
     attack: 140,
     defense: 90,
     kiDefense: 120, // Slightly reduced to avoid overwhelming attacker's damage
     ki: 160, // Increased to improve damage output
+    kiCost: 35,
     moveset: [
       { name: "Death Beam", damage: 160, kiCost: 75, special: false },
       { name: "Death Ball", damage: 180, kiCost: 125, special: true },
@@ -86,11 +98,14 @@ export const characters: Character[] = [
     name: "Gohan",
     level: 44,
     maxHealth: 690,
+    currentHealth: 690,
     maxEnergy: 250,
+    currentEnergy: 250,
     attack: 125,
     defense: 100,
     kiDefense: 110, // Adjusted for reasonable defense
     ki: 170, // Increased to allow decent ki damage
+    kiCost: 35,
     moveset: [
       { name: "Kamehameha", damage: 145, kiCost: 75, special: false },
       { name: "Masenko", damage: 100, kiCost: 60, special: false },
@@ -106,11 +121,14 @@ export const characters: Character[] = [
     name: "Piccolo",
     level: 44,
     maxHealth: 730,
+    currentHealth: 730,
     maxEnergy: 250,
+    currentEnergy: 250,
     attack: 115,
     defense: 130,
     kiDefense: 100, // Adjusted to allow for reasonable damage
     ki: 145, // Increased for more potential damage
+    kiCost: 35,
     moveset: [
       { name: "Light Grenade", damage: 110, kiCost: 60, special: false },
       { name: "Special Beam Cannon", damage: 175, kiCost: 120, special: true },
@@ -125,11 +143,14 @@ export const characters: Character[] = [
     name: "Beerus",
     level: 44,
     maxHealth: 760,
+    currentHealth: 760,
     maxEnergy: 250,
+    currentEnergy: 250,
     attack: 160,
     defense: 120,
     kiDefense: 110, // Adjusted to allow reasonable damage
     ki: 180, // Increased for better ki damage
+    kiCost: 35,
     moveset: [
       { name: "Sphere of Destruction", damage: 160, kiCost: 75, special: false },
       { name: "Hakai (Destruction)", damage: 240, kiCost: 250, special: true },
@@ -144,11 +165,14 @@ export const characters: Character[] = [
     name: "Jiren",
     level: 44,
     maxHealth: 780,
+    currentHealth: 780,
     maxEnergy: 250,
+    currentEnergy: 250,
     attack: 150,
     defense: 135,
     kiDefense: 115, // Adjusted to ensure reasonable ki defense
     ki: 170, // Increased to ensure decent damage
+    kiCost: 35,
     moveset: [
       { name: "Kiai", damage: 130, kiCost: 75, special: false },
       { name: "Power Impact", damage: 190, kiCost: 150, special: true },
@@ -163,11 +187,14 @@ export const characters: Character[] = [
     name: "Goku-Black",
     level: 44,
     maxHealth: 670,
+    currentHealth: 670,
+    currentEnergy: 250,
     maxEnergy: 250,
     attack: 145,
     defense: 95,
     kiDefense: 115, // Adjusted for reasonable defense
     ki: 190, // Increased to allow better damage output
+    kiCost: 35,
     moveset: [
       { name: "Black Kamehameha", damage: 150, kiCost: 75, special: false },
       { name: "Divine Retribution", damage: 190, kiCost: 150, special: true },

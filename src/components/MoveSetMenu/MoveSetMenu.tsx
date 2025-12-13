@@ -1,6 +1,5 @@
 import { Character } from "shared";
 import * as S from "./MoveSetMenu.styles";
-import { PlayableCharacter } from "../Battle/Battle.styles";
 
 interface MoveSetMenuProps {
   isHidden: boolean;

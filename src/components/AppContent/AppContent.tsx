@@ -2,61 +2,88 @@ import { useState } from "react";
 import * as S from "./AppContent.styles";
 import { Battle, EndMenu, StartMenu, CharacterSelection } from "components";
 import { Character } from "shared";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
 
+import {
+  startBattle,
+  setTurn,
+  setInSequence,
+  setAnnouncerMessage
+} from "../../redux/reducers/battleSlice";
+
+import { resetCharacters } from "../../redux/reducers/characterSlice";
+
 export const AppContent = () => {
-  const [mode, setMode] = useState("start");
+  const dispatch = useDispatch();
+
+  const [mode, setMode] = useState<
+    "start" | "characterSelection" | "battle" | "gameOver"
+  >("start");
+
   const [winner, setWinner] = useState<Character | null>(null);
 
-  const selectedCharacter = useSelector((state: RootState) => state.character.selectedCharacter);
-  
-  const backgroundUrl = (() => {
-    switch (mode) {
-      case "start":
-        return "/assets/startscreen.jpg";
-      case "characterSelection":
-        return "/assets/bg-character-select.jpg";
-      case "battle":
-        return "/assets/bg-battle.png";
-      default:
-        return "/assets/bg-battle.png";
-    }
-  })();
-  
-  const gradient = (() => {
-    switch (mode) {
-      case "start":
-        return "linear-gradient(0deg, rgba(0, 0, 0, 1), rgba(0, 0, 0, 0.5))";
-      case "characterSelection":
-        return "linear-gradient(0deg, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.5))";
-      case "battle":
-        return "linear-gradient(0deg, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.2))";
-      default:
-        return "linear-gradient(0deg, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.2))";
-    }
-  })();
+  const selectedCharacter = useSelector(
+    (state: RootState) => state.character.selectedCharacter
+  );
 
-  return ( 
-    <S.Container backgroundUrl={backgroundUrl} gradient={gradient}>
-      {mode === "start" && <StartMenu onStartClick={() => setMode("characterSelection")} />}
-      {mode === "characterSelection" && <CharacterSelection onStartClick={() => setMode("battle")} />}
+  const handlePlayAgain = () => {
+    dispatch(resetCharacters());
+    dispatch(setTurn());
+    dispatch(setInSequence(false));
+    dispatch(setAnnouncerMessage(""));
+    setWinner(null);
+    setMode("battle");
+  };
+
+  const handleStartBattle = () => {
+    dispatch(startBattle());
+    setMode("battle");
+  };
+
+  const handleGameEnd = (winner: Character) => {
+    setWinner(winner);
+    setMode("gameOver");
+  };
+
+  const backgroundMap = {
+    start: "/assets/startscreen.jpg",
+    characterSelection: "/assets/bg-character-select.jpg",
+    battle: "/assets/bg-battle.png",
+    gameOver: "/assets/bg-battle.png"
+  };
+
+  const gradientMap = {
+    start: "linear-gradient(0deg, rgba(0, 0, 0, 1), rgba(0, 0, 0, 0.5))",
+    characterSelection: "linear-gradient(0deg, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.5))",
+    battle: "linear-gradient(0deg, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.2))",
+    gameOver: "linear-gradient(0deg, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.2))"
+  };
+
+  return (
+    <S.Container
+      backgroundUrl={backgroundMap[mode]}
+      gradient={gradientMap[mode]}
+    >
+      {mode === "start" && (
+        <StartMenu onStartClick={() => setMode("characterSelection")} />
+      )}
+
+      {mode === "characterSelection" && (
+        <CharacterSelection onStartClick={handleStartBattle} />
+      )}
+
       {mode === "battle" && selectedCharacter && (
         <Battle
           selectedCharacter={selectedCharacter}
-          onGameEnd={(winner: Character) => {
-            setWinner(winner);
-            setMode("gameOver");
-          }}
+          onGameEnd={handleGameEnd}
         />
       )}
+
       {mode === "gameOver" && (
         <EndMenu
           winner={winner}
-          onStartClick={() => {
-            setWinner(null);
-            setMode("battle");
-          }}
+          onStartClick={handlePlayAgain}
         />
       )}
     </S.Container>

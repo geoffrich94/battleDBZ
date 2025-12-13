@@ -3,12 +3,16 @@ import { Character } from "shared/character";
 
 interface CharacterState {
   selectedCharacter: Character | null;
+  selectedCharacterBase: Character | null;
   aiCharacter: Character | null;
-}
+  aiCharacterBase: Character | null;
+};
 
 const initialState: CharacterState = {
   selectedCharacter: null,
+  selectedCharacterBase: null,
   aiCharacter: null,
+  aiCharacterBase: null
 };
 
 export const characterSlice = createSlice({
@@ -17,34 +21,54 @@ export const characterSlice = createSlice({
   reducers: {
     selectCharacter: (state, action: PayloadAction<Character>) => {
       state.selectedCharacter = action.payload;
+      state.selectedCharacterBase = action.payload;
     },
     selectAICharacter: (state, action: PayloadAction<Character>) => {
       state.aiCharacter = action.payload;
+      state.aiCharacterBase = action.payload;
     },
     deSelectCharacter: (state) => {
+      state.selectedCharacter = null;
       state.selectedCharacter = null;
     },
     deSelectAICharacter:(state) => {
       state.aiCharacter = null;
+      state.aiCharacterBase = null;
     },
     updatePlayableCharacterHealth: (state, action: PayloadAction<number>) => {
       if (state.selectedCharacter) {
-        state.selectedCharacter.maxHealth = action.payload;
+        state.selectedCharacter.currentHealth =  Math.max(0, state.selectedCharacter.currentHealth - action.payload )
       }
     },
     updateAiCharacterHealth: (state, action: PayloadAction<number>) => {
       if (state.aiCharacter) {
-        state.aiCharacter.maxHealth = action.payload;
+       state.aiCharacter.currentHealth = Math.max(0, state.aiCharacter.currentHealth - action.payload )
       }
     },
     updatePlayableCharacterEnergy: (state, action: PayloadAction<number>) => {
       if (state.selectedCharacter) {
-        state.selectedCharacter.maxEnergy = action.payload;
+        state.selectedCharacter.currentEnergy = action.payload;
       }
     },
     updateAiCharacterEnergy: (state, action: PayloadAction<number>) => {
       if (state.aiCharacter) {
-        state.aiCharacter.maxEnergy = action.payload;
+        state.aiCharacter.currentEnergy = action.payload;
+      }
+    },
+    applyPlayerSenzu: (state) => {
+      if (state.selectedCharacter) {
+        state.selectedCharacter.currentHealth = state.selectedCharacter.maxHealth;
+      }
+      if (state.selectedCharacter) {
+        state.selectedCharacter.currentEnergy = state.selectedCharacter.maxEnergy;
+      }
+    },
+    applyAiSenzu: (state) => {
+      if (state.aiCharacter) {
+        state.aiCharacter.currentHealth = state.aiCharacter.maxHealth;
+      }
+      if (state.aiCharacter) {
+        state.aiCharacter.currentEnergy = state.aiCharacter.maxEnergy;
       }
     },
     updatePlayableCharacterSenzuCount: (state, action: PayloadAction<number>) => {
@@ -57,6 +81,11 @@ export const characterSlice = createSlice({
         state.aiCharacter.senzuCount = action.payload;
       }
     },
+    updatePlayerIsCharging: (state, action) => {
+      if (state.selectedCharacter) {
+        state.selectedCharacter.isCharging = action.payload;
+      }
+    },
     updatePlayableCharacterDefense: (state, action) => {
       if (state.selectedCharacter) {
         state.selectedCharacter.defense = action.payload;
@@ -67,10 +96,12 @@ export const characterSlice = createSlice({
         state.aiCharacter.defense = action.payload;
       }
     },
-    updatePlayerIsCharging: (state, action) => {
-      if (state.selectedCharacter) {
-        state.selectedCharacter.isCharging = action.payload;
-      }
+    resetCharacters: (state) => {
+      if (state.selectedCharacterBase)
+    state.selectedCharacter = JSON.parse(JSON.stringify(state.selectedCharacterBase));
+
+  if (state.aiCharacterBase)
+    state.aiCharacter = JSON.parse(JSON.stringify(state.aiCharacterBase));
     }
   },
 });
@@ -85,11 +116,14 @@ export const {
   updateAiCharacterHealth,
   updatePlayableCharacterEnergy,
   updateAiCharacterEnergy,
+  applyPlayerSenzu,
+  applyAiSenzu,
   updatePlayableCharacterSenzuCount,
   updateAiSenzuCount,
   updatePlayableCharacterDefense,
   updateAiCharacterDefense,
-  updatePlayerIsCharging
+  updatePlayerIsCharging,
+  resetCharacters
 } = characterSlice.actions;
 
 export default characterSlice.reducer;

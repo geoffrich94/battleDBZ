@@ -19,12 +19,15 @@ export const CharacterSelection: React.FC<CharacterSelectionProps> = ({
   onStartClick,
 }) => {
   const dispatch = useDispatch();
+
   const selectedCharacter = useSelector(
     (state: RootState) => state.character.selectedCharacter
   );
   const aiCharacter = useSelector(
     (state: RootState) => state.character.aiCharacter
   );
+
+  const startBattle = useSelector((state: RootState) => state.battle);
 
   // Track selection step: First, select Player → then AI
   const [selectionStep, setSelectionStep] = useState<"player" | "ai">("player");
