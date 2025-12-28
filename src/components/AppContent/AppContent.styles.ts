@@ -12,7 +12,7 @@ export const Container = styled.div<{
   height: 100vh;
   /* padding: 25px; */
   display: flex;
-  align-items: center;
+  // align-items: center;
   flex-direction: column;
   justify-content: space-between;
   box-sizing: border-box;

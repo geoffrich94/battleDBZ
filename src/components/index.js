@@ -12,3 +12,4 @@ export * from './CharacterSelectionMenu';
 export * from './MoveSetMenu';
 export * from './ItemsMenu';
 export * from './ItemIcon';
+export * from './GameModeSelectMenu';

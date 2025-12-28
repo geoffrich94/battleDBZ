@@ -21,11 +21,18 @@ export const CharacterSelectionIcon = styled.button<{ profilePicture: string }>`
   box-shadow: inset 0 0 15px black;
   width: 75px;
   height: 75px;
+
   background-image: url(${({ profilePicture }) =>
     `${process.env.PUBLIC_URL}${profilePicture}`});
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
+
+  /* 👇 animate changes */
+  transition:
+    background-color 0.3s ease-in-out,
+    box-shadow 0.3s ease-in-out,
+    transform 0.3s ease;
 
   @media ${devices.laptop} {
     width: 125px;
@@ -36,10 +43,12 @@ export const CharacterSelectionIcon = styled.button<{ profilePicture: string }>`
     cursor: pointer;
     background-color: #EABA12;
     box-shadow: inset 0 0 15px black, 0 0 50px #EABA12;
+     transform: rotate(2deg) scale(1.05);
   }
 
   &:active {
     background-color: #EABA12;
     box-shadow: inset 0 0 15px black, 0 0 50px #EABA12;
+    transform: rotate(0deg) scale(0.97);
   }
-`
+`;

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import * as S from "./AppContent.styles";
-import { Battle, EndMenu, StartMenu, CharacterSelection } from "components";
+import { Battle, EndMenu, StartMenu, CharacterSelection, GameModeSelectMenu } from "components";
 import { Character } from "shared";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
@@ -18,7 +18,7 @@ export const AppContent = () => {
   const dispatch = useDispatch();
 
   const [mode, setMode] = useState<
-    "start" | "characterSelection" | "battle" | "gameOver"
+    "start" | "gameModeSelect" | "characterSelection" | "battle" | "gameOver"
   >("start");
 
   const [winner, setWinner] = useState<Character | null>(null);
@@ -48,13 +48,15 @@ export const AppContent = () => {
 
   const backgroundMap = {
     start: "/assets/startscreen.jpg",
+    gameModeSelect: "/assets/game-mode-bg.jpg",
     characterSelection: "/assets/bg-character-select.jpg",
     battle: "/assets/bg-battle.png",
     gameOver: "/assets/bg-battle.png"
   };
 
   const gradientMap = {
-    start: "linear-gradient(0deg, rgba(0, 0, 0, 1), rgba(0, 0, 0, 0.5))",
+    start: "linear-gradient(0deg, rgba(0, 0, 0, 1), rgba(0, 0, 0, 0))",
+    gameModeSelect: "linear-gradient(0deg, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0))",
     characterSelection: "linear-gradient(0deg, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.5))",
     battle: "linear-gradient(0deg, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.2))",
     gameOver: "linear-gradient(0deg, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.2))"
@@ -66,7 +68,11 @@ export const AppContent = () => {
       gradient={gradientMap[mode]}
     >
       {mode === "start" && (
-        <StartMenu onStartClick={() => setMode("characterSelection")} />
+        <StartMenu onStartClick={() => setMode("gameModeSelect")} />
+      )}
+
+      {mode === "gameModeSelect" && (
+        <GameModeSelectMenu onStartClick={() => setMode("characterSelection")}/>
       )}
 
       {mode === "characterSelection" && (

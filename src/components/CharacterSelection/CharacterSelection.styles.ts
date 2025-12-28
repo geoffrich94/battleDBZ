@@ -42,8 +42,8 @@ export const ImgContainter = styled.div`
 
 export const StyledCharacterImage = styled.img`
   position: relative;
-  bottom: 0;
-  width: 40%;
+  bottom: -30px;
+  width: 35%;
   height: 50%;
 
   @media ${devices.laptop} {
@@ -76,8 +76,7 @@ export const CharacterNameContainer = styled.div`
 `;
 
 export const CharacterName = styled.h1`
-  font-family: "Arial Black";
-  font-size: 20px;
+  font-size: 18px;
   color: white;
   margin: 0px;
   letter-spacing: 5px;
@@ -97,10 +96,10 @@ export const VersusLogo = styled.img`
   z-index: 99;
   top: 10%;
   width: 20%;
-
-  // @media ${devices.laptop} {
-  //   width: auto;
-  // }
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -100%);
 `;
 
 // Container
@@ -181,112 +180,127 @@ export const OptionBorder = styled.div`
     border-top: 110px solid transparent;
     border-right: 55px solid #202020;
     z-index: -1;
-     pointer-events: none;
-
-    /* Fake border */
-    box-shadow: inset 5px 0 0 0 blue;
+    pointer-events: none;
   }
 `;
 
 export const Option = styled.button`
   width: 100%;
-  background: orangered;
-  position: relative;
   height: 90%;
   align-self: center;
-  cursor: pointer;
-  outline: none;
-  border: none;
+
+  position: relative;
   z-index: 99;
+
+  background-color: orangered;
+  color: white;
+
+  border: none;
+  outline: none;
+  cursor: pointer;
+
   text-transform: uppercase;
   font-weight: bold;
   font-size: 16px;
-  color: white;
   overflow-y: clip;
 
-  ${({ disabled }) => disabled && `
-    cursor: not-allowed;
-  `}
+  transition: background-color 0.3s ease;
+
+  ${({ disabled }) =>
+    disabled &&
+    `
+      cursor: not-allowed;
+    `}
 
   &:hover {
     background-color: #EABA12;
-
-    &:first-child::after {
-      border-left-color: #EABA12;
-    }
-
-    &:nth-child(2)::before {
-      border-right-color: #EABA12;
-    }
-
-    &:nth-child(2)::after {
-      border-left-color: #EABA12;
-    }
-
-    &:last-child::before {
-      border-right-color: #EABA12;
-    }
   }
-
-  
 
   &:first-child::after {
     content: "";
     position: absolute;
-    top: 0px;
-    right: -54px; /* 49 + border width */
+    top: 0;
+    right: -54px;
+
     width: 0;
     height: 0;
+
     border-bottom: 110px solid transparent;
-    border-left: 55px solid #EABA12;
-    border-left-color: #EABA12;
+    border-left: 55px solid orangered;
+
     z-index: -1;
-     pointer-events: none;
+    pointer-events: none;
+
+    transition: border-left-color 0.3s ease;
+  }
+
+  &:hover:first-child::after {
+    border-left-color: #EABA12;
   }
 
   &:nth-child(2)::before {
     content: "";
     position: absolute;
-    top: 0px;
+    top: 0;
     left: -54px;
+
     width: 0;
     height: 0;
+
     border-top: 110px solid transparent;
-    border-right: 55px solid #EABA12;
+    border-right: 55px solid orangered;
+
     z-index: -1;
-     pointer-events: none;
+    pointer-events: none;
+
+    transition: border-right-color 0.3s ease;
+  }
+
+  &:hover:nth-child(2)::before {
+    border-right-color: #EABA12;
   }
 
   &:nth-child(2)::after {
     content: "";
     position: absolute;
-    top: 0px;
+    top: 0;
     right: -54px;
+
     width: 0;
     height: 0;
-    border-bottom: 110px solid transparent;
-    border-left: 55px solid #EABA12;
-    z-index: -1;
-     pointer-events: none;
 
-    &:hover {
-      backgound: green;
-    }
+    border-bottom: 110px solid transparent;
+    border-left: 55px solid orangered;
+
+    z-index: -1;
+    pointer-events: none;
+
+    transition: border-left-color 0.3s ease;
+  }
+
+  &:hover:nth-child(2)::after {
+    border-left-color: #EABA12;
   }
 
   &:last-child::before {
     content: "";
     position: absolute;
-    top: 0px;
+    top: 0;
     left: -54px;
+
     width: 0;
     height: 0;
+
     border-top: 110px solid transparent;
     border-right: 55px solid orangered;
-    z-index: -1;
-     pointer-events: none;
 
-    /* Fake border */
-    box-shadow: inset 5px 0 0 0 blue;
+    z-index: -1;
+    pointer-events: none;
+
+    transition: border-right-color 0.3s ease;
+  }
+
+  &:hover:last-child::before {
+    border-right-color: #EABA12;
   }
 `;

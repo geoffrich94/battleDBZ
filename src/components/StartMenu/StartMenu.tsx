@@ -7,10 +7,12 @@ interface StartMenuProps {
 export const StartMenu: React.FC<StartMenuProps> = ({ onStartClick }) => {
   return (
     <S.Container>
-      <S.Logo />
+  
+      <S.Logo src={`${process.env.PUBLIC_URL}/assets/logo.png`} />
       <S.StartButton onClick={onStartClick}>
         Click here to Start Game
       </S.StartButton>
+     
     </S.Container>
   );
 };

@@ -2,24 +2,21 @@ import styled from "styled-components";
 import { devices } from "theme";
 
 export const Container = styled.div`
-  height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: space-evenly;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 `;
 
-export const Logo = styled.div`
-  background: url("${process.env.PUBLIC_URL}/assets/logo.png");
-  background-repeat: no-repeat;
-  background-size: contain;
+export const Logo = styled.img`
   width: 500px;
-  height: 220px;
   z-index: 99;
 
   @media ${devices.laptop} {
-    width: 800px;
-    height: 300px;
+    width: 500px;
   }
 `;
 
@@ -33,7 +30,7 @@ export const StartButton = styled.button`
   border-radius: 50px;
   color: white;
   background-color: transparent;
-  font-weight: bold;
+  font-family: "Montserrat", sans-serif;
   text-transform: uppercase;
   text-align: center;
   display: inline-block;
