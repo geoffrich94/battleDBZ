@@ -130,6 +130,8 @@ export const Characters = styled.div`
 `;
 
 export const PlayerSprite = styled.div`
+  display: flex;
+
   & img.static {
     transform: translateX(0px);
     transform: translateY(0px);
@@ -140,7 +142,7 @@ export const PlayerSprite = styled.div`
     transform: translateX(100px);
   }
   & img.ki {
-    animation: ${glow} 0.5s linear infinite; 
+    animation: ${glow} 0.5s linear infinite;
   }
   & img.damage {
     opacity: 1;
@@ -149,6 +151,8 @@ export const PlayerSprite = styled.div`
 `;
 
 export const NPCSprite = styled.div`
+  display: flex;
+
   & img {
     transform: scaleX(-1);
     transition: 0.5s;
@@ -168,3 +172,24 @@ export const NPCSprite = styled.div`
     animation: ${flash} 0.3s infinite;
   }
 `;
+
+export const AttackStatus = styled.span<{ hasMissed: boolean }>`
+
+  margin: 0px 20px;
+  transform: ${({ hasMissed }) => (hasMissed ? "translateY(0)" : "translateY(6px)")};
+
+  opacity: ${({ hasMissed }) => (hasMissed ? 1 : 0)};
+  visibility: ${({ hasMissed }) => (hasMissed ? "visible" : "hidden")};
+
+  transition:
+    opacity 0.35s ease,
+    transform 0.35s ease,
+    visibility 0.35s ease;
+
+  pointer-events: none;
+
+  font-size: 25px;
+  font-weight: bold;
+  color: white;
+`;
+

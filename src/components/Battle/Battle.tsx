@@ -5,7 +5,7 @@ import { Character, wait, BattleSequence } from "shared";
 import * as S from "./Battle.styles";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "redux/store";
-import { updatePlayerIsCharging } from '../../redux/reducers/characterSlice';
+import { updatePlayerIsCharging } from "../../redux/reducers/characterSlice";
 
 interface BattleProps {
   onGameEnd: (winner: Character) => void;
@@ -31,6 +31,7 @@ export const Battle: React.FC<BattleProps> = ({
     kiDefense: 0,
     maxEnergy: 100,
     currentEnergy: 100,
+    attackAccuracy: 0.75,
     moveset: [],
     senzuCount: 1,
     isCharging: false,
@@ -46,8 +47,9 @@ export const Battle: React.FC<BattleProps> = ({
 
   const dispatch = useDispatch();
 
-  const isCharging =
-  useSelector((state: RootState) => state.character.selectedCharacter?.isCharging)
+  const isCharging = useSelector(
+    (state: RootState) => state.character.selectedCharacter?.isCharging
+  );
 
   const [sequence, setSequence] = useState<BattleSequence>({
     mode: "idle", // Default action
@@ -62,10 +64,8 @@ export const Battle: React.FC<BattleProps> = ({
     announcerMessage,
     playerAnimation,
     npcAnimation,
-  } = useBattleSequence(
-    sequence,
-    selectedMoveName,
-  );
+    missState
+  } = useBattleSequence(sequence, selectedMoveName);
 
   const aiSenzuCount = useSelector(
     (state: RootState) => state.character.aiCharacter?.senzuCount || 0
@@ -82,8 +82,8 @@ export const Battle: React.FC<BattleProps> = ({
       if (aiChoice) {
         setUsedAiTurn(true); // Ensure AI only acts once
         // setTimeout to simulate player waiting before choosing move
-        dispatch(updatePlayerIsCharging(false))
-          setSequence({ turn, mode: aiChoice as "attack" | "ki" | "senzu" });
+        dispatch(updatePlayerIsCharging(false));
+        setSequence({ turn, mode: aiChoice as "attack" | "ki" | "senzu" });
       }
     }
 
@@ -94,11 +94,16 @@ export const Battle: React.FC<BattleProps> = ({
   }, [turn, aiChoice, inSequence, usedAiTurn, sequence, isCharging]);
 
   useEffect(() => {
-    if (playableCharacter.currentHealth === 0 || aiCharacter.currentHealth === 0) {
+    if (
+      playableCharacter.currentHealth === 0 ||
+      aiCharacter.currentHealth === 0
+    ) {
       (async () => {
         await wait(1000);
         onGameEnd(
-          playableCharacter.currentHealth === 0 ? aiCharacter : selectedCharacter
+          playableCharacter.currentHealth === 0
+            ? aiCharacter
+            : selectedCharacter
         );
       })();
     }
@@ -136,8 +141,10 @@ export const Battle: React.FC<BattleProps> = ({
               src={`${process.env.PUBLIC_URL || ""}${selectedCharacter.img}`}
               className={playerAnimation}
             />
+             <S.AttackStatus hasMissed={missState.npc}>Missed!</S.AttackStatus>
           </S.PlayerSprite>
           <S.NPCSprite>
+            <S.AttackStatus hasMissed={missState.player}>Missed!</S.AttackStatus>
             <img
               alt={aiCharacter.name}
               src={`${process.env.PUBLIC_URL || ""}${aiCharacter.img}`}
@@ -157,7 +164,7 @@ export const Battle: React.FC<BattleProps> = ({
             maxHealth={selectedCharacter.maxHealth}
             energy={selectedCharacter.currentEnergy}
             maxEnergy={selectedCharacter.maxEnergy}
-            className={isCharging ? 'charge' : ''}
+            className={isCharging ? "charge" : ""}
           />
         </S.Summary>
       </S.PlayableCharacter>
@@ -183,10 +190,9 @@ export const Battle: React.FC<BattleProps> = ({
             }}
             onSpecialMove={() => setSequence({ mode: "specialMove", turn })}
             onSenzu={() => setSequence({ turn, mode: "senzu" })}
-            onCharge={() => { 
-                setSequence({ turn, mode: "charge" })
-              }
-            }
+            onCharge={() => {
+              setSequence({ turn, mode: "charge" });
+            }}
           />
         </S.HUDChild>
       </S.HUD>

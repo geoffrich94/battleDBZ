@@ -3,3 +3,14 @@ export interface BattleSequence {
   turn: number;
   timestamp?: number;
 };
+
+export interface AttackResult {
+  damage: number;
+  missed: boolean;
+  isCritical: boolean;
+}
+
+export interface MissState {
+  player: boolean;
+  npc: boolean
+}

@@ -1,31 +1,4 @@
-export interface Move {
-  name: string;
-  damage: number;
-  kiCost: number;
-  special: boolean;
-}
-
-export interface Character {
-  level: number;
-  maxHealth: number;
-  currentHealth: number;
-  maxEnergy: number;
-  currentEnergy: number;
-  name: string;
-  img?: string;
-  profileImg: string;
-  characterImg: string;
-
-  ki: number;
-  kiCost: number;
-  attack: number;
-  defense: number;
-  kiDefense: number;
-  moveset: Move[];
-
-  senzuCount: number;
-  isCharging: boolean;
-}
+import { Character } from "./types/CharacterType";
 
 export const characters: Character[] = [
   {
@@ -40,9 +13,10 @@ export const characters: Character[] = [
     kiDefense: 100, // Adjusted to allow for reasonable damage
     ki: 150, // Increased to make sure Goku can deal damage
     kiCost: 35,
+    attackAccuracy: 0.75,
     moveset: [
-      { name: "Kamehameha", damage: 150, kiCost: 75, special: false },
-      { name: "Spirit Bomb", damage: 200, kiCost: 150, special: true },
+      { name: "Kamehameha", damage: 150, kiCost: 75, accuracy: 0.875, special: false },
+      { name: "Spirit Bomb", damage: 200, kiCost: 150, accuracy: 1.2, special: true },
     ],
     senzuCount: 1,
     isCharging: false,
@@ -62,9 +36,10 @@ export const characters: Character[] = [
     kiDefense: 105, // Adjusted to allow for reasonable damage
     ki: 145, // Increased for better damage calculation
     kiCost: 35,
+    attackAccuracy: 0.75,
     moveset: [
-      { name: "Galick Gun", damage: 145, kiCost: 75, special: false },
-      { name: "Final Flash", damage: 190, kiCost: 150, special: true },
+      { name: "Galick Gun", damage: 145, kiCost: 75, accuracy: 0.875, special: false },
+      { name: "Final Flash", damage: 190, kiCost: 150, accuracy: 1.2, special: true },
     ],
     senzuCount: 1,
     isCharging: false,
@@ -84,9 +59,10 @@ export const characters: Character[] = [
     kiDefense: 120, // Slightly reduced to avoid overwhelming attacker's damage
     ki: 160, // Increased to improve damage output
     kiCost: 35,
+    attackAccuracy: 0.75,
     moveset: [
-      { name: "Death Beam", damage: 160, kiCost: 75, special: false },
-      { name: "Death Ball", damage: 180, kiCost: 125, special: true },
+      { name: "Death Beam", damage: 160, kiCost: 75, accuracy: 0.875, special: false },
+      { name: "Death Ball", damage: 180, kiCost: 125, accuracy: 1.2, special: true },
     ],
     senzuCount: 1,
     isCharging: false,
@@ -106,10 +82,11 @@ export const characters: Character[] = [
     kiDefense: 110, // Adjusted for reasonable defense
     ki: 170, // Increased to allow decent ki damage
     kiCost: 35,
+    attackAccuracy: 0.75,
     moveset: [
-      { name: "Kamehameha", damage: 145, kiCost: 75, special: false },
-      { name: "Masenko", damage: 100, kiCost: 60, special: false },
-      { name: "Super Kamehameha", damage: 185, kiCost: 150, special: true },
+      { name: "Kamehameha", damage: 145, kiCost: 75, accuracy: 0.875, special: false },
+      { name: "Masenko", damage: 100, kiCost: 60, accuracy: 0.875, special: false },
+      { name: "Super Kamehameha", damage: 185, kiCost: 150, accuracy: 1.2, special: true },
     ],
     senzuCount: 1,
     isCharging: false,
@@ -129,9 +106,10 @@ export const characters: Character[] = [
     kiDefense: 100, // Adjusted to allow for reasonable damage
     ki: 145, // Increased for more potential damage
     kiCost: 35,
+    attackAccuracy: 0.75,
     moveset: [
-      { name: "Light Grenade", damage: 110, kiCost: 60, special: false },
-      { name: "Special Beam Cannon", damage: 175, kiCost: 120, special: true },
+      { name: "Light Grenade", damage: 110, kiCost: 60, accuracy: 0.875, special: false },
+      { name: "Special Beam Cannon", damage: 175, kiCost: 120, accuracy: 1.2, special: true },
     ],
     senzuCount: 1,
     isCharging: false,
@@ -151,9 +129,10 @@ export const characters: Character[] = [
     kiDefense: 110, // Adjusted to allow reasonable damage
     ki: 180, // Increased for better ki damage
     kiCost: 35,
+    attackAccuracy: 0.75,
     moveset: [
-      { name: "Sphere of Destruction", damage: 160, kiCost: 75, special: false },
-      { name: "Hakai (Destruction)", damage: 240, kiCost: 250, special: true },
+      { name: "Sphere of Destruction", damage: 160, kiCost: 75, accuracy: 0.875, special: false },
+      { name: "Hakai (Destruction)", damage: 240, kiCost: 250, accuracy: 1.2, special: true },
     ],
     senzuCount: 1,
     isCharging: false,
@@ -173,9 +152,10 @@ export const characters: Character[] = [
     kiDefense: 115, // Adjusted to ensure reasonable ki defense
     ki: 170, // Increased to ensure decent damage
     kiCost: 35,
+    attackAccuracy: 0.75,
     moveset: [
-      { name: "Kiai", damage: 130, kiCost: 75, special: false },
-      { name: "Power Impact", damage: 190, kiCost: 150, special: true },
+      { name: "Kiai", damage: 130, kiCost: 75, accuracy: 0.875, special: false },
+      { name: "Power Impact", damage: 190, kiCost: 150, accuracy: 1.2, special: true },
     ],
     senzuCount: 1,
     isCharging: false,
@@ -195,9 +175,10 @@ export const characters: Character[] = [
     kiDefense: 115, // Adjusted for reasonable defense
     ki: 190, // Increased to allow better damage output
     kiCost: 35,
+    attackAccuracy: 0.75,
     moveset: [
-      { name: "Black Kamehameha", damage: 150, kiCost: 75, special: false },
-      { name: "Divine Retribution", damage: 190, kiCost: 150, special: true },
+      { name: "Black Kamehameha", damage: 150, kiCost: 75, accuracy: 0.875, special: false },
+      { name: "Divine Retribution", damage: 190, kiCost: 150, accuracy: 1.2, special: true },
     ],
     senzuCount: 1,
     isCharging: false,

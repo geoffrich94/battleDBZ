@@ -5,6 +5,8 @@ import {
   BattleSequence,
   calculateMoveDamage,
   charge,
+  MissState,
+  getAnnouncerMessage,
 } from "shared";
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -45,6 +47,11 @@ export const useBattleSequence = (
   const [playerAnimation, setPlayerAnimation] = useState("static");
   const [npcAnimation, setNPCAnimation] = useState("static");
 
+  const [missState, setMissState] = useState<MissState>({
+    player: false,
+    npc: false,
+  });
+
   const selectedCharacterSenzuCount = useSelector(
     (state: RootState) => state.character.selectedCharacter?.senzuCount || 0
   );
@@ -69,16 +76,14 @@ export const useBattleSequence = (
 
       switch (mode) {
         case "attack": {
-          const damage = attack(attacker, receiver, 0.25);
-          console.log('attack damage dealt: ', damage);
+          const result = attack(attacker, receiver);
+
+          const { damage, missed, isCritical } = result;
 
           (async () => {
             dispatch(setInSequence(true));
-            dispatch(
-              setAnnouncerMessage(`${attacker?.name} has chosen to attack!`)
-            );
-            await wait(1000);
 
+            // ATTACK animation (always plays first)
             if (turn === 0) {
               setPlayerAnimation("attack");
               setTimeout(() => setPlayerAnimation("static"), 200);
@@ -86,24 +91,55 @@ export const useBattleSequence = (
               setNPCAnimation("attack");
               setTimeout(() => setNPCAnimation("static"), 200);
             }
-            await wait(100);
 
-            if (turn === 0) {
-              setNPCAnimation("damage");
-              setTimeout(() => setNPCAnimation("static"), 2000);
-            } else {
-              setPlayerAnimation("damage");
-              setTimeout(() => setPlayerAnimation("static"), 2000);
+            // Show Missed text if attack missed
+            if (missed) {
+              // Wait 0.2s so the "Missed!" text appears slightly after attack starts
+              await wait(200);
+              if (turn === 0) {
+                setMissState({ player: true, npc: false });
+              } else {
+                setMissState({ player: false, npc: true });
+              }
+
+              // Keep the missed text (NOT ANNOUCNER MESSAGE) visible for 1 second
+              await wait(1000);
+
+              // Hide missed text
+              setMissState({ player: false, npc: false });
             }
+
+            // Wait 0.5s for announcer message
             await wait(500);
 
-            dispatch(setAnnouncerMessage(`${receiver?.name} felt that!`));
-            turn === 0
-              ? dispatch(updateAiCharacterHealth(damage))
-              : dispatch(updatePlayableCharacterHealth(damage));
+            // Announce action or miss or critical hit
+            dispatch(
+              setAnnouncerMessage(
+                getAnnouncerMessage(attacker.name, "Attack", result)
+              )
+            );
+
+            // Only apply damage animation if hit
+            if (!missed) {
+              await wait(500); // small delay after announcement
+              if (turn === 0) {
+                setNPCAnimation("damage");
+                setTimeout(() => setNPCAnimation("static"), 2000);
+                dispatch(updateAiCharacterHealth(damage));
+              } else {
+                setPlayerAnimation("damage");
+                setTimeout(() => setPlayerAnimation("static"), 2000);
+                dispatch(updatePlayableCharacterHealth(damage));
+              }
+
+              await wait(1000);
+              dispatch(setAnnouncerMessage(`${receiver.name} felt that!`));
+            }
+
             await wait(2000);
 
-            dispatch(setAnnouncerMessage(`Now it's ${receiver?.name}'s turn!`));
+            // Turn handoff
+            dispatch(setAnnouncerMessage(`Now it's ${receiver.name}'s turn!`));
             await wait(1500);
 
             dispatch(setTurn());
@@ -114,7 +150,7 @@ export const useBattleSequence = (
         }
 
         case "ki": {
-          const damage = ki(attacker, receiver, 0.25);
+          const result = ki(attacker, receiver);
 
           const kiCost = selectedCharacter.kiCost;
 
@@ -122,7 +158,9 @@ export const useBattleSequence = (
             (async () => {
               dispatch(setInSequence(true));
               dispatch(
-                setAnnouncerMessage(`${attacker.name} has used a ki blast!`)
+                setAnnouncerMessage(
+                  getAnnouncerMessage(attacker.name, "Ki Blast", result)
+                )
               );
               await wait(1000);
 
@@ -147,25 +185,36 @@ export const useBattleSequence = (
               }
               await wait(1000);
 
-              // Apply damage animation and make it last for 5 seconds
-              if (turn === 0) {
-                setNPCAnimation("damage");
-                setTimeout(() => setNPCAnimation("static"), 2000); // Stop flashing after 5s
-              } else {
-                setPlayerAnimation("damage");
-                setTimeout(() => setPlayerAnimation("static"), 2000);
-              }
-              await wait(750);
+              // Show Missed text if missed
+              if (result.missed) {
+                await wait(200); // small delay
+                if (turn === 0) setMissState({ player: true, npc: false });
+                else setMissState({ player: false, npc: true });
 
-              dispatch(
-                setAnnouncerMessage(
-                  `${receiver.name} doesn't know what hit them!`
-                )
-              );
+                await wait(1000);
+                setMissState({ player: false, npc: false });
+              }
+
+              // Only apply damage animation if hit
+              if (!result.missed) {
+                await wait(500); // small delay after announcement
+                if (turn === 0) {
+                  setNPCAnimation("damage");
+                  setTimeout(() => setNPCAnimation("static"), 2000);
+                  dispatch(updateAiCharacterHealth(result.damage));
+                } else {
+                  setPlayerAnimation("damage");
+                  setTimeout(() => setPlayerAnimation("static"), 2000);
+                  dispatch(updatePlayableCharacterHealth(result.damage));
+                }
+
+                await wait(1000);
+                dispatch(setAnnouncerMessage(`${receiver.name} felt that!`));
+              }
 
               turn === 0
-                ? dispatch(updateAiCharacterHealth(damage))
-                : dispatch(updatePlayableCharacterHealth(damage));
+                ? dispatch(updateAiCharacterHealth(result.damage))
+                : dispatch(updatePlayableCharacterHealth(result.damage));
 
               await wait(2500);
 
@@ -190,12 +239,9 @@ export const useBattleSequence = (
         }
 
         case "signatureMove": {
-          // Find the selected signature move from the moveset
           const selectedMove = selectCharacterMoveset?.find(
             (move) => move.name === selectedMoveName && move.special !== true
           );
-
-          console.log(selectedMove);
 
           if (!selectedMove) {
             dispatch(
@@ -206,183 +252,185 @@ export const useBattleSequence = (
             break;
           }
 
-          const kiCost = selectedMove.kiCost; // Get the kiCost from the signature move
+          const kiCost = selectedMove.kiCost;
+          const result = calculateMoveDamage(
+            selectedCharacter,
+            aiCharacter,
+            selectedMove
+          );
 
-          // Check if the selected character has enough energy to use the move
-          if (selectedCharacter.maxEnergy >= kiCost) {
-            (async () => {
-              dispatch(setInSequence(true));
-              dispatch(
-                setAnnouncerMessage(
-                  `${selectedCharacter.name} has used ${selectedMove.name}!`
-                )
-              );
-
-              // Deduct energy for the move
-              turn === 0
-                ? dispatch(
-                    updatePlayableCharacterEnergy(
-                      selectedCharacter.currentEnergy - kiCost
-                    )
-                  )
-                : dispatch(
-                    updateAiCharacterEnergy(aiCharacter.currentEnergy - kiCost)
-                  );
-
-              // Calculate damage
-              const damage = calculateMoveDamage(
-                selectedCharacter,
-                aiCharacter,
-                selectedMove,
-                0.25 // critChance
-              );
-               console.log('signature damage dealt: ', damage);
-
-              if (damage !== 0) {
-
-                await wait(1000);
-                await wait(1000);
-
-                // Ki blast animation
-                if (turn === 0) {
-                  setPlayerAnimation("ki");
-                  setTimeout(() => setPlayerAnimation("static"), 1000);
-                } else {
-                  setNPCAnimation("ki");
-                  setTimeout(() => setNPCAnimation("static"), 1000);
-                }
-                await wait(1000);
-
-                // Apply damage animation and make it last for 5 seconds
-                if (turn === 0) {
-                  setNPCAnimation("damage");
-                  setTimeout(() => setNPCAnimation("static"), 2000); // Stop flashing after 5s
-                } else {
-                  setPlayerAnimation("damage");
-                  setTimeout(() => setPlayerAnimation("static"), 2000);
-                }
-                await wait(750);
-
-                // Apply damage to the opponent
-                turn === 0
-                  ? dispatch(updateAiCharacterHealth(damage))
-                  : dispatch(updatePlayableCharacterHealth(damage));
-                await wait(2500);
-
-                dispatch(
-                  setAnnouncerMessage(`Now it's ${aiCharacter.name}'s turn!`)
-                );
-                await wait(1500);
-
-                // Switch turn
-                dispatch(setTurn());
-                dispatch(setInSequence(false));
-              }
-            })();
-          } else {
-            // If not enough energy, display a message
+          if (selectedCharacter.currentEnergy < kiCost) {
             dispatch(
               setAnnouncerMessage(
                 `${selectedCharacter.name} doesn't have enough energy!`
               )
             );
+            break;
           }
+
+          (async () => {
+            dispatch(setInSequence(true));
+
+            // Deduct energy
+            turn === 0
+              ? dispatch(
+                  updatePlayableCharacterEnergy(
+                    selectedCharacter.currentEnergy - kiCost
+                  )
+                )
+              : dispatch(
+                  updateAiCharacterEnergy(aiCharacter.currentEnergy - kiCost)
+                );
+
+            // Attack animation
+            if (turn === 0) {
+              setPlayerAnimation("ki");
+              setTimeout(() => setPlayerAnimation("static"), 1000);
+            } else {
+              setNPCAnimation("ki");
+              setTimeout(() => setNPCAnimation("static"), 1000);
+            }
+            await wait(1000);
+
+            // Show Missed text if missed
+            if (result.missed) {
+              await wait(200); // small delay
+              if (turn === 0) setMissState({ player: true, npc: false });
+              else setMissState({ player: false, npc: true });
+
+              await wait(1000);
+              setMissState({ player: false, npc: false });
+            }
+
+            // Announcer message
+            await wait(500);
+            dispatch(
+              setAnnouncerMessage(
+                getAnnouncerMessage(attacker.name, selectedMove.name, result)
+              )
+            );
+
+            // Apply damage only if hit
+            if (!result.missed) {
+              await wait(500); // small delay after announcer
+              if (turn === 0) {
+                setNPCAnimation("damage");
+                setTimeout(() => setNPCAnimation("static"), 2000);
+                dispatch(updateAiCharacterHealth(result.damage));
+              } else {
+                setPlayerAnimation("damage");
+                setTimeout(() => setPlayerAnimation("static"), 2000);
+                dispatch(updatePlayableCharacterHealth(result.damage));
+              }
+
+              await wait(1000);
+              dispatch(setAnnouncerMessage(`${receiver.name} felt that!`));
+            }
+
+            await wait(2000);
+
+            // Handoff turn
+            dispatch(setAnnouncerMessage(`Now it's ${receiver.name}'s turn!`));
+            await wait(1500);
+
+            dispatch(setTurn());
+            dispatch(setInSequence(false));
+          })();
 
           break;
         }
 
         case "specialMove": {
-          // Find the special move with special: true (which is Super Kamehameha)
           const selectedMove = selectedCharacter.moveset.find(
             (move) => move.special === true
           );
 
-          // If a special move is found, proceed
-          if (selectedMove) {
-            const kiCost = selectedMove.kiCost; // Get the kiCost from the special move
+          if (!selectedMove) break; // No special move available
 
-            // Check to see if the selected character has enough energy to make the move
-            if (selectedCharacter.maxEnergy >= kiCost) {
-              (async () => {
-                dispatch(setInSequence(true));
-                dispatch(
-                  setAnnouncerMessage(
-                    `${selectedCharacter.name} has used ${selectedMove.name}!`
-                  )
-                );
+          const kiCost = selectedMove.kiCost;
+          const result = calculateMoveDamage(
+            selectedCharacter,
+            aiCharacter,
+            selectedMove
+          );
 
-                // Deduct energy for the move
-                turn === 0
-                  ? dispatch(
-                      updatePlayableCharacterEnergy(
-                        selectedCharacter.currentEnergy - kiCost
-                      )
-                    )
-                  : dispatch(
-                      updateAiCharacterEnergy(
-                        aiCharacter.currentEnergy - kiCost
-                      )
-                    );
-
-                // Calculate damage
-                const damage = calculateMoveDamage(
-                  selectedCharacter,
-                  aiCharacter,
-                  selectedMove,
-                  0.25 // critChance
-                );
-
-                if (damage !== 0) {
-                  await wait(1000);
-
-                  // Ki blast animation
-                  if (turn === 0) {
-                    setPlayerAnimation("ki");
-                    setTimeout(() => setPlayerAnimation("static"), 1000);
-                  } else {
-                    setNPCAnimation("ki");
-                    setTimeout(() => setNPCAnimation("static"), 1000);
-                  }
-                  await wait(1000);
-
-                  // Apply damage animation and make it last for 5 seconds
-                  if (turn === 0) {
-                    setNPCAnimation("damage");
-                    setTimeout(() => setNPCAnimation("static"), 2000); // Stop flashing after 5s
-                  } else {
-                    setPlayerAnimation("damage");
-                    setTimeout(() => setPlayerAnimation("static"), 2000);
-                  }
-                  await wait(750);
-
-                  // Apply damage to the opponent
-                  turn === 0
-                    ? dispatch(updateAiCharacterHealth(damage))
-                    : dispatch(updatePlayableCharacterHealth(damage));
-
-                  await wait(2500);
-
-                  dispatch(
-                    setAnnouncerMessage(
-                      `Now it's ${selectedCharacter.name}'s turn!`
-                    )
-                  );
-                  await wait(1500);
-
-                  // Switch turn
-                  dispatch(setTurn());
-                  dispatch(setInSequence(false));
-                }
-              })();
-            } else {
-              // If not enough energy, display a message
-              dispatch(
-                setAnnouncerMessage(
-                  `${selectedCharacter.name} doesn't have enough energy!`
-                )
-              );
-            }
+          if (selectedCharacter.currentEnergy < kiCost) {
+            dispatch(
+              setAnnouncerMessage(
+                `${selectedCharacter.name} doesn't have enough energy!`
+              )
+            );
+            break;
           }
+
+          (async () => {
+            dispatch(setInSequence(true));
+
+            // Deduct energy
+            turn === 0
+              ? dispatch(
+                  updatePlayableCharacterEnergy(
+                    selectedCharacter.currentEnergy - kiCost
+                  )
+                )
+              : dispatch(
+                  updateAiCharacterEnergy(aiCharacter.currentEnergy - kiCost)
+                );
+
+            // Attack animation
+            if (turn === 0) {
+              setPlayerAnimation("ki");
+              setTimeout(() => setPlayerAnimation("static"), 1000);
+            } else {
+              setNPCAnimation("ki");
+              setTimeout(() => setNPCAnimation("static"), 1000);
+            }
+            await wait(1000);
+
+            // Show Missed text if missed
+            if (result.missed) {
+              await wait(200); // small delay
+              if (turn === 0) setMissState({ player: true, npc: false });
+              else setMissState({ player: false, npc: true });
+
+              await wait(1000);
+              setMissState({ player: false, npc: false });
+            }
+
+            // Announcer message
+            await wait(500);
+            dispatch(
+              setAnnouncerMessage(
+                getAnnouncerMessage(attacker.name, selectedMove.name, result)
+              )
+            );
+
+            // Apply damage only if hit
+            if (!result.missed) {
+              await wait(500); // small delay after announcer
+              if (turn === 0) {
+                setNPCAnimation("damage");
+                setTimeout(() => setNPCAnimation("static"), 2000);
+                dispatch(updateAiCharacterHealth(result.damage));
+              } else {
+                setPlayerAnimation("damage");
+                setTimeout(() => setPlayerAnimation("static"), 2000);
+                dispatch(updatePlayableCharacterHealth(result.damage));
+              }
+
+              await wait(1000);
+              dispatch(setAnnouncerMessage(`${receiver.name} felt that!`));
+            }
+
+            await wait(2000);
+
+            // Handoff turn
+            dispatch(setAnnouncerMessage(`Now it's ${receiver.name}'s turn!`));
+            await wait(1500);
+
+            dispatch(setTurn());
+            dispatch(setInSequence(false));
+          })();
 
           break;
         }
@@ -525,5 +573,6 @@ export const useBattleSequence = (
     announcerMessage,
     playerAnimation,
     npcAnimation,
+    missState,
   };
 };
