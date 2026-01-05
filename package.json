@@ -33,7 +33,7 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d build"
+    "deploy": "gh-pages -d build --repo https://github.com/geoffrich94/battleDBZ.git"
   },
   "eslintConfig": {
     "extends": [
@@ -55,7 +55,6 @@
   },
   "devDependencies": {
     "@types/redux": "^3.6.0",
-    "@types/styled-components": "^5.1.26",
-    "gh-pages": "^6.3.0"
+    "@types/styled-components": "^5.1.26"
   }
 }
