@@ -7,6 +7,9 @@
     "type": "git",
     "url": "https://github.com/geoffrich94/battleDBZ.git"
   },
+  "gh-pages": {
+    "repo": "https://github.com/geoffrich94/battleDBZ.git"
+  },
   "dependencies": {
     "@reduxjs/toolkit": "^2.6.0",
     "@testing-library/jest-dom": "^5.16.5",
