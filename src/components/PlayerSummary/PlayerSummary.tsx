@@ -2,9 +2,6 @@ import { Bar } from "components";
 import * as S from "./PlayerSummary.styles";
 import { Character } from "shared";
 
-const red = "#202020";
-const blue = "#202020";
-
 interface PlayerSummaryProps {
   selectedCharacter?: Character | null;
   playableCharacter?: boolean;

@@ -78,7 +78,7 @@ export const useBattleSequence = (
         case "attack": {
           const result = attack(attacker, receiver);
 
-          const { damage, missed, isCritical } = result;
+          const { damage, missed } = result;
 
           (async () => {
             dispatch(setInSequence(true));

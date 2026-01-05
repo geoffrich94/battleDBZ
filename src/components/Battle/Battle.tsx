@@ -91,7 +91,7 @@ export const Battle: React.FC<BattleProps> = ({
     if (turn === 0 && !inSequence) {
       setUsedAiTurn(false); // Reset after player completes their turn
     }
-  }, [turn, aiChoice, inSequence, usedAiTurn, sequence, isCharging]);
+  }, [turn, aiChoice, inSequence, usedAiTurn, sequence, isCharging, dispatch]);
 
   useEffect(() => {
     if (
