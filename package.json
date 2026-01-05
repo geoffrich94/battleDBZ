@@ -48,8 +48,8 @@
       "last 1 safari version"
     ]
   },
-   "devDependencies": {
+  "devDependencies": {
     "@types/redux": "^3.6.0",
-    "@types/styled-components": "^5.1.26",
+    "@types/styled-components": "^5.1.26"
   }
 }
