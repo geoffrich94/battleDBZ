@@ -1,3 +1,5 @@
+// eslint-disable-next-line react-hooks/exhaustive-deps
+
 import {
   wait,
   ki,
@@ -63,7 +65,6 @@ export const useBattleSequence = (
   const hasChargedRef = useRef(false);
   const hasRunRef = useRef(false);
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     if (!sequence || inSequence) return; // Prevents automatic execution
 
