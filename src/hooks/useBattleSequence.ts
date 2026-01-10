@@ -63,6 +63,7 @@ export const useBattleSequence = (
   const hasChargedRef = useRef(false);
   const hasRunRef = useRef(false);
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     if (!sequence || inSequence) return; // Prevents automatic execution
 
@@ -211,10 +212,6 @@ export const useBattleSequence = (
                 await wait(1000);
                 dispatch(setAnnouncerMessage(`${receiver.name} felt that!`));
               }
-
-              turn === 0
-                ? dispatch(updateAiCharacterHealth(result.damage))
-                : dispatch(updatePlayableCharacterHealth(result.damage));
 
               await wait(2500);
 
