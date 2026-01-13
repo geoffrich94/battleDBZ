@@ -31,7 +31,8 @@ export const BattleMenu: React.FC<BattleMenuProps> = ({
   return (
     <S.Container>
       <S.ItemIconContainer>
-        <ItemIcon imgUrl="assets/senzu-bean.png" onClick={onSenzu} />
+        <ItemIcon imgUrl="assets/senzu-bean.png" onClick={onSenzu} isConsumable />
+        <ItemIcon imgUrl="assets/ki-blast.png" onClick={onKi}/>
       </S.ItemIconContainer>
 
       {/* Battle Menu */}

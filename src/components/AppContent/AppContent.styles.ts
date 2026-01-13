@@ -10,9 +10,7 @@ export const Container = styled.div<{
   background-attachment: fixed;
   background-size: cover;
   height: 100vh;
-  /* padding: 25px; */
   display: flex;
-  // align-items: center;
   flex-direction: column;
   justify-content: space-between;
   box-sizing: border-box;

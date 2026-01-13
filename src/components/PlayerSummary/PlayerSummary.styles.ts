@@ -44,6 +44,39 @@ export const Container = styled.div`
   }
 `;
 
+export const TurnIndicator = styled.div`
+  z-index: 99;
+  position: absolute;
+  top: -10px;
+  right: 30px;
+
+   --skew: -20deg;
+
+  background-color: #2ecc71;
+  color: #102b18;
+
+  border: 2px solid #1e8449;
+  text-shadow: 0 1px 0 rgba(255,255,255,0.3);
+
+  padding: 6px 12px;
+  font-weight: bold;
+  font-size: 12px;
+  text-transform: uppercase;
+
+  animation: pulse 1.5s infinite;
+
+  @keyframes pulse {
+    0%   { transform: skewX(var(--skew)) scale(1); }
+    50%  { transform: skewX(var(--skew)) scale(1.05); }
+    100% { transform: skewX(var(--skew)) scale(1); }
+  }
+`;
+
+export const TurnIndicatorText = styled.div`
+  transform: skewX(20deg); /* counter skew */
+`;
+
+
 // New background wrapper to separate the background from the content stack
 export const BackgroundWrapper = styled.div`
   position: absolute;

@@ -6,12 +6,13 @@ interface PlayerSummaryProps {
   selectedCharacter?: Character | null;
   playableCharacter?: boolean;
   name: string;
-  level: number;
+  level?: number;
   health: number;
   maxHealth: number;
   energy: number;
   maxEnergy: number;
   className?: string;
+  playerTurn?: number;
 }
 
 export const PlayerSummary: React.FC<PlayerSummaryProps> = ({
@@ -24,9 +25,11 @@ export const PlayerSummary: React.FC<PlayerSummaryProps> = ({
   energy,
   maxEnergy,
   className,
+  playerTurn
 }) => {
   return (
     <S.Wrapper>
+      { playerTurn === 0 ? <S.TurnIndicator><S.TurnIndicatorText>YOUR TURN</S.TurnIndicatorText></S.TurnIndicator> : <></>}
       {/* Wrapper around animated background */}
       <S.BackgroundWrapper>
         <S.AnimatedBackground className={className}/>
@@ -46,7 +49,6 @@ export const PlayerSummary: React.FC<PlayerSummaryProps> = ({
             <S.Info>
               <S.InfoInnerContainer>
                 <S.Heading>{name}</S.Heading>
-                <S.Heading>Lvl: {level}</S.Heading>
               </S.InfoInnerContainer>
             </S.Info>
 

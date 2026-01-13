@@ -27,7 +27,6 @@ export const Container = styled.button`
   cursor: pointer;
 
   & img {
-    width: 50%;
     height: 50%;
   }
 

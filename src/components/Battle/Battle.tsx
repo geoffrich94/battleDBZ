@@ -116,7 +116,7 @@ export const Battle: React.FC<BattleProps> = ({
   ]);
 
   return (
-    <>
+    <S.Container>
       <S.Logo />
       <S.NonPlayableCharacter>
         <S.Summary>
@@ -165,6 +165,7 @@ export const Battle: React.FC<BattleProps> = ({
             energy={selectedCharacter.currentEnergy}
             maxEnergy={selectedCharacter.maxEnergy}
             className={isCharging ? "charge" : ""}
+            playerTurn={turn}
           />
         </S.Summary>
       </S.PlayableCharacter>
@@ -196,6 +197,6 @@ export const Battle: React.FC<BattleProps> = ({
           />
         </S.HUDChild>
       </S.HUD>
-    </>
+    </S.Container>
   );
 };

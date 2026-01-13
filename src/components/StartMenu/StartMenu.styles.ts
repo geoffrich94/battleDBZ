@@ -6,21 +6,33 @@ export const Container = styled.div`
   flex-direction: column;
   align-items: center;
   position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  z-index: 99;
+  left: 100px;
+  bottom: 200px;
 `;
 
 export const Logo = styled.img`
-  width: 500px;
-  z-index: 99;
-
+  width: 400px;
   @media ${devices.laptop} {
     width: 500px;
   }
 `;
 
+export const CompanyLogo = styled.img`
+  position: absolute;
+  bottom: 0px;
+  right: 0px;
+  width: 200px;
+  @media ${devices.laptop} {
+    width: 300px;
+  }
+`;
+
 export const StartButton = styled.button`
+  z-index: 99;
+  left: 100px;
+  bottom: 150px;
+
   border: none;
   outline: none;
   padding: 15px;

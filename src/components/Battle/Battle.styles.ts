@@ -2,6 +2,16 @@ import styled, { keyframes } from "styled-components";
 // import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
 import { devices } from "theme";
 
+export const Container = styled.div`
+ height: 100%;
+ width: 100%^;
+ padding 10px 30px;
+ display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-sizing: border-box;
+`;
+
 const flash = keyframes`
   0% {
     opacity: 0;
@@ -48,11 +58,6 @@ export const Logo = styled.div`
   }
 `;
 
-export const Container = styled.div`
-  background: linear-gradient(0deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)),
-    url("${process.env.PUBLIC_URL}/assets/bg.png");
-`;
-
 export const Summary = styled.div`
   display: flex;
   align-items: flex - end;
@@ -73,11 +78,38 @@ export const NonPlayableCharacter = styled.div`
 `;
 
 export const PlayableCharacter = styled.div`
+  position: relative;
   gap: 10px;
   display: flex;
   flex-direction: column;
   width: 100%;
   box-sizing: border-box;
+`;
+
+export const TurnTag = styled.div`
+  position: absolute;
+  top: -10px;
+  right: 10px;
+
+  background-color: #2ecc71; /* green */
+  color: #102b18;
+
+  border: 2px solid #1e8449;
+  text-shadow: 0 1px 0 rgba(255,255,255,0.3);
+
+
+  padding: 6px 12px;
+  font-weight: bold;
+  font-size: 12px;
+  text-transform: uppercase;
+
+  animation: pulse 1.5s infinite;
+
+  @keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+  }
 `;
 
 export const HUD = styled.div`

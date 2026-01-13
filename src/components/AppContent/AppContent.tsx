@@ -48,14 +48,14 @@ export const AppContent = () => {
 
   const backgroundMap = {
     start: "/assets/startscreen.jpg",
-    gameModeSelect: "/assets/game-mode-bg.jpg",
+    gameModeSelect: "/assets/startscreen.jpg",
     characterSelection: "/assets/bg-character-select.jpg",
     battle: "/assets/bg-battle.png",
     gameOver: "/assets/bg-battle.png"
   };
 
   const gradientMap = {
-    start: "linear-gradient(0deg, rgba(0, 0, 0, 1), rgba(0, 0, 0, 0))",
+    start: "linear-gradient(0deg, rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0))",
     gameModeSelect: "linear-gradient(0deg, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0))",
     characterSelection: "linear-gradient(0deg, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.5))",
     battle: "linear-gradient(0deg, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.2))",

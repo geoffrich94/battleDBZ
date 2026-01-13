@@ -2,10 +2,12 @@ import styled from "styled-components";
 import { devices } from "theme";
 
 export const Container = styled.div`
+  position: Relative;
+
   transform: rotate(3deg);
 
   height: 100%;
-  padding: 25px;
+  padding: 10px 25px;
   /* border-radius: 10px; */
   box-sizing: border-box;
 
@@ -16,6 +18,21 @@ export const Container = styled.div`
   justify-content: center;
   border: 5px solid orangered;
   background-color: #202020;
+`;
+
+export const AnnouncerDiv = styled.div`
+  height: 80%;
+  position: absolute;
+  left: 0;
+
+  & img {
+    height: 100%;
+  }
+`
+export const MessageWrapper = styled.div`
+  flex: 1;
+  display: flex;
+  justify-content: center;
 `;
 
 export const Message = styled.div`
