@@ -12,7 +12,7 @@ interface BattleMenuProps {
   onCharge: () => void;
   onSignatureMove: (moveName: string) => void;
   onSpecialMove: () => void;
-}
+};
 
 export const BattleMenu: React.FC<BattleMenuProps> = ({
   selectedCharacter,
@@ -31,8 +31,11 @@ export const BattleMenu: React.FC<BattleMenuProps> = ({
   return (
     <S.Container>
       <S.ItemIconContainer>
-        <ItemIcon imgUrl="assets/senzu-bean.png" onClick={onSenzu} isConsumable />
+        <ItemIcon imgUrl="assets/attack.png" onClick={onAttack} />
         <ItemIcon imgUrl="assets/ki-blast.png" onClick={onKi}/>
+        <ItemIcon imgUrl="assets/senzu-bean.png" onClick={onSenzu} isSenzu />
+        <ItemIcon imgUrl="assets/capsule01.png" isAttackCapsule={false} />
+        <ItemIcon imgUrl="assets/capsule02.png" isDefenceCapsule={false} />
       </S.ItemIconContainer>
 
       {/* Battle Menu */}
