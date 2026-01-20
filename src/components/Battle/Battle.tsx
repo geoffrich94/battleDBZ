@@ -33,6 +33,10 @@ export const Battle: React.FC<BattleProps> = ({
     currentEnergy: 100,
     attackAccuracy: 0.75,
     moveset: [],
+    moveCooldown: {
+      special: 0,
+      signature: 0
+    },
     senzuCount: 1,
     isCharging: false,
   };

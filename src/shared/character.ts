@@ -15,9 +15,13 @@ export const characters: Character[] = [
     kiCost: 35,
     attackAccuracy: 0.75,
     moveset: [
-      { name: "Kamehameha", damage: 150, kiCost: 75, accuracy: 0.875, special: false },
-      { name: "Spirit Bomb", damage: 200, kiCost: 150, accuracy: 1.2, special: true },
+      { name: "Kamehameha", damage: 150, kiCost: 75, accuracy: 0.875, category: 'signature' },
+      { name: "Spirit Bomb", damage: 200, kiCost: 150, accuracy: 1.2, category: 'special' },
     ],
+    moveCooldown: {
+      signature: 0,
+      special: 0
+    },
     senzuCount: 1,
     isCharging: false,
     img: "/assets/goku.png",
@@ -33,14 +37,18 @@ export const characters: Character[] = [
     currentEnergy: 250,
     attack: 135,
     defense: 105,
-    kiDefense: 105, // Adjusted to allow for reasonable damage
-    ki: 145, // Increased for better damage calculation
+    kiDefense: 105, 
+    ki: 145,
     kiCost: 35,
     attackAccuracy: 0.75,
     moveset: [
-      { name: "Galick Gun", damage: 145, kiCost: 75, accuracy: 0.875, special: false },
-      { name: "Final Flash", damage: 190, kiCost: 150, accuracy: 1.2, special: true },
+      { name: "Galick Gun", damage: 145, kiCost: 75, accuracy: 0.875, category: 'signature' },
+      { name: "Final Flash", damage: 190, kiCost: 150, accuracy: 1.2, category: 'special' },
     ],
+    moveCooldown: {
+      signature: 0,
+      special: 0
+    },
     senzuCount: 1,
     isCharging: false,
     img: "/assets/vegeta.png",
@@ -56,14 +64,18 @@ export const characters: Character[] = [
     currentEnergy: 250,
     attack: 140,
     defense: 90,
-    kiDefense: 120, // Slightly reduced to avoid overwhelming attacker's damage
-    ki: 160, // Increased to improve damage output
+    kiDefense: 120, 
+    ki: 160,
     kiCost: 35,
     attackAccuracy: 0.75,
     moveset: [
-      { name: "Death Beam", damage: 160, kiCost: 75, accuracy: 0.875, special: false },
-      { name: "Death Ball", damage: 180, kiCost: 125, accuracy: 1.2, special: true },
+      { name: "Death Beam", damage: 160, kiCost: 75, accuracy: 0.875, category: 'signature' },
+      { name: "Death Ball", damage: 180, kiCost: 125, accuracy: 1.2, category: 'special' },
     ],
+    moveCooldown: {
+      signature: 0,
+      special: 0
+    },
     senzuCount: 1,
     isCharging: false,
     img: "/assets/frieza.png",
@@ -84,10 +96,14 @@ export const characters: Character[] = [
     kiCost: 35,
     attackAccuracy: 0.75,
     moveset: [
-      { name: "Kamehameha", damage: 145, kiCost: 75, accuracy: 0.875, special: false },
-      { name: "Masenko", damage: 100, kiCost: 60, accuracy: 0.875, special: false },
-      { name: "Super Kamehameha", damage: 185, kiCost: 150, accuracy: 1.2, special: true },
+      { name: "Kamehameha", damage: 145, kiCost: 75, accuracy: 0.875, category: 'signature' },
+      { name: "Masenko", damage: 100, kiCost: 60, accuracy: 0.875, category: 'signature' },
+      { name: "Super Kamehameha", damage: 185, kiCost: 150, accuracy: 1.2, category: 'special' },
     ],
+    moveCooldown: {
+      signature: 0,
+      special: 0
+    },
     senzuCount: 1,
     isCharging: false,
     img: "/assets/gohan.png",
@@ -108,9 +124,13 @@ export const characters: Character[] = [
     kiCost: 35,
     attackAccuracy: 0.75,
     moveset: [
-      { name: "Light Grenade", damage: 110, kiCost: 60, accuracy: 0.875, special: false },
-      { name: "Special Beam Cannon", damage: 175, kiCost: 120, accuracy: 1.2, special: true },
+      { name: "Light Grenade", damage: 110, kiCost: 60, accuracy: 0.875, category: 'signature' },
+      { name: "Special Beam Cannon", damage: 175, kiCost: 120, accuracy: 1.2, category: 'special' },
     ],
+    moveCooldown: {
+      signature: 0,
+      special: 0
+    },
     senzuCount: 1,
     isCharging: false,
     img: "/assets/piccolo.png",
@@ -126,14 +146,18 @@ export const characters: Character[] = [
     currentEnergy: 250,
     attack: 160,
     defense: 120,
-    kiDefense: 110, // Adjusted to allow reasonable damage
-    ki: 180, // Increased for better ki damage
+    kiDefense: 110,
+    ki: 180, 
     kiCost: 35,
     attackAccuracy: 0.75,
     moveset: [
-      { name: "Sphere of Destruction", damage: 160, kiCost: 75, accuracy: 0.875, special: false },
-      { name: "Hakai (Destruction)", damage: 240, kiCost: 250, accuracy: 1.2, special: true },
+      { name: "Sphere of Destruction", damage: 160, kiCost: 75, accuracy: 0.875, category: 'signature' },
+      { name: "Hakai (Destruction)", damage: 240, kiCost: 250, accuracy: 1.2, category: 'special' },
     ],
+    moveCooldown: {
+      signature: 0,
+      special: 0
+    },
     senzuCount: 1,
     isCharging: false,
     img: "/assets/beerus.png",
@@ -149,14 +173,18 @@ export const characters: Character[] = [
     currentEnergy: 250,
     attack: 150,
     defense: 135,
-    kiDefense: 115, // Adjusted to ensure reasonable ki defense
-    ki: 170, // Increased to ensure decent damage
+    kiDefense: 115, 
+    ki: 170,
     kiCost: 35,
     attackAccuracy: 0.75,
     moveset: [
-      { name: "Kiai", damage: 130, kiCost: 75, accuracy: 0.875, special: false },
-      { name: "Power Impact", damage: 190, kiCost: 150, accuracy: 1.2, special: true },
+      { name: "Kiai", damage: 130, kiCost: 75, accuracy: 0.875, category: 'signature' },
+      { name: "Power Impact", damage: 190, kiCost: 150, accuracy: 1.2, category: 'special' },
     ],
+    moveCooldown: {
+      signature: 0,
+      special: 0
+    },
     senzuCount: 1,
     isCharging: false,
     img: "/assets/jiren.png",
@@ -172,14 +200,18 @@ export const characters: Character[] = [
     maxEnergy: 250,
     attack: 145,
     defense: 95,
-    kiDefense: 115, // Adjusted for reasonable defense
-    ki: 190, // Increased to allow better damage output
+    kiDefense: 115, 
+    ki: 190, 
     kiCost: 35,
     attackAccuracy: 0.75,
     moveset: [
-      { name: "Black Kamehameha", damage: 150, kiCost: 75, accuracy: 0.875, special: false },
-      { name: "Divine Retribution", damage: 190, kiCost: 150, accuracy: 1.2, special: true },
+      { name: "Black Kamehameha", damage: 150, kiCost: 75, accuracy: 0.875, category: 'signature' },
+      { name: "Divine Retribution", damage: 190, kiCost: 150, accuracy: 1.2, category: 'special' },
     ],
+    moveCooldown: {
+      signature: 0,
+      special: 0
+    },
     senzuCount: 1,
     isCharging: false,
     img: "/assets/goku-black.png",

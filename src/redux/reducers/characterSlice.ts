@@ -1,19 +1,18 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { Character } from "shared/types";
 
-
 interface CharacterState {
   selectedCharacter: Character | null;
   selectedCharacterBase: Character | null;
   aiCharacter: Character | null;
   aiCharacterBase: Character | null;
-};
+}
 
 const initialState: CharacterState = {
   selectedCharacter: null,
   selectedCharacterBase: null,
   aiCharacter: null,
-  aiCharacterBase: null
+  aiCharacterBase: null,
 };
 
 export const characterSlice = createSlice({
@@ -32,18 +31,24 @@ export const characterSlice = createSlice({
       state.selectedCharacter = null;
       state.selectedCharacter = null;
     },
-    deSelectAICharacter:(state) => {
+    deSelectAICharacter: (state) => {
       state.aiCharacter = null;
       state.aiCharacterBase = null;
     },
     updatePlayableCharacterHealth: (state, action: PayloadAction<number>) => {
       if (state.selectedCharacter) {
-        state.selectedCharacter.currentHealth =  Math.max(0, state.selectedCharacter.currentHealth - action.payload )
+        state.selectedCharacter.currentHealth = Math.max(
+          0,
+          state.selectedCharacter.currentHealth - action.payload,
+        );
       }
     },
     updateAiCharacterHealth: (state, action: PayloadAction<number>) => {
       if (state.aiCharacter) {
-       state.aiCharacter.currentHealth = Math.max(0, state.aiCharacter.currentHealth - action.payload )
+        state.aiCharacter.currentHealth = Math.max(
+          0,
+          state.aiCharacter.currentHealth - action.payload,
+        );
       }
     },
     updatePlayableCharacterEnergy: (state, action: PayloadAction<number>) => {
@@ -58,10 +63,12 @@ export const characterSlice = createSlice({
     },
     applyPlayerSenzu: (state) => {
       if (state.selectedCharacter) {
-        state.selectedCharacter.currentHealth = state.selectedCharacter.maxHealth;
+        state.selectedCharacter.currentHealth =
+          state.selectedCharacter.maxHealth;
       }
       if (state.selectedCharacter) {
-        state.selectedCharacter.currentEnergy = state.selectedCharacter.maxEnergy;
+        state.selectedCharacter.currentEnergy =
+          state.selectedCharacter.maxEnergy;
       }
     },
     applyAiSenzu: (state) => {
@@ -72,7 +79,10 @@ export const characterSlice = createSlice({
         state.aiCharacter.currentEnergy = state.aiCharacter.maxEnergy;
       }
     },
-    updatePlayableCharacterSenzuCount: (state, action: PayloadAction<number>) => {
+    updatePlayableCharacterSenzuCount: (
+      state,
+      action: PayloadAction<number>,
+    ) => {
       if (state.selectedCharacter) {
         state.selectedCharacter.senzuCount = action.payload;
       }
@@ -82,6 +92,48 @@ export const characterSlice = createSlice({
         state.aiCharacter.senzuCount = action.payload;
       }
     },
+
+    applyMoveCooldown: (
+      state,
+      action: PayloadAction<{
+        target: "player" | "ai";
+        category: "signature" | "special";
+      }>,
+    ) => {
+      const character =
+        action.payload.target === "player"
+          ? state.selectedCharacter
+          : state.aiCharacter;
+
+      if (!character) return;
+
+      if (action.payload.category === "signature") {
+        character.moveCooldown.signature = 3;
+      }
+
+      if (action.payload.category === "special") {
+        character.moveCooldown.special = 5;
+      }
+    },
+
+    decrementMoveCooldowns: (state) => {
+      const characters = [state.selectedCharacter, state.aiCharacter];
+
+      characters.forEach((char) => {
+        if (!char) return;
+
+        char.moveCooldown.signature = Math.max(
+          0,
+          char.moveCooldown.signature - 1,
+        );
+
+        char.moveCooldown.special = Math.max(
+          0,
+          char.moveCooldown.special - 1,
+        );
+      });
+    },
+
     updatePlayerIsCharging: (state, action) => {
       if (state.selectedCharacter) {
         state.selectedCharacter.isCharging = action.payload;
@@ -99,11 +151,13 @@ export const characterSlice = createSlice({
     },
     resetCharacters: (state) => {
       if (state.selectedCharacterBase)
-    state.selectedCharacter = JSON.parse(JSON.stringify(state.selectedCharacterBase));
+        state.selectedCharacter = JSON.parse(
+          JSON.stringify(state.selectedCharacterBase),
+        );
 
-  if (state.aiCharacterBase)
-    state.aiCharacter = JSON.parse(JSON.stringify(state.aiCharacterBase));
-    }
+      if (state.aiCharacterBase)
+        state.aiCharacter = JSON.parse(JSON.stringify(state.aiCharacterBase));
+    },
   },
 });
 
@@ -121,10 +175,12 @@ export const {
   applyAiSenzu,
   updatePlayableCharacterSenzuCount,
   updateAiSenzuCount,
+  applyMoveCooldown,
+  decrementMoveCooldowns,
   updatePlayableCharacterDefense,
   updateAiCharacterDefense,
   updatePlayerIsCharging,
-  resetCharacters
+  resetCharacters,
 } = characterSlice.actions;
 
 export default characterSlice.reducer;

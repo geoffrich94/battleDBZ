@@ -23,6 +23,8 @@ import {
   updateAiCharacterEnergy,
   applyPlayerSenzu,
   applyAiSenzu,
+  applyMoveCooldown,
+  decrementMoveCooldowns,
 } from "./../redux/reducers/characterSlice";
 import {
   setTurn,
@@ -32,18 +34,18 @@ import {
 
 export const useBattleSequence = (
   sequence: BattleSequence,
-  selectedMoveName: string // Add selectedMoveName as an argument
+  selectedMoveName: string, // Add selectedMoveName as an argument
 ) => {
   const dispatch = useDispatch();
 
   const { turn, inSequence, announcerMessage } = useSelector(
-    (state: RootState) => state.battle
+    (state: RootState) => state.battle,
   );
   const { selectedCharacter, aiCharacter } = useSelector(
-    (state: RootState) => state.character
+    (state: RootState) => state.character,
   );
   const selectCharacterMoveset = useSelector(
-    (state: RootState) => state.character.selectedCharacter?.moveset
+    (state: RootState) => state.character.selectedCharacter?.moveset,
   );
 
   const [playerAnimation, setPlayerAnimation] = useState("static");
@@ -55,10 +57,10 @@ export const useBattleSequence = (
   });
 
   const selectedCharacterSenzuCount = useSelector(
-    (state: RootState) => state.character.selectedCharacter?.senzuCount || 0
+    (state: RootState) => state.character.selectedCharacter?.senzuCount || 0,
   );
   const aiSenzuCount = useSelector(
-    (state: RootState) => state.character.aiCharacter?.senzuCount || 0
+    (state: RootState) => state.character.aiCharacter?.senzuCount || 0,
   );
 
   const senzuProcessedRef = useRef(false);
@@ -117,8 +119,8 @@ export const useBattleSequence = (
             // Announce action or miss or critical hit
             dispatch(
               setAnnouncerMessage(
-                getAnnouncerMessage(attacker.name, "Attack", result)
-              )
+                getAnnouncerMessage(attacker.name, "Attack", result),
+              ),
             );
 
             // Only apply damage animation if hit
@@ -161,8 +163,8 @@ export const useBattleSequence = (
               dispatch(setInSequence(true));
               dispatch(
                 setAnnouncerMessage(
-                  getAnnouncerMessage(attacker.name, "Ki Blast", result)
-                )
+                  getAnnouncerMessage(attacker.name, "Ki Blast", result),
+                ),
               );
               await wait(1000);
 
@@ -170,11 +172,11 @@ export const useBattleSequence = (
               turn === 0
                 ? dispatch(
                     updatePlayableCharacterEnergy(
-                      selectedCharacter.currentEnergy - kiCost
-                    )
+                      selectedCharacter.currentEnergy - kiCost,
+                    ),
                   )
                 : dispatch(
-                    updateAiCharacterEnergy(aiCharacter.currentEnergy - kiCost)
+                    updateAiCharacterEnergy(aiCharacter.currentEnergy - kiCost),
                   );
 
               // Ki blast animation
@@ -217,7 +219,7 @@ export const useBattleSequence = (
               await wait(2500);
 
               dispatch(
-                setAnnouncerMessage(`Now it's ${receiver.name}'s turn!`)
+                setAnnouncerMessage(`Now it's ${receiver.name}'s turn!`),
               );
               await wait(1500);
 
@@ -228,8 +230,8 @@ export const useBattleSequence = (
             // If not enough energy, display a message
             dispatch(
               setAnnouncerMessage(
-                `${selectedCharacter.name} doesn't have enough energy!`
-              )
+                `${selectedCharacter.name} doesn't have enough energy!`,
+              ),
             );
           }
 
@@ -238,14 +240,15 @@ export const useBattleSequence = (
 
         case "signatureMove": {
           const selectedMove = selectCharacterMoveset?.find(
-            (move) => move.name === selectedMoveName && move.special !== true
+            (move) =>
+              move.name === selectedMoveName && move.category !== "special",
           );
 
           if (!selectedMove) {
             dispatch(
               setAnnouncerMessage(
-                `${selectedCharacter.name} has no signature move selected!`
-              )
+                `${selectedCharacter.name} has no signature move selected!`,
+              ),
             );
             break;
           }
@@ -254,14 +257,14 @@ export const useBattleSequence = (
           const result = calculateMoveDamage(
             selectedCharacter,
             aiCharacter,
-            selectedMove
+            selectedMove,
           );
 
           if (selectedCharacter.currentEnergy < kiCost) {
             dispatch(
               setAnnouncerMessage(
-                `${selectedCharacter.name} doesn't have enough energy!`
-              )
+                `${selectedCharacter.name} doesn't have enough energy!`,
+              ),
             );
             break;
           }
@@ -273,11 +276,11 @@ export const useBattleSequence = (
             turn === 0
               ? dispatch(
                   updatePlayableCharacterEnergy(
-                    selectedCharacter.currentEnergy - kiCost
-                  )
+                    selectedCharacter.currentEnergy - kiCost,
+                  ),
                 )
               : dispatch(
-                  updateAiCharacterEnergy(aiCharacter.currentEnergy - kiCost)
+                  updateAiCharacterEnergy(aiCharacter.currentEnergy - kiCost),
                 );
 
             // Attack animation
@@ -304,8 +307,8 @@ export const useBattleSequence = (
             await wait(500);
             dispatch(
               setAnnouncerMessage(
-                getAnnouncerMessage(attacker.name, selectedMove.name, result)
-              )
+                getAnnouncerMessage(attacker.name, selectedMove.name, result),
+              ),
             );
 
             // Apply damage only if hit
@@ -326,6 +329,14 @@ export const useBattleSequence = (
             }
 
             await wait(2000);
+
+            // Apply move cooldown (Redux handles persistence)
+            dispatch(
+              applyMoveCooldown({
+                target: turn === 0 ? "player" : "ai",
+                category: selectedMove.category, // signature
+              }),
+            );
 
             // Handoff turn
             dispatch(setAnnouncerMessage(`Now it's ${receiver.name}'s turn!`));
@@ -340,7 +351,7 @@ export const useBattleSequence = (
 
         case "specialMove": {
           const selectedMove = selectedCharacter.moveset.find(
-            (move) => move.special === true
+            (move) => move.category === "special",
           );
 
           if (!selectedMove) break; // No special move available
@@ -349,14 +360,14 @@ export const useBattleSequence = (
           const result = calculateMoveDamage(
             selectedCharacter,
             aiCharacter,
-            selectedMove
+            selectedMove,
           );
 
           if (selectedCharacter.currentEnergy < kiCost) {
             dispatch(
               setAnnouncerMessage(
-                `${selectedCharacter.name} doesn't have enough energy!`
-              )
+                `${selectedCharacter.name} doesn't have enough energy!`,
+              ),
             );
             break;
           }
@@ -368,11 +379,11 @@ export const useBattleSequence = (
             turn === 0
               ? dispatch(
                   updatePlayableCharacterEnergy(
-                    selectedCharacter.currentEnergy - kiCost
-                  )
+                    selectedCharacter.currentEnergy - kiCost,
+                  ),
                 )
               : dispatch(
-                  updateAiCharacterEnergy(aiCharacter.currentEnergy - kiCost)
+                  updateAiCharacterEnergy(aiCharacter.currentEnergy - kiCost),
                 );
 
             // Attack animation
@@ -399,8 +410,8 @@ export const useBattleSequence = (
             await wait(500);
             dispatch(
               setAnnouncerMessage(
-                getAnnouncerMessage(attacker.name, selectedMove.name, result)
-              )
+                getAnnouncerMessage(attacker.name, selectedMove.name, result),
+              ),
             );
 
             // Apply damage only if hit
@@ -421,6 +432,14 @@ export const useBattleSequence = (
             }
 
             await wait(2000);
+
+            // Apply move cooldown (Redux handles persistence)
+            dispatch(
+              applyMoveCooldown({
+                target: turn === 0 ? "player" : "ai",
+                category: selectedMove.category, // special
+              }),
+            );
 
             // Handoff turn
             dispatch(setAnnouncerMessage(`Now it's ${receiver.name}'s turn!`));
@@ -448,8 +467,8 @@ export const useBattleSequence = (
               if (currentSenzu <= 0) {
                 dispatch(
                   setAnnouncerMessage(
-                    `${attacker.name} has run out of senzu beans.`
-                  )
+                    `${attacker.name} has run out of senzu beans.`,
+                  ),
                 );
                 await wait(1500);
                 dispatch(setInSequence(false));
@@ -457,12 +476,12 @@ export const useBattleSequence = (
               }
 
               dispatch(
-                setAnnouncerMessage(`${attacker.name} has chosen to heal!`)
+                setAnnouncerMessage(`${attacker.name} has chosen to heal!`),
               );
               dispatch(
                 attacker === selectedCharacter
                   ? updatePlayableCharacterSenzuCount(currentSenzu - 1)
-                  : updateAiSenzuCount(currentSenzu - 1)
+                  : updateAiSenzuCount(currentSenzu - 1),
               );
 
               await wait(1000);
@@ -474,8 +493,8 @@ export const useBattleSequence = (
 
               dispatch(
                 setAnnouncerMessage(
-                  `${attacker.name} has recovered health and energy.`
-                )
+                  `${attacker.name} has recovered health and energy.`,
+                ),
               );
 
               turn === 0
@@ -485,7 +504,7 @@ export const useBattleSequence = (
               await wait(2500);
 
               dispatch(
-                setAnnouncerMessage(`Now it's ${receiver.name}'s turn!`)
+                setAnnouncerMessage(`Now it's ${receiver.name}'s turn!`),
               );
               await wait(1500);
 
@@ -517,7 +536,7 @@ export const useBattleSequence = (
             }
 
             dispatch(
-              setAnnouncerMessage(`${attacker.name} is charging up energy!`)
+              setAnnouncerMessage(`${attacker.name} is charging up energy!`),
             );
             await wait(500);
 
@@ -526,13 +545,13 @@ export const useBattleSequence = (
             if (turn === 0) {
               dispatch(
                 updatePlayableCharacterEnergy(
-                  selectedCharacter.currentEnergy + chargeUp
-                )
+                  selectedCharacter.currentEnergy + chargeUp,
+                ),
               );
               setPlayerAnimation("charge");
             } else {
               dispatch(
-                updateAiCharacterEnergy(aiCharacter.currentEnergy + chargeUp)
+                updateAiCharacterEnergy(aiCharacter.currentEnergy + chargeUp),
               );
               setNPCAnimation("charge");
             }
@@ -564,6 +583,13 @@ export const useBattleSequence = (
       }
     }
   }, [sequence, selectedMoveName]);
+
+  useEffect(() => {
+    if (turn === null) return; // ignore first render
+
+    // Decrement all move cooldowns at the start of a new turn
+    dispatch(decrementMoveCooldowns());
+  }, [turn, dispatch]);
 
   return {
     turn,

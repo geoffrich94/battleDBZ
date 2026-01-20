@@ -16,8 +16,14 @@ export interface Character {
   attack: number;
   defense: number;
   kiDefense: number;
+
   attackAccuracy: number;
+
   moveset: Move[];
+  moveCooldown: {
+    signature: number;
+    special: number;
+  };
 
   senzuCount: number;
   isCharging: boolean;

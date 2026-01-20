@@ -1,10 +1,10 @@
 import { Character } from "shared";
 import * as S from "./MoveSetMenu.styles";
+import { CooldownSkillIcon } from "components/CooldownSkillIcon/CooldownSkillIcon";
 
 interface MoveSetMenuProps {
   isHidden: boolean;
   selectedCharacter: Character;
-  playableCharacterHealth: number;
   onKi: () => void;
   onBack: () => void;
   onSignatureMove: (moveName: string) => void;
@@ -14,7 +14,6 @@ interface MoveSetMenuProps {
 export const MoveSetMenu: React.FC<MoveSetMenuProps> = ({
   isHidden,
   selectedCharacter,
-  playableCharacterHealth,
   onKi,
   onBack,
   onSignatureMove,
@@ -31,10 +30,21 @@ export const MoveSetMenu: React.FC<MoveSetMenuProps> = ({
       {selectedCharacter.moveset.map((move, index) => {
         const isLastMove = index === selectedCharacter.moveset.length - 1;
         const isHealthLow =
-          playableCharacterHealth < selectedCharacter.maxHealth * 0.2;
+          selectedCharacter.currentHealth < selectedCharacter.maxHealth * 0.2;
+        const cooldown =
+          move.category === "special"
+            ? selectedCharacter.moveCooldown.special
+            : selectedCharacter.moveCooldown.signature;
+
+        const isDisabled =
+          cooldown > 0 ||
+          selectedCharacter.currentEnergy < move.kiCost ||
+          (isLastMove && !isHealthLow);
 
         const handleMoveClick = () => {
-          if (move.special) {
+          if (isDisabled) return;
+
+          if (move.category === "special") {
             onSpecialMove();
           } else {
             onSignatureMove(move.name);
@@ -43,11 +53,14 @@ export const MoveSetMenu: React.FC<MoveSetMenuProps> = ({
 
         return (
           <S.Border key={index}>
-            <S.Option
-              disabled={isLastMove && !isHealthLow}
-              onClick={handleMoveClick}
-            >
+            <S.Option disabled={isDisabled} onClick={handleMoveClick}>
               {move.name}
+              {cooldown > 0 && (
+                <CooldownSkillIcon
+                  turnsRemaining={cooldown}
+                  maxTurns={move.category === "special" ? 5 : 3}
+                />
+              )}
             </S.Option>
           </S.Border>
         );

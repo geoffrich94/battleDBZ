@@ -66,7 +66,6 @@ export const BattleMenu: React.FC<BattleMenuProps> = ({
           onSignatureMove={onSignatureMove}
           isHidden={false}
           selectedCharacter={selectedCharacter}
-          playableCharacterHealth={playableCharacterHealth}
           onBack={() => setActiveMenu("default")}
         />
       )}
