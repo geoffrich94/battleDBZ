@@ -8,7 +8,7 @@ interface MoveSetMenuProps {
   onKi: () => void;
   onBack: () => void;
   onSignatureMove: (moveName: string) => void;
-  onSpecialMove: () => void;
+  onSpecialMove: (moveName: string) => void;
 }
 
 export const MoveSetMenu: React.FC<MoveSetMenuProps> = ({
@@ -45,7 +45,7 @@ export const MoveSetMenu: React.FC<MoveSetMenuProps> = ({
           if (isDisabled) return;
 
           if (move.category === "special") {
-            onSpecialMove();
+            onSpecialMove(move.name);
           } else {
             onSignatureMove(move.name);
           }

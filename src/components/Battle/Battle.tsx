@@ -60,7 +60,7 @@ export const Battle: React.FC<BattleProps> = ({
     turn: 0, // Player starts first
   });
 
-  const [selectedMoveName, setSelectedMoveName] = useState<string>("");
+  // const [selectedMoveName, setSelectedMoveName] = useState<string>("");
 
   const {
     turn,
@@ -69,7 +69,7 @@ export const Battle: React.FC<BattleProps> = ({
     playerAnimation,
     npcAnimation,
     missState
-  } = useBattleSequence(sequence, selectedMoveName);
+  } = useBattleSequence(sequence);
 
   const aiSenzuCount = useSelector(
     (state: RootState) => state.character.aiCharacter?.senzuCount || 0
@@ -190,10 +190,9 @@ export const Battle: React.FC<BattleProps> = ({
             onKi={() => setSequence({ mode: "ki", turn })}
             onSignatureMove={(moveName: string) => {
               console.log(`Selected Signature Move: ${moveName}`);
-              setSelectedMoveName(moveName); // Save the move name
-              setSequence({ mode: "signatureMove", turn }); // Start sequence
+              setSequence({ mode: "signatureMove", turn, selectedMoveName: moveName }); // Start sequence
             }}
-            onSpecialMove={() => setSequence({ mode: "specialMove", turn })}
+            onSpecialMove={(moveName: string) => setSequence({ mode: "specialMove", turn, selectedMoveName: moveName })}
             onSenzu={() => setSequence({ turn, mode: "senzu" })}
             onCharge={() => {
               setSequence({ turn, mode: "charge" });

@@ -1,5 +1,5 @@
 
-import { resolveAttack } from "shared/helpers";
+import { resolveAttack } from "shared";
 import { AttackResult, Character, Move } from "shared/types";
 
 export const calculateMoveDamage = (

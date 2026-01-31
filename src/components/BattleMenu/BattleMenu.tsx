@@ -11,7 +11,7 @@ interface BattleMenuProps {
   onSenzu: () => void;
   onCharge: () => void;
   onSignatureMove: (moveName: string) => void;
-  onSpecialMove: () => void;
+  onSpecialMove: (moveName: string) => void;
 };
 
 export const BattleMenu: React.FC<BattleMenuProps> = ({
