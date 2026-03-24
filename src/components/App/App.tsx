@@ -4,6 +4,7 @@ import { AppContent } from "components";
 import GlobalStyle from "./App.styles";
 
 export const App = () => {
+
   return (
     <Provider store={store}>
       <GlobalStyle />

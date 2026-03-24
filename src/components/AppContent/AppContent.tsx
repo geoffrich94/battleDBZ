@@ -1,6 +1,6 @@
 import { useState } from "react";
 import * as S from "./AppContent.styles";
-import { Battle, EndMenu, StartMenu, CharacterSelection, GameModeSelectMenu } from "components";
+import { Battle, EndMenu, StartMenu, CharacterSelection, GameModeSelectMenu, MultiplayerLayout } from "components";
 import { Character } from "shared";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
@@ -13,13 +13,12 @@ import {
 } from "../../redux/reducers/battleSlice";
 
 import { resetCharacters } from "../../redux/reducers/characterSlice";
+import { AppMode } from "shared/types/AppMode";
 
 export const AppContent = () => {
   const dispatch = useDispatch();
 
-  const [mode, setMode] = useState<
-    "start" | "gameModeSelect" | "characterSelection" | "battle" | "gameOver"
-  >("start");
+  const [mode, setMode] = useState<AppMode>("start");
 
   const [winner, setWinner] = useState<Character | null>(null);
 
@@ -49,6 +48,7 @@ export const AppContent = () => {
   const backgroundMap = {
     start: "/assets/startscreen.jpg",
     gameModeSelect: "/assets/startscreen.jpg",
+    multiplayer: "/assets/multiplayerbg.jpg",
     characterSelection: "/assets/bg-character-select.jpg",
     battle: "/assets/bg-battle.png",
     gameOver: "/assets/bg-battle.png"
@@ -57,6 +57,7 @@ export const AppContent = () => {
   const gradientMap = {
     start: "linear-gradient(0deg, rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0))",
     gameModeSelect: "linear-gradient(0deg, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0))",
+    multiplayer: "linear-gradient(0deg, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0))",
     characterSelection: "linear-gradient(0deg, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.5))",
     battle: "linear-gradient(0deg, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.2))",
     gameOver: "linear-gradient(0deg, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.2))"
@@ -72,11 +73,15 @@ export const AppContent = () => {
       )}
 
       {mode === "gameModeSelect" && (
-        <GameModeSelectMenu onStartClick={() => setMode("characterSelection")}/>
+        <GameModeSelectMenu onStartClick={setMode} />
+      )}
+
+      {mode === "multiplayer" && (
+        <MultiplayerLayout onExit={() => setMode("start")} />
       )}
 
       {mode === "characterSelection" && (
-        <CharacterSelection onStartClick={handleStartBattle} />
+        <CharacterSelection mode="singleplayer" onStartClick={handleStartBattle} />
       )}
 
       {mode === "battle" && selectedCharacter && (

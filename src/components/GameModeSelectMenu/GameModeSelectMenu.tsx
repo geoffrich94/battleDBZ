@@ -1,22 +1,40 @@
 import { useState } from "react";
 import * as S from "./GameModeSelectMenu.styles";
+import { AppMode } from "shared";
 
 interface GameModeSelectMenuProps {
-  onStartClick: () => void;
+ onStartClick: (mode: AppMode) => void;
 }
 
 export const GameModeSelectMenu: React.FC<GameModeSelectMenuProps> = ({
   onStartClick,
 }) => {
-  const OPTIONS = [
+  const OPTIONS: { label: string; description: string; mode: AppMode }[] = [
     {
       label: "Singleplayer",
       description: "Play solo against AI",
+      mode: "characterSelection",
     },
-    { label: "Online Multiplayer", description: "Compete with players online" },
-    { label: "Store", description: "Buy items and upgrades" },
-    { label: "Collection", description: "View your card collection" },
-    { label: "Codex", description: "Learn lore and rules" },
+    {
+      label: "Online Multiplayer",
+      description: "Compete with players online",
+      mode: "multiplayer",
+    },
+    {
+      label: "Store",
+      description: "Buy items and upgrades",
+      mode: "characterSelection",
+    },
+    {
+      label: "Collection",
+      description: "View your card collection",
+      mode: "characterSelection",
+    },
+    {
+      label: "Codex",
+      description: "Learn lore and rules",
+      mode: "characterSelection",
+    },
   ];
   const DEFAULT_TEXT = "Select Game Mode";
   const [description, setDescription] = useState(DEFAULT_TEXT);
@@ -29,7 +47,7 @@ export const GameModeSelectMenu: React.FC<GameModeSelectMenuProps> = ({
     setTimeout(() => {
       setDescription(text);
       setIsFading(false);
-    }, 200); // matches CSS transition
+    }, 200);
   };
 
   return (
@@ -38,11 +56,11 @@ export const GameModeSelectMenu: React.FC<GameModeSelectMenuProps> = ({
 
       <S.MenuContainer>
         <S.ListContainer>
-          {OPTIONS.map(({ label, description: desc }) => (
+          {OPTIONS.map(({ label, description, mode }) => (
             <S.ListOption
               key={label}
-              onClick={onStartClick}
-                onMouseEnter={() => changeDescription(desc)}
+              onClick={() => onStartClick(mode)}
+              onMouseEnter={() => changeDescription(description)}
             >
               {label}
             </S.ListOption>
@@ -50,7 +68,9 @@ export const GameModeSelectMenu: React.FC<GameModeSelectMenuProps> = ({
         </S.ListContainer>
       </S.MenuContainer>
 
-      <S.DescriptionContainer $fading={isFading}>{description}</S.DescriptionContainer>
+      <S.DescriptionContainer $fading={isFading}>
+        {description}
+      </S.DescriptionContainer>
     </>
   );
 };

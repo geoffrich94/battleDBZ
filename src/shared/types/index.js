@@ -4,3 +4,5 @@ export * from './Move';
 export * from './CharacterType';
 export * from './EngineContext';
 export * from './battleSequence';
+export * from './AppMode';
+export * from './MatchData';
