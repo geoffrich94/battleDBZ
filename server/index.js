@@ -1,4 +1,3 @@
-// Import required packages
 const express = require("express"); // Web framework
 const http = require("http"); // Node HTTP server
 const { Server } = require("socket.io"); // WebSocket library
@@ -11,13 +10,12 @@ const app = express();
 app.use(cors());
 
 // Create a raw HTTP server from Express
-// Socket.IO needs access to the actual HTTP server
 const server = http.createServer(app);
 
 // Create a new Socket.IO server attached to the HTTP server
 const io = new Server(server, {
   cors: {
-    origin: "http://localhost:3000", // Only allow your frontend to connect
+    origin: "http://localhost:3000", 
   },
 });
 
@@ -26,31 +24,15 @@ const io = new Server(server, {
 // =======================================
 
 // Object to store active games
-// Structure:
-// {
-//   gameId: {
-//     players: [socketId1, socketId2],
-//     turn: socketId1
-//   }
-// }
 const games = {};
 
-// Array to store players waiting for a match
-// Example: ["socketIdA", "socketIdB"]
+// Array to store players waiting for a match, Example: ["socketIdA", "socketIdB"]
 let queue = [];
 
 // NEW: Object to store player information (like username)
-// Structure:
-// {
-//   socketId: {
-//     username: "John"
-//   }
-// }
 const players = {};
 
-// ===============================
 // HELPER: FIND GAME BY SOCKET ID
-// ===============================
 function findGameBySocket(socketId) {
   for (const gameId in games) {
     if (games[gameId].players.includes(socketId)) {
@@ -60,10 +42,8 @@ function findGameBySocket(socketId) {
   return null;
 }
 
-// =======================================
-// When a new client connects
-// =======================================
 
+// When a new client connects
 io.on("connection", (socket) => {
   // Each connected user gets a unique socket.id
   console.log("User connected with socket ID:", socket.id);
@@ -71,7 +51,6 @@ io.on("connection", (socket) => {
   // =======================================
   // MATCHMAKING SYSTEM
   // =======================================
-
   socket.on("find_match", ({ username }) => {
     console.log(username, "is looking for a match");
 
@@ -92,7 +71,7 @@ io.on("connection", (socket) => {
     );
 
     // If we have at least 2 players waiting
-    if (queue.length >= 2) {
+    while (queue.length >= 2) {
       // Remove first 2 players from queue
       const player1 = queue.shift();
       const player2 = queue.shift();
@@ -104,7 +83,8 @@ io.on("connection", (socket) => {
       games[gameId] = {
         players: [player1, player2],
         turn: player1,
-        selections: {}, // ✅ ADD THIS
+        selections: {},
+        ready: {},
       };
 
       // NEW: Log matched usernames
@@ -169,6 +149,28 @@ io.on("connection", (socket) => {
       io.to(gameId).emit("both_players_selected", {
         selections: game.selections,
       });
+    }
+  });
+
+  socket.on("player_ready", () => {
+    const gameId = findGameBySocket(socket.id);
+    if (!gameId) return;
+
+    const game = games[gameId];
+
+    console.log("Player ready:", socket.id);
+
+    // ✅ Mark this player as ready
+    game.ready[socket.id] = true;
+
+    // OPTIONAL: notify opponent
+    socket.to(gameId).emit("opponent_ready");
+
+    // ✅ Check if BOTH players are ready
+    if (Object.keys(game.ready).length === 2) {
+      console.log("Both players ready → starting game");
+
+      io.to(gameId).emit("start_battle");
     }
   });
 

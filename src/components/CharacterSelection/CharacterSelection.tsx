@@ -26,11 +26,11 @@ export const CharacterSelection: React.FC<CharacterSelectionProps> = ({
   const dispatch = useDispatch();
 
   const selectedCharacter = useSelector(
-    (state: RootState) => state.character.selectedCharacter
+    (state: RootState) => state.character.selectedCharacter,
   );
 
   const aiCharacter = useSelector(
-    (state: RootState) => state.character.aiCharacter
+    (state: RootState) => state.character.aiCharacter,
   );
 
   // Only used in SINGLEPLAYER
@@ -64,12 +64,11 @@ export const CharacterSelection: React.FC<CharacterSelectionProps> = ({
   // =========================
   const handleCharacterSelection = (
     characterImg: string,
-    characterName: string
+    characterName: string,
   ) => {
     const chosenCharacter = characters.find(
       (char) =>
-        char.characterImg === characterImg &&
-        char.name === characterName
+        char.characterImg === characterImg && char.name === characterName,
     );
 
     if (!chosenCharacter) return;
@@ -126,9 +125,16 @@ export const CharacterSelection: React.FC<CharacterSelectionProps> = ({
     // Optional: handle multiplayer cancel later
   };
 
-  // =========================
-  // UI
-  // =========================
+  const handleStart = () => {
+    if (mode === "singleplayer") {
+      // ✅ Go immediately
+      onStartClick();
+    } else {
+      // ✅ Wait for both players
+      socket.emit("player_ready");
+    }
+  };
+
   return (
     <>
       <S.Logo />
@@ -136,27 +142,19 @@ export const CharacterSelection: React.FC<CharacterSelectionProps> = ({
       <S.ImgContainter>
         <S.StyledCharacterImage
           src={
-            selectedCharacter?.characterImg ||
-            "assets/empty-character-pic.png"
+            selectedCharacter?.characterImg || "assets/empty-character-pic.png"
           }
           alt={selectedCharacter?.name}
         />
         <S.StyledCharacterImage
-          src={
-            aiCharacter?.characterImg ||
-            "assets/empty-character-pic.png"
-          }
+          src={aiCharacter?.characterImg || "assets/empty-character-pic.png"}
           alt={aiCharacter?.name}
         />
       </S.ImgContainter>
 
       <S.CharacterNameContainer>
-        <S.CharacterName>
-          {selectedCharacter?.name || "?"}
-        </S.CharacterName>
-        <S.CharacterName>
-          {aiCharacter?.name || "?"}
-        </S.CharacterName>
+        <S.CharacterName>{selectedCharacter?.name || "?"}</S.CharacterName>
+        <S.CharacterName>{aiCharacter?.name || "?"}</S.CharacterName>
       </S.CharacterNameContainer>
 
       <S.VersusLogo src="assets/vs-logo.png" />
@@ -168,10 +166,7 @@ export const CharacterSelection: React.FC<CharacterSelectionProps> = ({
 
       <S.OptionsContainer>
         <S.OptionBorder className="with-right">
-          <S.Option
-            className="with-right"
-            onClick={removeCharacter}
-          >
+          <S.Option className="with-right" onClick={removeCharacter}>
             Cancel
           </S.Option>
         </S.OptionBorder>
@@ -179,7 +174,7 @@ export const CharacterSelection: React.FC<CharacterSelectionProps> = ({
         <S.OptionBorder className="with-left with-right">
           <S.Option
             className="with-left with-right"
-            onClick={onStartClick}
+            onClick={handleStart}
             disabled={!selectedCharacter || !aiCharacter}
           >
             Start Game

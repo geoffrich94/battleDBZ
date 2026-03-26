@@ -17,7 +17,20 @@ type MultiplayerMode =
 
 export const MultiplayerLayout: React.FC<MultiplayerLayoutProps> = () => {
   const [mpMode, setMpMode] = useState<MultiplayerMode>("login");
-   const [matchData, setMatchData] = useState<MatchData | null>(null);
+  const [matchData, setMatchData] = useState<MatchData | null>(null);
+
+  useEffect(() => {
+    const handleStartBattle = () => {
+      console.log("🔥 Both players ready → starting battle");
+      setMpMode("battle");
+    };
+
+    socket.on("start_battle", handleStartBattle);
+
+    return () => {
+      socket.off("start_battle", handleStartBattle);
+    };
+  }, []);
 
   // Disconnect when leaving multiplayer completely
   useEffect(() => {
